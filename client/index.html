@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Tracking Salient Points</title>
+
+    <meta name="description" content="UI for Tracking Salient Points - Master of Sciense Thesis">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+
+  <body>
+    <section class="overlay hidden">
+      <section class="content">
+        <img src="/img/loader.gif" class="loader-control" />
+      </section>
+    </section>
+
+    <section class="main-content">
+      <section>
+        <label for="movies">Select video:</label>
+        <select name="movies" id="movies" disabled>
+          <option value="-1">No video</option>
+        </select>
+      </section>
+
+      <section>
+        <canvas id="image"></canvas>
+      </section>
+
+      <section>
+        <input type="submit" id="send-coordinates" value="Send" disabled />
+      </section>
+    </section>
+
+    <script src="/js/main.js"></script>
+  </body>
+</html>

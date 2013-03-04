@@ -1,0 +1,23 @@
+{
+  "name": "tracking-salient-points",
+
+  "version": "0.1.0",
+  "author": "Wojciech Gawroński <afronski@gmail.com>",
+
+  "main": "./server/server.js",
+
+  "dependencies" : {
+    "colors":  "*",
+    "express": "3.x.x"
+  },
+
+  "devDependencies": {
+    "bower":  "0.8.x",
+    "grunt":  "0.4.x"
+  },
+
+  "license": "MIT",
+  "engines": {
+    "node": ">= 0.8"
+  }
+}

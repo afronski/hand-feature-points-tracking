@@ -1,0 +1,69 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: lightgray;
+  font-size: 62.5%;
+}
+
+label {
+  font-size: 1.5em;
+  margin-right: 33px;
+}
+
+canvas {
+  border: 1px dashed lightgray;
+  width: 430px;
+  height: 430px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.8;
+}
+
+.hidden {
+  display: none;
+}
+
+.content {
+  width: 960px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.main-content {
+  width: 960px;
+  margin: 100px auto 0px auto;
+  background-color: white;
+
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+
+.main-content section {
+  padding: 10px;
+  margin: 0 auto;
+  width: 430px;
+}
+
+.loader-control {
+  margin-top: 35%;
+  border: 0;
+  width: 60px;
+  height: 60px;
+}
+
+#movies {
+  font-size: 1.5em;
+  width: 70%;
+}
+
+#send-coordinates {
+  width: 100%;
+  font-size: 1.5em;
+}
