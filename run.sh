@@ -12,6 +12,9 @@ pushd assets
 ./convert.sh
 popd
 
+# Preparation.
+pkill node
+
 # Run server and client.
 node server/server.js &
 chromium http://localhost:9292 &
