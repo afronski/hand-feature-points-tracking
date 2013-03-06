@@ -32,7 +32,7 @@ app.get("/videos-converted/:path", videoStreamer);
 app.get("/movies", function(request, response) {
   debug("Get movie list");
 
-  sendJSON(response, [ { name: "1.avi", value: 1 } ]);
+  sendJSON(response, [ { name: "circle_sample_1.avi", value: 1 } ]);
 });
 
 app.get("/frame/:id", function(request, response) {

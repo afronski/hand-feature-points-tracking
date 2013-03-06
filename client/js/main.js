@@ -62,14 +62,28 @@
     });
   }
 
+  function getTextFromActivePositionInSelect() {
+    return $("option[value='%value']".replace("%value", $("#movies").value)).innerText;
+  }
+
   function onMovieChanging() {
-    var value = $("#movies").value;
+    var value = $("#movies").value,
+        movie;
 
     if (value === "-1") {
       toggleSendButton(false);
+
+      $("#video-container").classList.add("hidden");
+      $("#player").removeAttribute("src")
     } else {
       xhrGet("/frame/" + value);
+
       toggleSendButton(true);
+
+      $("#video-container").classList.remove("hidden");
+
+      movie = getTextFromActivePositionInSelect().replace("avi", "webm");
+      $("#player").setAttribute("src", "/videos-converted/%webm".replace("%webm", movie))
     }
   }
 
