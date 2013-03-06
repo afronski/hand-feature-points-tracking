@@ -8,7 +8,8 @@
 
   "dependencies" : {
     "colors":  "*",
-    "express": "3.x.x"
+    "express": "3.x.x",
+    "vid-streamer": "*"
   },
 
   "devDependencies": {

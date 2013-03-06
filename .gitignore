@@ -1,4 +1,6 @@
-assets/*
+assets/*.avi
+assets/*.png
+assets/videos-converted/*.webm
 node_modules/
 bin/*
 .sconsign.dblite

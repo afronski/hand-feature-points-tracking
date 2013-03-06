@@ -3,6 +3,7 @@
 var PORT = 9292,
 
     express = require("express"),
+    videoStreamer = require("vid-streamer"),
     app = express(),
 
     info = function(text) {
@@ -23,7 +24,10 @@ var PORT = 9292,
     };
 
 app.use(express.static("client"));
+
 app.use(express.bodyParser());
+
+app.get("/videos-converted/:path", videoStreamer);
 
 app.get("/movies", function(request, response) {
   debug("Get movie list");

@@ -12,8 +12,14 @@ label {
 
 canvas {
   border: 1px dashed lightgray;
-  width: 430px;
-  height: 430px;
+  width: 640px;
+  height: 480px;
+}
+
+video {
+  border: 1px dashed lightgray;
+  width: 640px;
+  height: 480px;
 }
 
 .overlay {
@@ -48,7 +54,7 @@ canvas {
 .main-content section {
   padding: 10px;
   margin: 0 auto;
-  width: 430px;
+  width: 640px;
 }
 
 .loader-control {
@@ -60,7 +66,7 @@ canvas {
 
 #movies {
   font-size: 1.5em;
-  width: 70%;
+  width: 510px;
 }
 
 #send-coordinates {
