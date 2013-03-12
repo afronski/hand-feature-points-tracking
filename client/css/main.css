@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: lightgray;
+  background-color: slategray;
   font-size: 62.5%;
 }
 
@@ -10,13 +10,7 @@ label {
   margin-right: 33px;
 }
 
-canvas {
-  border: 1px dashed lightgray;
-  width: 640px;
-  height: 480px;
-}
-
-video {
+.bordered {
   border: 1px dashed lightgray;
   width: 640px;
   height: 480px;
@@ -30,21 +24,34 @@ video {
   height: 100%;
   background-color: black;
   opacity: 0.8;
+  z-index: 1;
 }
 
-.hidden {
-  display: none;
-}
+.centered-content {
+  display: -webkit-box;
+  display: box;
 
-.content {
-  width: 960px;
-  margin: 0 auto;
-  text-align: center;
+  -webkit-box-align: center;
+  box-align: center;
+
+  -webkit-box-pack: center;
+  box-pack: center;
 }
 
 .main-content {
-  width: 960px;
-  margin: 100px auto 0px auto;
+  display: -webkit-box;
+  display: box;
+
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+
+  -webkit-box-align: center;
+  box-align: center;
+
+  -webkit-box-pack: center;
+  box-pack: center;
+
+  margin: 100px 150px 0px;
   background-color: white;
 
   border-radius: 5px;
@@ -52,13 +59,25 @@ video {
 }
 
 .main-content section {
-  padding: 10px;
-  margin: 0 auto;
-  width: 640px;
+  padding: 5px;
+}
+
+.media-container {
+  display: -webkit-box;
+  display: box;
+
+  -webkit-justify-content: center;
+  justify-content: center;
+
+  -webkit-box-orient: horizontal;
+  box-orient: horizontal;
+}
+
+.media-container section {
+  margin: 0 5px;
 }
 
 .loader-control {
-  margin-top: 35%;
   border: 0;
   width: 60px;
   height: 60px;
@@ -70,6 +89,10 @@ video {
 }
 
 #send-coordinates {
-  width: 100%;
+  width: 200px;
   font-size: 1.5em;
+}
+
+.hidden {
+  display: none;
 }

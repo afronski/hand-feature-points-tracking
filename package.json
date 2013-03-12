@@ -9,7 +9,8 @@
   "dependencies" : {
     "colors":  "*",
     "express": "3.x.x",
-    "vid-streamer": "*"
+    "vid-streamer": "*",
+    "execSync": "*"
   },
 
   "devDependencies": {

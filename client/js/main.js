@@ -3,10 +3,12 @@
 
   // Helpers.
   var $ = function(selector) {
-    var results = document.querySelectorAll(selector);
+        var results = document.querySelectorAll(selector);
 
-    return results.length == 1 ? results[0] : results;
-  };
+        return results.length == 1 ? results[0] : results;
+      },
+
+      context;
 
   // Methods related with overlay.
   function hideOverlay() {
@@ -41,7 +43,26 @@
     xhr("POST", path, callback, args);
   }
 
-  // UI handlers.
+  // Canvas helpers.
+  function getImageCanvas() {
+    return $("#image");
+  }
+
+  function getImageCanvasContext() {
+    if (!context) {
+      context = getImageCanvas().getContext("2d");
+    }
+
+    return context;
+  }
+
+  function clearCanvas() {
+    var canvas = getImageCanvas();
+
+    getImageCanvasContext().clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  // Sending coordinates.
   function getData() {
     return [
       { id: 1, x: 100, y: 100 },
@@ -62,6 +83,7 @@
     });
   }
 
+  // Changing movies in select control.
   function getTextFromActivePositionInSelect() {
     return $("option[value='%value']".replace("%value", $("#movies").value)).innerText;
   }
@@ -71,12 +93,13 @@
         movie;
 
     if (value === "-1") {
+      clearCanvas();
       toggleSendButton(false);
 
       $("#video-container").classList.add("hidden");
-      $("#player").removeAttribute("src")
+      $("#player").removeAttribute("src");
     } else {
-      xhrGet("/frame/" + value);
+      xhrGet("/frame/" + value, loadFirstFrame);
 
       toggleSendButton(true);
 
@@ -87,6 +110,24 @@
     }
   }
 
+  // Drawing image on canvas element.
+  function drawImageOnCanvas() {
+    var canvas = getImageCanvas(),
+        context = getImageCanvasContext();
+
+    context.drawImage(this, 0, 0, this.width, this.height, 0, 0, canvas.width, canvas.height);
+    hideOverlay();
+  }
+
+  function loadFirstFrame() {
+    var response = JSON.parse(this.responseText),
+        image = new Image();
+
+    image.addEventListener("load", drawImageOnCanvas);
+    image.src = response.imageURI;
+  }
+
+  // UI state helpers.
   function toggleSendButton(value) {
     var send = $("#send-coordinates");
 

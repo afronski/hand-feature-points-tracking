@@ -13,10 +13,8 @@
   </head>
 
   <body>
-    <section class="overlay hidden">
-      <section class="content">
-        <img src="/img/loader.gif" class="loader-control" />
-      </section>
+    <section class="hidden overlay centered-content">
+      <img src="/img/loader.gif" class="loader-control" />
     </section>
 
     <section class="main-content">
@@ -27,16 +25,18 @@
         </select>
       </section>
 
-      <section>
-        <canvas id="image"></canvas>
+      <section class="media-container">
+        <section>
+          <canvas id="image" class="bordered"></canvas>
+        </section>
+
+        <section id="video-container" class="hidden">
+            <video id="player" class="bordered" controls></video>
+        </section>
       </section>
 
       <section>
         <input type="submit" id="send-coordinates" value="Send" disabled />
-      </section>
-
-      <section id="video-container" class="hidden">
-          <video id="player" controls></video>
       </section>
     </section>
 
