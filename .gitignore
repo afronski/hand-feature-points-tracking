@@ -7,5 +7,4 @@ bin/*
 *.o
 *.sublime-workspace
 *.pdf
-*.tex
 *.log
