@@ -1,0 +1,11 @@
+- First concept - one point:
+    - Simple page with canvas, drawImage get from server (first image of video sequence). --> Node.js
+    - Select salient point with mouse, sent coordinates to the server.
+
+    - Process video on server.  --> C++
+        - API:
+            - input - vector of all images from video sequence, salient point(s) coordinates.
+            - output - series of images with tracked points.
+
+    - Return series of images get from video sequence with tracked point. --> Node.js
+        - Draw them on canvas step by step.

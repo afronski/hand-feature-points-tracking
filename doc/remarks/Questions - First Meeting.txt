@@ -1,0 +1,38 @@
+ 0. Dokładny temat pracy i wpisanie go do PD.
+     Śledzenie punktów charakterystycznych dłoni w sekwencjach wideo wraz z prostą analizą trajektorii.
+
+ 1. Które metody byłyby preferowane?
+    - Top 100 Scale-Saliency Regions (Kadir and Brady) ?
+    - Lowe's Keypoints ?
+
+    - Do usprawnienia, ew. dodatkowa warstwa dla powyższych:
+        - Optical Flow ?
+
+    - Prosta analiza trajektorii:
+        - Maszyna stanów i proste zasady przy analizie (ruch w dół itd.).
+    - Wątpliwe:
+        - Skomplikowana analiza trajektorii: Algorytm Vitterbiego
+
+ 2. Weryfikacja technologii - proponowany stos:
+        - C++
+            - DLL
+            - Visual Studio 2010 - Windows 7
+            - Środowisko w całości dostępne (biblioteki również).
+            - Żadnych nowych features z nowego standardu.
+
+        - LaTeX, R
+
+        - GUI?
+            - Minimalne, brak.
+            - Badania jakościowe i wydajnościowe + implementacja.
+
+ 3. Wejście - filmiki, formaty?
+    - Filmy + metadane.
+
+ 4. Program/sposób w jaki przygotowuje się wejście.
+    - Program do zaznaczania do przeróbki.
+
+TODO:
+    - Materiały (PDFy, dalsze artykuły).
+    - Przykładowe filmy (im wyższa rozdzielczość tym lepiej).
+        - Skupić się na rodzajach gestów i opisie ich aby łatwiej je wykonać.

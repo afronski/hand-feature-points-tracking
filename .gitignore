@@ -6,3 +6,6 @@ bin/*
 .sconsign.dblite
 *.o
 *.sublime-workspace
+*.pdf
+*.tex
+*.log
