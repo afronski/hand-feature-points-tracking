@@ -14,11 +14,8 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
 
-  background: rgb(215, 215, 215);
-  background: -o-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
-  background: -moz-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
-  background: -webkit-radial-gradient(rgb(240, 240, 240), rgb(190, 190, 190));
-  background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(240, 240, 240)), to(rgb(190, 190, 190)));
+  background: #353129;
+  background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 500, from(rgb(48, 35, 30)), to(rgb(35, 31, 29)));
 
   -webkit-font-smoothing: antialiased;
 }
@@ -61,8 +58,9 @@ body {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
 
-  background-color: white;
+  background-color: #353129;
 
+  color: #8BC84B;
   box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
   border: 1px solid rgba(0, 0, 0, .3);
 
@@ -83,12 +81,25 @@ body {
 }
 
 .slides.template-default > article:not(.nobackground):not(.biglogo) {
-  background-color: white;
+  background: url(images/logo-small.png) 680px 635px no-repeat;
+  background-color: #353129;
+}
+
+.huge {
+  font-size: 300%;
+  margin-top: 275px;
 }
 
 .slides.layout-widescreen > article:not(.nobackground):not(.biglogo),
 .slides.layout-faux-widescreen > article:not(.nobackground):not(.biglogo) {
   background-position-x: 0, 840px;
+}
+
+.entry-point h2,
+.entry-point h3 {
+  color: white;
+  font-weight: normal;
+  margin: 0;
 }
 
 /* Clickable/tappable areas */
@@ -129,18 +140,6 @@ body {
 }
 
 /* Slide styles */
-
-.slides.template-default article.biglogo {
-  background: white url(images/google-logo.png) 50% 50% no-repeat;
-}
-
-.slides.template-io2011 article.biglogo {
-  background: white url(images/googleio-logo.png) 50% 50% no-repeat;
-
-  background-size: 600px;
-}
-
-/* Slides */
 
 .slides > article {
   display: none;
@@ -225,9 +224,9 @@ body {
 /* Styles for slides */
 
 .slides > article {
-  font-family: 'Segoe UI';
+  font-family: 'Titillium Web', Arial, sans-serif;
 
-  color: rgb(102, 102, 102);
+  color: white;
   text-shadow: 0 1px 1px rgba(0, 0, 0, .1);
 
   font-size: 30px;
@@ -278,10 +277,6 @@ p {
 p:first-child {
   margin-top: 0;
 }
-ul.big > li {
-    font-size: 60px;
-    margin-bottom: 50px;
-}
 
 h1 {
   font-size: 60px;
@@ -289,14 +284,14 @@ h1 {
 
   padding: 0;
   margin: 0;
-  margin-top: 150px;
+  margin-top: 200px;
   padding-right: 40px;
 
   font-weight: 600;
 
   letter-spacing: -3px;
 
-  color: rgb(51, 51, 51);
+  color: #8BC84B;
 }
 
 h2 {
@@ -314,7 +309,7 @@ h2 {
 
   letter-spacing: -2px;
 
-  color: rgb(51, 51, 51);
+  color: #8BC84B;
 }
 
 h3 {
@@ -329,7 +324,7 @@ h3 {
 
   letter-spacing: -1px;
 
-  color: rgb(51, 51, 51);
+  color: #8BC84B;
 }
 
 article.fill h3 {
@@ -397,7 +392,7 @@ code {
   font-size: 95%;
   font-family: 'Droid Sans Mono', 'Courier New', monospace;
 
-  color: black;
+  color: #AAAAAA;
 }
 
 iframe {
