@@ -1,0 +1,68 @@
+Wprowadzenie opisuje podstawowe techniki śledzenia punktów charakterystycznych opratych
+np. o różnicę obrazu analizę różnicy (piksele, które znacznie różnią się po odjęciu
+następnej klatki od poprzedniej to piksele pierwszego planu lub poruszający się obiekt).
+
+Wybór punktów charakterystycznych jest praktycznie oczywistym i prostym zadaniem dla człowieka.
+Intuicyjnie podchodząc do tego typu zadania wybieramy krawędzie, narożniki, oczy na twarzy,
+wystające fragmenty obiektu. Mimo, że najczęstszymi cechami są krawędzie i narożniki, to
+można dostrzec że wraz z rozwojem tej dziedziny pojawiają się nowe metody definiowania
+punktów charakterystycznych opierające się na zawartości obrazu pobieranego z otoczenia.
+
+Tradycyjnym podejściem jest analiza otoczenia krawędzi i narożników w celu śledzenia obiektu przez
+poszczególne klatki. Wadą tego podejścia, jest zbieżność punktów otoczenia z punktami tła, i gdy
+te piksele ulegają zmianie z klatki na klatkę metoda zwraca niepoprawne rezultaty.
+
+Kolejne podejście opiera się na wyekstrahowani małego wektora cech reprezentującego własności
+narożnika fragmentu obrazu np. wykorzystanie jasności, pochodnych cząstkowych lub współrzędnych
+relatywnych do narożnika. Można również wykorzystać filtr Kalmana do śledzenia narożników w klatkach
+materiału wideo. Artykuł jednak skupia się na dwóch innych metodach
+
+'Scale Saliency algorithm of Kadir and Brady'
+  Salient - charakterystyczny, wystający, wydatny.
+
+  Śledzenie odbywa się na podstawie definicji zaproponowanej przez Gilles' opierającej się na lokalnych
+  własnościach sygnału. Obliczana jest entropia lokalnych atrybutów pikseli obrazów np. intensywności w
+  otoczeniu aktualnego piksela. Kadir i Brady rozszerzyli tę definicję wprowadzając region, nie punkt
+  jako funkcję lokalnej złożoności sygnału ważoną przez pomiar podobieństwa dla skali
+  przestrzeni obrazu (scale-space, skala przestrzeni obrazu - rodzina obrazów o różnej skali).
+
+  Z polskiego na nasze: dla każdego punktu 'x' na obrazie obliczany jest histogram intensywności z kołowego
+  otoczenia o promieniu 's'. Obliczana jest entropia każdego histogramu i lokalne (dla tego punktu 'x')
+  maksimum jest brane pod uwagę jako kandydat do regionu. Taki zbiór skoków entropii jest następnie
+  ważony za pomocą 'inter-scale saliency measure' gdzie mnożnikiem jest iloraz
+  kwadratu skali 's' i wartości 2 * s  - 1.
+
+    Wzory 1,2,3,4 - p to histogram (prawdopodobieństwo można opisać znormalizowanym histogramem).
+
+  Top N regionów pod względem obliczonej wartości jest wykorzystywanych do dalszego przetwarzania.
+  Warto zauważyć, że mimo, że entropia jest liczona od smin do smax to skoki entropii wystąpią
+  tylko od smin + 1 do smax - 1.
+
+  Regiony te z definicji są niewrażliwe na obrót, skalowanie, przesunięcie intensywności histogramu
+  i przesunięcie.
+
+'Scale-invariant keypoints from Lowe'
+  Metoda opiera się o transformację niewrażliwości cech na skalowanie (Scale invariant feature transform).
+  Jest to proces dwuetapowy - selekcja punktów kluczowych lub regionów i ekstrakcja cech dla tych regionów,
+  które będą niewrażliwe na rotację, skalowanie i translację.
+
+  Podobnie jak w powyższym algorytmie bierzemy pod uwagę skalowane rodziny obrazów. Rozważamy maksima i minima
+  różnicy obrazów rozmytych filtrem Gaussa - odejmujemy bardziej rozmyty od mniej rozmytego. W pracy Lowe można
+  znaleźć dokładną metodę znajdowania minimów i maksimów takiej funkcji. Splot dwuwymiarowej funkcji Gaussa jest
+  zaimplementowany w dwóch przejściach 1wymiarowego filtru Gaussa z sigmą pierwiastek z 2. Wyjściowy obraz jest
+  ponownie spleciony z obrazem filtrowanym filtrem Gaussa o wartości sigma pierwiastek z 2. Różnica obrazów
+  rozmytych filtrem Gaussa to odjęcie drugiego obrazu od pierwszego.
+
+  Następnie wprowadzamy pojęcie piramidy rodziny przeskalowanych obrazów będących obliczonymi różnicami Gaussa.
+  Obraz bardziej rozmyty skalujemy za pomocą interpolacji biliniowej z rozmiarem międzypikselowym 1.5 w każdym
+  kierunku. Następnie obliczamy maxima i minima dla funkcji skali. Piksel jest zatrzymywany gdy jest maximum
+  lub minimum w porównaniu z 8mio sąsiedztwem na obecnym poziomie i z 9 sąsiadami na każdym z poziomów poniżej i powyżej.
+
+Śledzenie:
+
+  Każdy z powyższych algorytmw zwraca zbiór regionów dla każdej klatki video. Każdy region to pewna obserwacja.
+  Celem śledzenia jest wykorzystanie tych obserwacji do generacji trajektorii odpowiadającej poruszającemu
+  się obiektowi.
+
+
+PRZYDATNOŚĆ: Duża.

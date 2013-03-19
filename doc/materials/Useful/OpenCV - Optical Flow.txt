@@ -1,0 +1,26 @@
+(inaczej: Metoda Shi-Tomasi-Kanade)
+
+Przepływ optyczny - opis wykorzystania algorytmu wykrywania i śledzenia ruchu na
+podstawie przepływu optycznego zaimplementowanego w bibliotece OpenCV.
+
+Zasada działania:
+Mając zadany punkt na obrazie I1 [x1, y1] chcemy odnaleźć ten sam punkt na obrazie I2 [x1 + dx, y1 + dy]
+którego delty spełniają minimum dla poniższego kryterium błędu:
+
+E(dx, dy) = sum_{x=x1 - wx}^{x1 + wx} sum_{y=y1 - wy}^{y1 + wy} (I1(x,y) - I2(x + dx, y + dy))
+
+gdzie:
+wx, wy - współrzędne opisujące obszar przesunięcia (przeszukiwanie tego obszaru jest konieczne ze względu na przeskoki, szczeliny itp).
+
+No dobrze ale co śledzić?
+Cechy, punkty które mają duże własności własne. Dlaczego wartości własne?
+
+Wektorem własnym macierzy kwadratowej A nazywamy niezerowy wektor a którym pomnożony przez
+tą macierz zwróci oryginalny wektor pomnożony przez pojedynczy skalar lambda.
+
+Interpretacja geometryczna tego twierdzenia jest taka, że wektory własne nie ulegają przekształceniu
+po przemnożeniu przez kwadratową macierz transformacji (zostają tylko przeskalowane o wartość własną). Kierunek wektorów przed i po przekształceniu pozostaje ten sam.
+
+Skoro dobre cechy mają duże wartości własne, to implikuje, że b. dobrymi cechami są narożniki lub punkty charakterystyczne tekstury obiektu.
+
+PRZYDATNOŚĆ: Duża.

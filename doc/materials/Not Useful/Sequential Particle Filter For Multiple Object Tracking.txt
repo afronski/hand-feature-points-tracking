@@ -1,0 +1,7 @@
+Artykuł w którym autorzy poruszają kwestię śledzenia obiektów w sekwencjach
+wideo z przesłaniającymi przeszkodami. W celu ominięcia problemu przesłanianych
+obiektów proponują dwuskładnikowe rozwiązanie:
+- Sekwencyjny filtr cząsteczkowy
+- Układ warstw obliczany na podstawie funkcji klasyfikacji koloru otoczenia i tła.
+
+PRZYDATNOŚĆ: Mała, generalnie artykuł opisuje zupełnie inny problem.
