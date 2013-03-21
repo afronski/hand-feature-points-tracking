@@ -1,0 +1,4 @@
+Metoda geometryczna do lokalnego dopasowania cech oparta o wyszukiwanie maksymalnej kliki w grafie.
+Wykorzystywana wraz z obrazami posiadającymi powtarzalny wzorzec (krata, linie etc).
+
+PRZYDATNOŚĆ: Mała.

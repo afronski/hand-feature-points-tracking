@@ -1,0 +1,4 @@
+Wykorzystanie dwustopniowej klasyfikacji opartej o randomizowane drzewa nauczone na podstawie widoku.
+Lepsze niż 'Scale Invariant Feature Transform', SURF. W OpenCV 2.x mamy CvRTrees do tego.
+
+PRZYDATNOŚĆ: Spora.
