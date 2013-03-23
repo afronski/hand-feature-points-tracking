@@ -8,7 +8,8 @@
         return results.length == 1 ? results[0] : results;
       },
 
-      context;
+      context,
+      points = [];
 
   // Methods related with overlay.
   function hideOverlay() {
@@ -64,10 +65,27 @@
 
   // Sending coordinates.
   function getData() {
-    return [
-      { id: 1, x: 100, y: 100 },
-      { id: 1, x: 200, y: 200 }
-    ];
+    return points;
+  }
+
+  function drawRect(x, y, a, color) {
+    context.fillStyle = color;
+    context.fillRect(x - a / 2, y - a / 2, a, a);
+  }
+
+  function onMouseDown(event) {
+    var canvas = getImageCanvas(),
+        context = getImageCanvasContext();
+
+    drawRect(event.offsetX, event.offsetY, 6, "rgba(0,     0,   0, 255)");
+    drawRect(event.offsetX, event.offsetY, 3, "rgba(255, 255, 255, 255)");
+    drawRect(event.offsetX, event.offsetY, 1, "rgba(255,   0,   0, 255)");
+
+    points.push({
+      id: $("#movies").value,
+      x: event.offsetX,
+      y: event.offsetY
+    });
   }
 
   function onDataSending() {
@@ -78,9 +96,7 @@
       return;
     }
 
-    data.forEach(function(coordinates) {
-      xhrPost("/coordinates", coordinates);
-    });
+    xhrPost("/coordinates", data);
   }
 
   // Changing movies in select control.
@@ -88,20 +104,44 @@
     return $("option[value='%value']".replace("%value", $("#movies").value)).innerText;
   }
 
+  function attachMouseEventHandlers() {
+    var canvas = getImageCanvas();
+
+    canvas.addEventListener("mousedown", onMouseDown, false);
+  }
+
+  function detachMouseEventHandlers() {
+    var canvas = getImageCanvas();
+
+    canvas.removeEventListener("mousedown", onMouseDown, false);
+  }
+
+  function onClear() {
+    clearCanvas();
+    points = [];
+
+    xhrGet("/frame/" + $("#movies").value, loadFirstFrame);
+  }
+
   function onMovieChanging() {
     var value = $("#movies").value,
         movie;
 
+    points = [];
+    detachMouseEventHandlers();
+
     if (value === "-1") {
       clearCanvas();
-      toggleSendButton(false);
+      toggleButton("#send-coordinates", false);
+      toggleButton("#clear", false);
 
       $("#video-container").classList.add("hidden");
       $("#player").removeAttribute("src");
     } else {
       xhrGet("/frame/" + value, loadFirstFrame);
 
-      toggleSendButton(true);
+      toggleButton("#send-coordinates", true);
+      toggleButton("#clear", true);
 
       $("#video-container").classList.remove("hidden");
 
@@ -117,6 +157,7 @@
 
     context.drawImage(this, 0, 0, this.width, this.height, 0, 0, canvas.width, canvas.height);
     hideOverlay();
+    attachMouseEventHandlers();
   }
 
   function loadFirstFrame() {
@@ -128,25 +169,28 @@
   }
 
   // UI state helpers.
-  function toggleSendButton(value) {
-    var send = $("#send-coordinates");
+  function toggleButton(selector, value) {
+    var button = $(selector);
 
     if (!!value) {
-      send.removeAttribute("disabled");
+      button.removeAttribute("disabled");
     } else {
-      send.setAttribute("disabled", "disabled");
+      button.setAttribute("disabled", "disabled");
     }
   }
 
   function enableUI() {
     var movies = $("#movies"),
+        clear = $("#clear"),
         send = $("#send-coordinates");
 
     movies.removeAttribute("disabled");
-    toggleSendButton(false);
+    toggleButton("#send-coordinates", false);
+    toggleButton("#clear", false);
 
     movies.addEventListener("change", onMovieChanging);
     send.addEventListener("click", onDataSending);
+    clear.addEventListener("click", onClear);
   }
 
   // Application logic.
