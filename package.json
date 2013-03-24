@@ -10,7 +10,8 @@
     "colors":  "*",
     "express": "3.x.x",
     "vid-streamer": "*",
-    "execSync": "*"
+    "execSync": "*",
+    "glob": "*"
   },
 
   "devDependencies": {

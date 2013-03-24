@@ -1,15 +1,21 @@
     "use strict";
 
     require("colors");
-
+    // SKĄD TE STRATY JAKOŚCI ? -> OpenCV Writer? -> FFMPEG?
 var PORT = 9292,
-    FirstFramePostFix = "_first_frame.png",
 
+    FirstFramePostFix = "_first_frame.png",
+    ResultMovieBeforeConversionPostFix = "_tracking_result.avi",
+    ResultMoviePostFix = "_tracking_result.webm",
+
+    path = require("path"),
+    glob = require("glob"),
     util = require("util"),
     express = require("express"),
     videoStreamer = require("vid-streamer"),
     execSync = require("execSync"),
 
+    movies = [],
     app = express(),
 
     info = function(text) {
@@ -29,14 +35,29 @@ var PORT = 9292,
       response.end(body);
     },
 
+    prettyPrint = function(object) {
+      return "\n" + JSON.stringify(object, null, 2);
+    },
+
+    notTrackingResults = function(element) {
+      return element.indexOf(ResultMovieBeforeConversionPostFix) === -1;
+    },
+
+    movieMapper = function(element, index) {
+      return {
+        value: index + 1,
+        name: path.basename(element),
+        path: element
+      };
+    },
+
     getMovieList = function() {
-      return [
-        {
-          name: "circle_sample_1.avi",
-          path: "circle_sample_1.avi",
-          value: 1
-        }
-      ];
+      if (movies.length <= 0) {
+        movies = glob.sync("./assets/*.avi").filter(notTrackingResults).map(movieMapper);
+        debug("Listing movie files from assets directory: " + prettyPrint(movies));
+      }
+
+      return movies;
     },
 
     getById = function(array, id) {
@@ -44,20 +65,51 @@ var PORT = 9292,
       return !!result ? result : null;
     },
 
-    extractFileName = function(path) {
-      var index = path.lastIndexOf(".");
-
-      if (index !== -1) {
-        return path.substr(0, index);
-      }
-
-      return path;
-    },
-
     extractFirstFrame = function(movieObject) {
       if (!!movieObject) {
-        if (execSync.code(util.format("./bin/export-first-frame assets/%s", movieObject.path)) === 0) {
-          return util.format("/%s", extractFileName(movieObject.path) + FirstFramePostFix);
+        if (execSync.code(util.format("./bin/export-first-frame %s", movieObject.path)) === 0) {
+          var filename = path
+                          .basename(movieObject.path)
+                          .replace(path.extname(movieObject.path), "");
+
+          return util.format("/%s", filename + FirstFramePostFix);
+        }
+      }
+
+      return null;
+    },
+
+    toCoordinates = function(element) {
+      return util.format("%s %s", element.x, element.y);
+    },
+
+    trackPoints = function(points, movieObject) {
+      var trackingInvocation,
+          conversionInvocation,
+          pointsList,
+          filename;
+
+      if (!!movieObject) {
+        pointsList = points.map(toCoordinates).join(" ");
+        trackingInvocation = util.format("./bin/tracking %s %s", movieObject.path, pointsList)
+
+        debug("Invoking: " + trackingInvocation);
+
+        if (execSync.code(trackingInvocation) === 0) {
+            filename = path
+                        .basename(movieObject.path)
+                        .replace(path.extname(movieObject.path), "");
+
+            conversionInvocation = util.format("./convert-one.sh %s",
+                                               filename + ResultMovieBeforeConversionPostFix);
+
+            debug("Invoking: " + conversionInvocation);
+
+            if (execSync.code(conversionInvocation) === 0) {
+              debug("Returning new video: " + filename + ResultMoviePostFix);
+
+              return util.format("%s", filename + ResultMoviePostFix);
+            }
         }
       }
 
@@ -88,9 +140,16 @@ app.get("/frame/:id", function(request, response) {
 });
 
 app.post("/coordinates", function(request, response) {
-  debug("Save coordinates for salient point " + JSON.stringify(request.body));
+  var points = request.body,
+      uri = null;
 
-  sendJSON(response, { status: "OK" });
+  if (points.length > 0) {
+    debug("Save coordinates for salient point: " + prettyPrint(points));
+
+    uri = trackPoints(points, getById(getMovieList(), parseInt(points[0].id, 10)));
+  }
+
+  sendJSON(response, { status: "OK", resultMovieURI: uri });
 });
 
 app.listen(PORT);

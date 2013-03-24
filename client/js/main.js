@@ -96,7 +96,7 @@
       return;
     }
 
-    xhrPost("/coordinates", data);
+    xhrPost("/coordinates", data, replaceMovie);
   }
 
   // Changing movies in select control.
@@ -104,6 +104,7 @@
     return $("option[value='%value']".replace("%value", $("#movies").value)).innerText;
   }
 
+  // Mouse event handlers.
   function attachMouseEventHandlers() {
     var canvas = getImageCanvas();
 
@@ -116,6 +117,21 @@
     canvas.removeEventListener("mousedown", onMouseDown, false);
   }
 
+  // Change source for video tag.
+  function changeVideo(name) {
+    if (!!name) {
+      $("#player").setAttribute("src", "/videos-converted/%webm".replace("%webm", name));
+    }
+  }
+
+  function replaceMovie() {
+    var response = JSON.parse(this.responseText);
+
+    changeVideo(response.resultMovieURI);
+    hideOverlay();
+  }
+
+  // Clearing canvas.
   function onClear() {
     clearCanvas();
     points = [];
@@ -146,7 +162,7 @@
       $("#video-container").classList.remove("hidden");
 
       movie = getTextFromActivePositionInSelect().replace("avi", "webm");
-      $("#player").setAttribute("src", "/videos-converted/%webm".replace("%webm", movie))
+      changeVideo(movie);
     }
   }
 
