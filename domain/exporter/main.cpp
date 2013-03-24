@@ -5,6 +5,8 @@
 #include <opencv/cxcore.h>
 #include <opencv/highgui.h>
 
+#include "../common/path.hpp"
+
 void help() {
   std::cout << "first-frame-exporter                               Wojciech Gawroński (2013)" << std::endl;
   std::cout << "Usage:                                                                      " << std::endl;
@@ -12,16 +14,6 @@ void help() {
   std::cout << "     - input_file_AVI - AVI file                                            " << std::endl;
   std::cout << "     - output_file_PNG - PNG file (default: input_file_AVI_first_frame.png) " << std::endl;
   std::cout << std::endl;
-}
-
-std::string extractFileName(const std::string& input) {
-  size_t index = input.find_last_of(".");
-
-  if (index != std::string::npos) {
-    return input.substr(0, index);
-  }
-
-  return input;
 }
 
 int grabFrame(std::string input, std::string output) {

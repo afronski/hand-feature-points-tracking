@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/video/tracking.hpp>
 
@@ -95,8 +96,8 @@ int main (int argc, char* argv[]) {
       kalmanPoints.push_back(statePt);
 
       image = cv::Scalar::all(0);
-      drawCross(image, statePt, cv::Scalar(255,255,255), 5);
-      drawCross(image, measPt, cv::Scalar(0,0,255), 5);
+      drawCross(image, statePt, cv::Scalar(255, 255, 255), 5);
+      drawCross(image, measPt, cv::Scalar(0, 0, 255), 5);
 
       for (int i = 0; i < mousePoints.size() - 1; i++) {
         cv::line(image, mousePoints[i], mousePoints[i+1], cv::Scalar(255, 255, 0), 1);
