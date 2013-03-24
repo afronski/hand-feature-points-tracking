@@ -1,11 +1,17 @@
 #include "path.hpp"
 
-std::string extractFileName(const std::string& input) {
-  size_t index = input.find_last_of(".");
+namespace common {
+  namespace path {
 
-  if (index != std::string::npos) {
-    return input.substr(0, index);
+    std::string extractFileName(const std::string& input) {
+      size_t index = input.find_last_of(".");
+
+      if (index != std::string::npos) {
+        return input.substr(0, index);
+      }
+
+      return input;
+    }
+
   }
-
-  return input;
 }

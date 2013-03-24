@@ -16,6 +16,8 @@ var PORT = 9292,
     execSync = require("execSync"),
 
     movies = [],
+    algorithms = [],
+
     app = express(),
 
     info = function(text) {
@@ -60,6 +62,25 @@ var PORT = 9292,
       return movies;
     },
 
+    toAlgorithm = function(element, index) {
+      return { value: index, name: element };
+    },
+
+    nonEmpty = function(element) {
+      return !!element;
+    },
+
+    getAlgorithmsList = function() {
+      var output;
+
+      if (algorithms.length <= 0) {
+        output = execSync.stdout("./bin/tracking --list-algorithms");
+        algorithms = output.split("\n").filter(nonEmpty).map(toAlgorithm);
+      }
+
+      return algorithms;
+    },
+
     getById = function(array, id) {
       var result = array.filter(function(element) { return element.value === id; })[0];
       return !!result ? result : null;
@@ -83,15 +104,21 @@ var PORT = 9292,
       return util.format("%s %s", element.x, element.y);
     },
 
-    trackPoints = function(points, movieObject) {
+    trackPoints = function(points, movieObject, algorithmId) {
       var trackingInvocation,
           conversionInvocation,
           pointsList,
+          algorithm,
           filename;
 
       if (!!movieObject) {
         pointsList = points.map(toCoordinates).join(" ");
-        trackingInvocation = util.format("./bin/tracking %s %s", movieObject.path, pointsList)
+        algorithm = algorithms[algorithmId].name;
+
+        trackingInvocation = util.format('./bin/tracking %s "%s" %s',
+                                         movieObject.path,
+                                         algorithm,
+                                         pointsList)
 
         debug("Invoking: " + trackingInvocation);
 
@@ -129,6 +156,12 @@ app.get("/movies", function(request, response) {
   sendJSON(response, getMovieList());
 });
 
+app.get("/algorithms", function(request, response) {
+  debug("Get algorithms list");
+
+  sendJSON(response, getAlgorithmsList());
+});
+
 app.get("/frame/:id", function(request, response) {
   var id = parseInt(request.params.id, 10),
       uri;
@@ -139,14 +172,17 @@ app.get("/frame/:id", function(request, response) {
   sendJSON(response, { status: "OK", imageURI: uri });
 });
 
-app.post("/coordinates", function(request, response) {
-  var points = request.body,
+app.post("/data", function(request, response) {
+  var data = request.body,
+      movieObject,
       uri = null;
 
-  if (points.length > 0) {
-    debug("Save coordinates for salient point: " + prettyPrint(points));
+  if (data.points.length > 0) {
+    debug(util.format("Selected video %s with algorithm %s", data.id, data.algorithmId));
+    debug("Save coordinates for salient point: " + prettyPrint(data.points));
 
-    uri = trackPoints(points, getById(getMovieList(), parseInt(points[0].id, 10)));
+    movieObject = getById(getMovieList(), parseInt(data.id, 10));
+    uri = trackPoints(data.points, movieObject, data.algorithmId);
   }
 
   sendJSON(response, { status: "OK", resultMovieURI: uri });

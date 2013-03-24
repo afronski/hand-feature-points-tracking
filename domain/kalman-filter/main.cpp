@@ -4,7 +4,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/video/tracking.hpp>
 
-#include "../common/primitives.hpp"
+#include "../common/vision.hpp"
 
 struct mouse_info_struct {
   int x;
@@ -91,14 +91,14 @@ int main (int argc, char* argv[]) {
       kalmanPoints.push_back(statePt);
 
       image = cv::Scalar::all(0);
-      drawCross(image, statePt, cv::Scalar(255, 255, 255), 5);
-      drawCross(image, measPt, cv::Scalar(0, 0, 255), 5);
+      common::vision::draw_cross(image, statePt, cv::Scalar(255, 255, 255), 5);
+      common::vision::draw_cross(image, measPt, cv::Scalar(0, 0, 255), 5);
 
-      for (int i = 0; i < mousePoints.size() - 1; i++) {
+      for (size_t i = 0; i < mousePoints.size() - 1; i++) {
         cv::line(image, mousePoints[i], mousePoints[i+1], cv::Scalar(255, 255, 0), 1);
       }
 
-      for (int i = 0; i < kalmanPoints.size() - 1; i++) {
+      for (size_t i = 0; i < kalmanPoints.size() - 1; i++) {
         cv::line(image, kalmanPoints[i], kalmanPoints[i+1], cv::Scalar(0, 255, 0), 1);
       }
 

@@ -3,6 +3,12 @@
 
 #include <string>
 
-std::string extractFileName(const std::string& input);
+namespace common {
+  namespace path {
+
+    std::string extractFileName(const std::string& input);
+
+  }
+}
 
 #endif

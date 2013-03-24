@@ -89,7 +89,13 @@ label {
 
 #movies {
   font-size: 1.5em;
-  width: 510px;
+  width: 480px;
+  margin-left: 31px;
+}
+
+#algorithms {
+  font-size: 1.5em;
+  width: 480px;
 }
 
 #send-coordinates {

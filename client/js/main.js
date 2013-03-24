@@ -64,7 +64,7 @@
   }
 
   // Sending coordinates.
-  function getData() {
+  function getPoints() {
     return points;
   }
 
@@ -82,21 +82,37 @@
     drawRect(event.offsetX, event.offsetY, 1, "rgba(255,   0,   0, 255)");
 
     points.push({
-      id: $("#movies").value,
       x: event.offsetX,
       y: event.offsetY
     });
   }
 
   function onDataSending() {
-    var data = getData();
+    var points = getPoints(),
+        id = $("#movies").value,
+        algorithmId = $("#algorithms").value,
+        data = {
+          id: id,
+          algorithmId: algorithmId,
+          points: points
+        };
 
-    if (data.length <= 0) {
+    if (algorithmId < 0) {
+      alert("You didn't select any algorithm. Please select any and try again.");
+      return;
+    }
+
+    if (id < 0) {
+      alert("You didn't select any video. Please select any and try again.");
+      return;
+    }
+
+    if (points.length <= 0) {
       alert("You didn't select any salient point. Please select any and try again.");
       return;
     }
 
-    xhrPost("/coordinates", data, replaceMovie);
+    xhrPost("/data", data, replaceMovie);
   }
 
   // Changing movies in select control.
@@ -197,10 +213,13 @@
 
   function enableUI() {
     var movies = $("#movies"),
+        algorithms = $("#algorithms"),
         clear = $("#clear"),
         send = $("#send-coordinates");
 
     movies.removeAttribute("disabled");
+    algorithms.removeAttribute("disabled");
+
     toggleButton("#send-coordinates", false);
     toggleButton("#clear", false);
 
@@ -223,12 +242,32 @@
       movies.appendChild(option);
     });
 
+    getAlgorithms();
+  }
+
+  function buildAlgorithmsList() {
+    var response = JSON.parse(this.responseText),
+        algorithms = $("#algorithms");
+
+    response.forEach(function(algorithm) {
+      var option = document.createElement("option");
+
+      option.setAttribute("value", algorithm.value);
+      option.innerText = algorithm.name;
+
+      algorithms.appendChild(option);
+    });
+
     enableUI();
     hideOverlay();
   }
 
   function getMovies() {
     xhrGet("/movies", buildMovieList);
+  }
+
+  function getAlgorithms() {
+    xhrGet("/algorithms", buildAlgorithmsList);
   }
 
   function init() {
