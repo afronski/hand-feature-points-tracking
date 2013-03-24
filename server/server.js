@@ -1,7 +1,7 @@
     "use strict";
 
     require("colors");
-    // SKĄD TE STRATY JAKOŚCI ? -> OpenCV Writer? -> FFMPEG?
+
 var PORT = 9292,
 
     FirstFramePostFix = "_first_frame.png",

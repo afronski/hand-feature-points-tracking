@@ -5,11 +5,9 @@ assets/*.png
 node_modules/
 
 bin/*
-
-.sconsign.dblite
-
 *.o
 
+.sconsign.dblite
 *.sublime-workspace
 
 *.pdf
