@@ -4,6 +4,8 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/video/tracking.hpp>
 
+#include "../common/primitives.hpp"
+
 struct mouse_info_struct {
   int x;
   int y;
@@ -13,7 +15,7 @@ mouse_info_struct mouse_info = { -1, -1 },
                   last_mouse;
 
 std::vector<cv::Point>  mousePoints,
-                    kalmanPoints;
+                        kalmanPoints;
 
 bool shouldWeExit(char keyCode) {
   return keyCode == 27 || keyCode == 'q' || keyCode == 'Q';
@@ -24,13 +26,6 @@ void on_mouse(int event, int x, int y, int flags, void* param) {
 
   mouse_info.x = x;
   mouse_info.y = y;
-}
-
-void drawCross(cv::Mat& image, const cv::Point& center, const cv::Scalar& color, int d) {
-  cv::line(image, cv::Point(center.x - d, center.y - d),
-                  cv::Point(center.x + d, center.y + d), color, 2, CV_AA, 0);
-  cv::line(image, cv::Point(center.x + d, center.y - d),
-                  cv::Point(center.x - d, center.y + d), color, 2, CV_AA, 0);
 }
 
 int main (int argc, char* argv[]) {
