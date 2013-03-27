@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include <stdexcept>
 
 #include "CommandLineInterface.hpp"
@@ -9,14 +8,17 @@ namespace common {
     if (minimum_amount_of_arguments != 0 &&
         static_cast<unsigned int>(argc - 1) < minimum_amount_of_arguments) {
       help();
-      std::exit(CommandLineInterface::MISSING_ARGUMENTS);
+      return CommandLineInterface::MISSING_ARGUMENTS;
     }
 
     for (int i = 1; i < argc; ++i) {
       arguments.push_back(argv[i]);
     }
 
-    handle_special_case();
+    if (handle_special_case()) {
+      return CommandLineInterface::SUCCESS_EXIT_CODE;
+    }
+
     return main();
   }
 

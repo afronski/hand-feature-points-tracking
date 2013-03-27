@@ -9,6 +9,7 @@ namespace common {
   class CommandLineInterface {
     public:
       static const int MISSING_ARGUMENTS = -127;
+      static const int SUCCESS_EXIT_CODE = 0;
 
       CommandLineInterface() {}
 
@@ -25,7 +26,9 @@ namespace common {
       virtual void help() = 0;
       virtual int main() = 0;
 
-      virtual void handle_special_case() {};
+      virtual bool handle_special_case() {
+        return false;
+      }
 
     private:
       std::vector<std::string> arguments;
