@@ -3,7 +3,7 @@ environment = Environment(CPPFLAGS = "-O3 -Wall")
 openCV = [ "opencv_core", "opencv_highgui", "opencv_video", "opencv_imgproc" ]
 libraries = openCV + [ "common" ]
 
-common = Glob("./domain/exporter/main.cpp")
+common = [ "./domain/exporter/main.cpp" ]
 
 environment.Library("./bin/common", [
                               "./domain/common/CommandLineInterface.cpp",
@@ -13,8 +13,8 @@ environment.Library("./bin/common", [
                             ],
                             LIBS = openCV)
 
-exporter = Glob("./domain/exporter/main.cpp")
-kalman   = Glob("./domain/kalman-filter/main.cpp")
+exporter = [ "./domain/exporter/main.cpp" ]
+kalman   = [ "./domain/kalman-filter/main.cpp" ]
 tracking = [
     "./domain/tracking/PointsMarker.cpp",
     "./domain/tracking/AlgorithmFactory.cpp",
