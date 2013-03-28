@@ -10,8 +10,10 @@ namespace common {
 
     class VideoStream {
       public:
-        VideoStream(FrameTransformer* transformer);
+        VideoStream();
         ~VideoStream();
+
+        void add(FrameTransformer* transformer);
 
         void open(const std::string& input);
         void transfer(const std::string& output);

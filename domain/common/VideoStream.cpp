@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
+#include <algorithm>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/core_c.h>
@@ -10,25 +11,47 @@
 namespace common {
   namespace vision {
 
+    // Functors.
+    class TransformerDelete {
+      public:
+        void operator() (FrameTransformer* transformer) {
+          if (transformer) {
+            delete transformer;
+          }
+        }
+    };
+
+    class FrameProcessor {
+      public:
+        FrameProcessor(cv::Mat& frame): frameReference(frame) {}
+
+        void operator() (FrameTransformer* transformer) {
+          transformer->process(frameReference);
+        }
+
+      private:
+        cv::Mat& frameReference;
+    };
+
+    // Protected implementation for class internals.
     struct VideoStream::PIMPL {
-      PIMPL() {
-        transformer = 0;
-      }
+      typedef std::vector<FrameTransformer*> TransformersList;
+      typedef TransformersList::iterator TransformersIterator;
 
       ~PIMPL() {
-        if (transformer) {
-          delete transformer;
-        }
+        TransformerDelete deleteTransform;
+
+        std::for_each(transformers.begin(), transformers.end(), deleteTransform);
       }
 
       bool isValid() const {
-        return !!transformer;
+        return transformers.size() > 0;
       }
 
       cv::VideoCapture input_video;
       cv::VideoWriter output_video;
 
-      FrameTransformer* transformer;
+      TransformersList transformers;
 
       int codec;
       int fps;
@@ -39,9 +62,8 @@ namespace common {
       cv::Size dimmensions;
     };
 
-    VideoStream::VideoStream(FrameTransformer* transformer) {
+    VideoStream::VideoStream() {
       this->_implementation = new VideoStream::PIMPL();
-      this->_implementation->transformer = transformer;
     }
 
     VideoStream::~VideoStream() {
@@ -52,19 +74,24 @@ namespace common {
       return _implementation->isValid();
     }
 
+    void VideoStream::add(FrameTransformer* transformer) {
+      this->_implementation->transformers.push_back(transformer);
+    }
+
     void VideoStream::processFrames() {
-      cv::Mat input,
-              output;
+      cv::Mat frame;
 
       while (true) {
-        _implementation->input_video.read(input);
+        _implementation->input_video.read(frame);
 
-        if (input.empty()) {
+        if (frame.empty()) {
           break;
         }
 
-        output = _implementation->transformer->process(input);
-        _implementation->output_video.write(output);
+        FrameProcessor frameProcessor(frame);
+        std::for_each(_implementation->transformers.begin(), _implementation->transformers.end(), frameProcessor);
+
+        _implementation->output_video.write(frame);
       }
     }
 

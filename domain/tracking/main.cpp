@@ -7,7 +7,7 @@
 #include "../common/VideoStream.hpp"
 #include "../common/CommandLineInterface.hpp"
 
-#include "AlgorithmFactory.hpp"
+#include "factories/AlgorithmFactory.hpp"
 
 class TrackerApplication : public common::CommandLineInterface {
   public:
@@ -51,8 +51,9 @@ class TrackerApplication : public common::CommandLineInterface {
           PointsAwareFrameTransformer* transformer = AlgorithmFactory::createAlgorithm(method);
 
           transformer->fill(common::vision::extract_points_from_arguments(*this, 2));
-          common::vision::VideoStream stream(transformer);
+          common::vision::VideoStream stream;
 
+          stream.add(transformer);
           stream.open(input);
           stream.transfer(output);
         } catch(const std::exception& exception) {

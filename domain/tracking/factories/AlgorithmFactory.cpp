@@ -1,6 +1,7 @@
 #include <iostream>
 
-#include "PointsMarker.hpp"
+#include "../implementations/PointsMarker.hpp"
+
 #include "AlgorithmFactory.hpp"
 
 static const std::string names[] = {

@@ -8,7 +8,7 @@
 class FrameTransformer {
   public:
     virtual ~FrameTransformer() {}
-    virtual cv::Mat process(const cv::Mat& frame) = 0;
+    virtual void process(cv::Mat& frame) = 0;
 };
 
 class PointsAwareFrameTransformer : public FrameTransformer {

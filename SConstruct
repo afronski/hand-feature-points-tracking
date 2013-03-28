@@ -16,8 +16,8 @@ environment.Library("./bin/common", [
 exporter = [ "./domain/exporter/main.cpp" ]
 kalman   = [ "./domain/kalman-filter/main.cpp" ]
 tracking = [
-    "./domain/tracking/PointsMarker.cpp",
-    "./domain/tracking/AlgorithmFactory.cpp",
+    "./domain/tracking/implementations/PointsMarker.cpp",
+    "./domain/tracking/factories/AlgorithmFactory.cpp",
     "./domain/tracking/main.cpp"
 ]
 
