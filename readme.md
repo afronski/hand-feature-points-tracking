@@ -11,8 +11,8 @@ Thin back-end and simple front-end:
   - express
   - vid-streamer
   - colors
-  - bower
-  - grunt
+  - execSync
+  - glob
 - pure JavaScript (ES5), HTML5, CSS3 (front-end)
 
 Continuous integration:

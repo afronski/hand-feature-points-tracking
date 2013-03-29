@@ -14,11 +14,6 @@
     "glob": "*"
   },
 
-  "devDependencies": {
-    "bower":  "0.8.x",
-    "grunt":  "0.4.x"
-  },
-
   "license": "MIT",
   "engines": {
     "node": ">= 0.8"
