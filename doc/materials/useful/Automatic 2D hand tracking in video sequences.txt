@@ -1,0 +1,5 @@
+Alternatywny (do filtrów cząsteczkowych i filtrów Kalmana) algorytm oparty na śledzeniu i wykrywaniu ruchów dłoni w sekwencjach wideo ilustrujących język migowy. Zawiera dokładny opis i informacje o zbiorze danych wejściowych.
+
+Ważny artykuł, ze względu na ew. alternatywę i przedstawiciela algorymtu uczenia maszynowego opartego na HMM i algorytmie Vitterbiego.
+
+PRZYDATNOŚĆ: Spora.

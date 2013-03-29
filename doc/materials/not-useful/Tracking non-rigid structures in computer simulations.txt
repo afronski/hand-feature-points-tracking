@@ -1,0 +1,3 @@
+Artykuł z zupełnie innej przestrzeni problemów - śledzenie ciał miękkich, o ściśle ustalonym kształcie. Dodatkowo domena problemu jest biologiczno chemiczna i nawet pośrednie wykorzystanie algorytmu przesłaniania wymaga olbrzymiej reimplementacji.
+
+PRZYDATNOŚĆ: Brak jakiejkolwiek, zupełnie inna domena problemu.

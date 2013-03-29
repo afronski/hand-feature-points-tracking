@@ -1,0 +1,3 @@
+Ważny papierek, jednak metoda mocno ograniczona wyborem punktów charakterystycznych. Warto przy ocenie i jej ewaluacji podkreślić tą wadę, z drugiej strony warto zwrócić uwagę na jej dokładność przy takim wyborze punktów charakterystycznych w stosunku do innych metod.
+
+PRZYDATNOŚĆ: Spora, ale jednak ograniczony dobór punktów charakterystycznych.

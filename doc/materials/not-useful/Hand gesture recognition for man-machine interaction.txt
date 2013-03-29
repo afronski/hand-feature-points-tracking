@@ -1,0 +1,5 @@
+Generalnie cały artykuł jest mocno ogólny i raczej skupia się na ogólnych problemach jakie można napotkać tworząc system oparty o rozpoznawanie gestów wykonywanych dłońmi.
+
+Ogólnie dużo informacji o segmentacji skóry, wykrywaniu gestów i wykorzystywaniu operacji morfologicznych w celu ekstrakcji kształtu dłoni. Pomysł śledzenia oparty jest na skomplikowanych ukrytych modelach Markova.
+
+PRZYDATNOŚĆ: Mała.

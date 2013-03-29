@@ -1,0 +1,7 @@
+Generalnie artykuł opisujący zupełnie inny problem, jednak jego rozwiązanie może zostać wykorzystane w celu optymalizacji i zacieśnienia analizowanego obszaru wideo.
+
+Celem algorytmu jest analiza dłoni przesłaniającej twarz na podstawie analizy pól siłowych i pewnych cech, właściwości takich pól wyekstrahowanych z obrazu za pomocą prostych algorytmów wizyjnych.
+
+Algorytm w Naszym przypadku mógłby z powodzeniem zawęzić obszar analizowanego gestu, problemem jest jednak bardzo ograniczony i nietypowy format obrazów wejściowych (dłoń znajdująca się przed twarzą, zasłaniąca ją).
+
+PRZYDATNOŚĆ: Średnia, ulepszenie i optymalizacja - na pewno nie jest to główny algorytm.
