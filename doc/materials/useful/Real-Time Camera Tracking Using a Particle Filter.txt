@@ -1,0 +1,4 @@
+Jedna z najważniejszych metod do zaimplementowania - warto sie z nią zapoznać i wykorzystać do porównania.
+Warto się skupić na implementacji podstawowej, bez udziwnień.
+
+PRZYDATNOŚĆ: Spora.

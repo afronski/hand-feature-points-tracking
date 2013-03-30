@@ -1,0 +1,4 @@
+Bardzo ciężka metoda, może być skuteczna jednak wymaga zaangażowania w proces uczenia.
+Do analizy czy złożoność nie przewyższa zysku po implementacji.
+
+PRZYDATNOŚĆ: Spora, ale ze względu na złożoność do rozważenia.
