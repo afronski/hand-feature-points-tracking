@@ -1,0 +1,3 @@
+Bardzo ważny algorytm, rozwinięcie trackera LK z 1981 roku, ważny w kontekście Optical Flow.
+
+PRZYDATNOŚĆ: Duża.

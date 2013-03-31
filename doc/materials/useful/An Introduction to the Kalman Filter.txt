@@ -1,0 +1,3 @@
+Analiza i wprowadzenie teoretyczne do filtrów Kalmana.
+
+PRZYDATNOŚĆ: Spora.

@@ -1,0 +1,3 @@
+Przepływ optyczny obliczany w oparciu o metody energetyczne i analizę światła.
+
+PRZYDATNOŚĆ: Spora, warto zastanowić się nad sensem implementacji.

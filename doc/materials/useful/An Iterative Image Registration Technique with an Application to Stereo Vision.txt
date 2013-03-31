@@ -1,0 +1,4 @@
+Artykuł zawiera oryginalny algorytm Lucas-Tanade zaimplementowany wraz z optymalizacjami
+(piramidki obrazów) w OpenCV. Ważny w kontekście omawiania Optical Flow.
+
+PRZYDATNOŚĆ: Duża.
