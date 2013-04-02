@@ -90,10 +90,10 @@
 \def\ang#1{ang.~\emph{#1}}
 \def\lat#1{lac.~\emph{#1}}
 \def\e{\ensuremath{\textrm{\normalfont{}e}}}
-\def\stopien{\ensuremath{^{\circ}}\protect\space}
+\def\degree{\ensuremath{^{\circ}}\protect}
 \def\fixme#1{\marginpar{\tiny{}#1}}
 \newtheorem{twierdzenie}{Twierdzenie}[chapter]
-\newtheorem{wlasnosc}{Wlasność}[chapter]
+\newtheorem{wlasnosc}{Własność}[chapter]
 \newtheorem{lemat}{Lemat}[chapter]
 \newenvironment{dowod}{\parindent=0pt{\bf Dowód. }}{\begin{flushright}$\square$\end{flushright}}
 \def\captionlabeldelim{.}
@@ -119,6 +119,23 @@
    \setlength{\abovecaptionskip}{0pt}%
    \setlength{\belowcaptionskip}{10pt}%
    \caption}
+
+\newcommand{\gest}[9] {
+    \subsubsection{#1}
+        \begin{table}[!h]
+            \begin{tabular}{l p{10cm}}
+                \textbf{Tło i~kadr:}        & #2 \\
+                \textbf{Kształt i~wymiary:} & #3 \\
+                \textbf{Elementy składowe:} & #4 \\
+                \textbf{Ułożenie dłoni:}    & #5 \\
+                \textbf{Ruch i~kierunek:}   & #6 \\
+                \textbf{Pozycja wejściowa:} & #7 \\
+                \textbf{Punkty kluczowe:}   & #8 \\
+                \textbf{Punkty pośrednie:}  & #9 \\
+            \end{tabular}
+            \caption{Opis gestu "#1"}
+        \end{table}
+}
 
 \floatstyle{ruled}
 \newfloat{sample}{thp}{lop}

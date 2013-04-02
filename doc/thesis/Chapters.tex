@@ -1,121 +1,192 @@
 \chapter{Wstęp}\label{Chapter_Wstep}
 
-\section{Motywacja}\label{Section_Motywacja}
+  \section{Motywacja}\label{Section_Motywacja}
 
-\section{Cel}\label{Section_Cel}
+  \section{Cel}\label{Section_Cel}
 
-\chapter{Problem śledzenia punktów charakterystycznych w sekwencjach wideo}
+\chapter{Problem śledzenia punktów charakterystycznych w~sekwencjach wideo}
 
-\section{Opis dziedziny problemu}\label{Section_Problematyka}
-\cite{SalientPointsTracking05}
-\cite{GoodFeaturesToTrack94}
-\cite{LucasKanadeTracker81}
+  \section{Opis dziedziny problemu}\label{Section_Problematyka}
+    \cite{SalientPointsTracking05}
+    \cite{GoodFeaturesToTrack94}
+    \cite{LucasKanadeTracker81}
 
-\section{Podstawowe definicje}\label{Section_Definicje}
-\cite{SalientPointsTracking05}
-\cite{GoodFeaturesToTrack94}
-\cite{LucasKanadeTracker81}
+  \section{Podstawowe definicje}\label{Section_Definicje}
+    \cite{SalientPointsTracking05}
+    \cite{GoodFeaturesToTrack94}
+    \cite{LucasKanadeTracker81}
 
-\section{Analiza i porównanie wybranych algorytmów}\label{Section_Algorytmy}
+  \section{Analiza i~porównanie wybranych algorytmów}\label{Section_Algorytmy}
 
-\subsection{Algorytmy oparte punkty kluczowe i analizę wybitności}\label{Subsection_SaliencyAndKeypoints}
-\cite{SalientPointsTracking05}
+    \subsection{Algorytmy oparte punkty kluczowe i~analizę wybitności}\label{Subsection_SaliencyKeypoints}
+      \cite{SalientPointsTracking05}
 
-\subsection{Algorytm oparty o filtr Kalmana}\label{Subsection_Kalman}
-\cite{KalmanFilter95}
+    \subsection{Algorytmy oparte o~przepływ optyczny}\label{Subsection_OpticalFlow}
 
-\subsection{Algorytmy oparte o przepływ optyczny}\label{Subsection_OpticalFlow}
+      \subsubsection{Ogólny zarys algorytmów opartych o~przepływ optyczny}
+      \cite{OpticalFlowNonPriori05}
+      \cite{LucasKanadeTracker81}
 
-\textit{Lucas-Kanade}
+      \subsubsection{Lucas-Kanade}
+      \cite{OpenCvOpticalFlow04}
 
-\textit{Lucas-Kanade w wariacji Shi-Tomasi}
+      \subsubsection{Horn-Shunck}
+      \cite{HornSchunck81}
 
-\textit{TV-L}
+      \subsubsection{TV-L}
+      \cite{TVL107}
 
-\textit{Optymalizacja}
+      \subsubsection{Problem doboru cech do śledzenia dla algorytmów opartych o przepływ optyczny}
+      \cite{GoodFeaturesToTrack94}
 
-\cite{LucasKanadeTracker81}
-\cite{GoodFeaturesToTrack94}
-\cite{TVL107}
-\cite{OpticalFlowNonPriori05}
+    \subsection{Algorytm oparty o~filtr cząsteczkowy}\label{Subsection_ParticleFilter}
+      \cite{ParticleFilter05}
+      \cite{FingertipParticleFilter11}
 
-\subsection{Algorytmy oparte o filtr cząsteczkowy}\label{Subsection_ParticleFilter}
-\cite{ParticleFilter05}
-\cite{FingertipParticleFilter11}
+    \subsection{Algorytm oparty o~filtr Kalmana}\label{Subsection_Kalman}
+      \cite{KalmanFilter95}
 
-\subsection{Algorytmy oparte o decyzyjne drzewa losowe}\label{Subsection_RandomizedTrees}
-\cite{RandomizedTrees06}
-\cite{TwoStageRandomizedTrees11}
+    \subsection{Algorytm oparty o~decyzyjne drzewa losowe}\label{Subsection_RandomizedTrees}
+      \cite{RandomizedTrees06}
+      \cite{TwoStageRandomizedTrees11}
 
-\subsection{Algorytm oparty o analizę łańcuchów Markova}\label{Subsection_Vitterbi}
-\cite{HandTrackingVitterbi05}
-
-\chapter{Specyfikacja wewnętrzna}\label{Chapter_SpecyfikacjaWewnetrzna}
-
-\section{Wykorzystane technologie}\label{Section_Technologie}
-
-\subsection{C++}\label{Subsection_Cpp}
-
-\textit{Standard ISO C++ z roku 2003}\cite{CppStroustrup}\cite{EffectiveCpp}\cite{MoreEffectiveCpp}
-
-\textit{Krótkie wprowadzenie do Object Oriented Programming}
-
-\textit{Zastosowanie OOP w wizji komputerowej}
-
-\subsection{STL}\label{Subsection_STL}
-\textit{Opis biblioteki STL}\cite{EffectiveStl}
-
-\textit{Szablony}
-
-\textit{Algorytmy}
-
-\textit{Funktory}
-
-\subsection{OpenCV}\label{Subsection_OpenCV}
-
-\textit{Opis biblioteki OpenCV w wersji 2.0}\cite{LearningOpenCV}
-
-\textit{Podstawowe koncepcje wykorzystywane przy pracy z OpenCV}\cite{OpenCVCookbook}
-
-\subsection{Narzędzia pomocniczne}\label{Subsection_PomocniczeTechnologie}
-\textit{R}
-
-\textit{Automatyzacja pracy i koncepcja "ciągłej integracji"} - Bash, Scons, FFmpeg.
-
-\textit{HTML5, CSS3 i "middle-end" stworzony za pomocą node.js}
-
-\section{Szczegóły techniczne implementacji wybranych algorytmów}
+    \subsection{Algorytm oparty o~analizę łańcuchów Markova}\label{Subsection_Vitterbi}
+      \cite{HandTrackingVitterbi05}
 
 \chapter{Specyfikacja przeprowadzonych badań}\label{Chapter_SpecyfikacjaPrzeprowadzonychBadan}
 
-\section{Definicje gestów}\label{Section_DefinicjeGestow}
+  \section{Definicje gestów}\label{Section_DefinicjeGestow}
 
-W~ramach przeprowadzonych badań stworzono definicje poszczególnych gestów wykonywanych dłońmi użytkownika. Specyfikacja ma na celu ujednolicenie oraz uwspólnienie pojęć potrzebnych przy przeprowadzeniu analizy jakościowej oraz wydajnościowej dla wykorzystywanych danych wejściowych.
+    W~ramach przeprowadzonych badań stworzono definicje poszczególnych gestów wykonywanych dłońmi użytkownika. Poniższa specyfikacja ma na celu uwspólnienie pojęć potrzebnych przy przeprowadzeniu analizy jakościowej oraz wydajnościowej.
 
-Przed przystąpieniem do badań zostały stworzone testowe materiały zgodne z~protokołami zaprezentowanymi poniżej. W~zbiorze danych wejściowych możemy wyszczególnić następujące definicje gestów:
+    Wytyczne były pomocne przy procesie akwizycji oraz obróbki danych wejściowych. Wszystkie stworzone materiały testowe są zgodne z~przedstawionymi protokołami. W~zbiorze danych wejściowych możemy wyróżnić następujące definicje gestów:
 
-\begin{itemize}
-  \item Okrąg wykonywany do kamery otwartą prawą dłonią (w pozycji wejściowej dłoń znajduje się na godzinie dwunastej, kierunek ruchu jest zgodny z ruchem wskazówek zegara, promień około 20cm).
-  \item Krzyż równoramienny wykonywany zewnętrzną stroną dłoni z~wyciągniętymi dwoma palcami (wskazującym oraz środkowym) prawej dłoni (najpierw wykonywane jest ramię pionowe, następnie powracamy palcami do środka i kierujemy się w lewą stronę potem w prawą, promień krzyża to około 7cm).
-  \item Oburęczny gest rozciągania dłoni od środka obrazu na odległość około 20cm (obie dłonie znajdują się na środku i są uformowane gest "szczypty", obie są złączone czubkami palców).
-  \item Półokrąg znaczony wskazującym palcem lewej dłoni (poruszanie palcem i dłonią, kierunek przeciwny do ruchu wskazówek zegara, pozycja wyjściowa - palec wskazujący na godzinie dwunastej, promień 7cm).
-  \item Litera L wykonywana całą prawą dłonią, kształt litery zarysowują czubki palców (poruszanie górną częścią dłoni, złączonymi palcami, wysokość litery około 7cm).
-  \item Zaciśnięcie prawej dłoni do kamery od pozycji otwartej do zaciśniętej pięści bez poruszania dłoni. Pozycją wejściową jest rozłożona dłoń, w której każdy palec znajduje się osobno. W pozycji końcowej pozostaje zaciśnięta pięść z kciukiem na wierzchu. Gest powinien być wykonywany z różnymi prędkościami.
-\end{itemize}
+    \gest{Okrąg}
+         {Gest wykonywany na tle twarzy lub ciała.}
+         {Okrąg o promieniu 20 cm.}
+         {Prawa dłoń.}
+         {Okrąg wykonywany do kamery otwartą dłonią.}
+         {Kierunek ruchu jest zgodny z~ruchem wskazówek zegara.}
+         {Dłoń znajduje się na godzinie dwunastej.}
+         {Punkty charakterystyczne rozmieszczone równomiernie na krawędziach dłoni.}
+         {Punkty kluczowe połączone linią ciągłą rozmieszczone na okręgu co 30\degree.}
 
-\section{Akwizycja i obróbka danych wejściowych}\label{Section_DefinicjeGestow}
+    \newpage
+    \gest{Krzyż}
+         {Gest wykonywany na tle twarzy lub ciała.}
+         {Krzyż równoramienny o~promieniu 7 cm.}
+         {Dwa, wyciągnięte palce (wskazujący oraz środkowy) prawej dłoni}
+         {Kształt zarysowywany zewnętrzną strona dłoni.}
+         {W~pierwszej kolejności wykonywane jest ramię pionowe, następnie palce powracają do środka i~gest wykonywany jest w~lewą stronę a~następnie w~prawo.}
+         {Ustawiona dłoń znajduje się na godzinie dwunastej.}
+         {Punkty charakterystyczne rozmieszczone na czubkach wyciągniętych palców.}
+         {5 punktów kluczowych - cztery na krawędziach i~jeden w~środku figury.}
 
-\section{Procedura weryfikacji jakości badanego algorytmu}\label{Section_Jakosc}
+    \gest{Rozszerzanie}
+         {Gest wykonywany w~pozycji siedzącej.}
+         {W~pozycji wyjściowej, jest to kwadrat o~długości boku około 20 cm.}
+         {Obie dłonie złączone czubkami palców uformowane w~gest \textit{szczypty}.}
+         {Oburęczny gest rozciągania dłoni od środka.}
+         {Gest powinien symulować rozciąganie niewidzialnego materiału. Kształt dłoni nie powinien ulegać zmianie w~trakcie wykonywania gestu.}
+         {Obie złączone dłonie znajdują się w~środku figury na wysokości klatki piersiowej.}
+         {Punkty charakterystyczne rozmieszczone równomiernie na powierzchni obu dłoni.}
+         {Punkty kluczowe równomiernie rozmieszczone na przekątnej kwadratu.}
 
-\section{Procedura weryfikacji wydajności badanego algorytmu}\label{Section_Wydajnosc}
+    \newpage
+    \gest{Duża litera C}
+         {Gest wykonywany na jednolitej i~gładkiej powierzchni.}
+         {Półokrąg o~promieniu 10 cm.}
+         {Palec wskazujący lewej dłoni.}
+         {Zarysowanie kształtu w~kierunku przeciwnym do ruchu wskazówek zegara.}
+         {Gest powinien być wykonywany przez poruszenie całej dłoni, nie tylko samego palca.}
+         {Palec wskazujący na godzinie dwunastej.}
+         {Punkty charakterystyczne zaznaczone na krawędziach analizowanego palca.}
+         {Punkty połączone linią ciągłą rozmieszczone równomiernie na półokręgu co 30\degree.}
+
+    \gest{Duża litera L}
+         {Gest wykonywany na jednolitej i~gładkiej powierzchni.}
+         {Litera "L" o~wysokości 7 cm.}
+         {Złączone palce prawej dłoni.}
+         {Kształt litery zarysowują czubki palców.}
+         {Gest powinien być wykonywany przez poruszanie tylko złączonymi palcami, nie samą dłonią.}
+         {Palce na godzinie dwunastej.}
+         {Punkty charakterystyczne rozmieszczone równomiernie na górnej części dłoni.}
+         {4 punkty kluczowe - na początku, na końcu, na zgięciu litery oraz dodatkowy punkt na dłuższej części litery, dokładnie w~jej połowie.}
+
+    \newpage
+    \gest{Zgniecenie}
+         {Gest wykonywany na tle twarzy lub ciała.}
+         {Zaciśnięcie dłoni od rozwarcia do pięści.}
+         {Prawa dłoń.}
+         {W~pozycji wejściowej otwarta dłoń, w~pozycji końcowej pięść zwrócona palcami do kamery, z~kciukiem na wierzchu.}
+         {Gest powinien być wykonywany bez poruszania dłonią, z~jednolitą prędkością.}
+         {Otwarta dłoń z~rozłożonymi palcami, skierowana wewnętrzną stroną do kamery.}
+         {Punkty charakterystyczne znajdują się na czubkach palców.}
+         {Punkty kluczowe rozmieszczone równomiernie na drodze wykonywanej przez każdy z~palców z~osobna.}
+
+  \section{Akwizycja i~obróbka danych wejściowych}\label{Section_DefinicjeGestow}
+
+  \section{Procedura weryfikacji jakości badanego algorytmu}\label{Section_Jakosc}
+
+  \section{Procedura weryfikacji wydajności badanego algorytmu}\label{Section_Wydajnosc}
+
+
+\chapter{Specyfikacja wewnętrzna}\label{Chapter_SpecyfikacjaWewnetrzna}
+
+  \section{Wykorzystane technologie}\label{Section_Technologie}
+
+    \subsection{C++}\label{Subsection_Cpp}
+
+      \subsubsection{Standard ISO C++ z~roku~2003}
+        \cite{CppStroustrup}\cite{EffectiveCpp}\cite{MoreEffectiveCpp}
+
+      \subsubsection{Object Oriented Programming}
+
+      \subsubsection{Zastosowanie \textit{OOP} w~wizji komputerowej}
+
+    \subsection{STL}\label{Subsection_STL}
+
+      \subsubsection{Opis biblioteki}
+        \cite{EffectiveStl}
+
+      \subsubsection{Szablony}
+
+      \subsubsection{Algorytmy}
+
+      \subsubsection{Funktory}
+
+    \subsection{OpenCV}\label{Subsection_OpenCV}
+
+      \subsubsection{Opis biblioteki}
+        \cite{LearningOpenCV}
+
+      \subsubsection{Podstawowe koncepcje wykorzystywane przy pracy z OpenCV}
+        \cite{OpenCVCookbook}
+
+    \subsection{Narzędzia pomocniczne}\label{Subsection_PomocniczeTechnologie}
+
+      \subsubsection{R}
+
+      \subsubsection{Automatyzacja pracy i~koncepcja "ciągłej integracji"}
+        Bash, Scons, FFmpeg.
+
+      \subsubsection{HTML5, CSS3 i~warstwa pośrednia oparta o~node.js}
+
+  \section{Szczegóły techniczne implementacji wybranych algorytmów}
 
 \chapter{Specyfikacja zewnętrzna}\label{Chapter_SpecyfikacjaZewnetrzna}
 
-\chapter{Analiza rezultatów}\label{Chapter_AnalizaRezultatow}
+\chapter{Analiza wyników badań}\label{Chapter_AnalizaRezultatow}
 
-\section{Wnioski}\label{Section_Wnioski}
+  \section{Wyniki weryfikacji jakościowej badanych algorytmów}\label{Section_Quality}
 
-\section{Proponowane usprawnienia}\label{Section_Usprawnienia}
-\cite{HandOverFaceOcclusion07}
+  \section{Wnioski badań jakości}\label{Section_QualityWnioski}
+
+  \section{Wyniki weryfikacji wydajnościowej badanych algorytmów}\label{Section_Performance}
+
+  \section{Wnioski badań wydajności}\label{Section_PerformanceWnioski}
+
+  \section{Proponowane usprawnienia}\label{Section_Usprawnienia}
+    \cite{HandOverFaceOcclusion07}
 
 \chapter{Podsumowanie}\label{Section_Podsumowanie}

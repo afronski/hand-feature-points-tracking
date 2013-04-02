@@ -1,0 +1,3 @@
+Najważniejszy artykuł opisujący implementację algorytmu sparse optical flow dostępną w OpenCV.
+
+PRZYDATNOŚĆ: Spora.
