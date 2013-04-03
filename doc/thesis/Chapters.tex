@@ -124,11 +124,37 @@
          {Punkty charakterystyczne znajdują się na czubkach palców.}
          {Punkty kluczowe rozmieszczone równomiernie na drodze wykonywanej przez każdy z~palców z~osobna.}
 
-  \section{Akwizycja i~obróbka danych wejściowych}\label{Section_DefinicjeGestow}
+  \section{Akwizycja i~obróbka danych wejściowych}\label{Section_Akwizycja}
 
   \section{Procedura weryfikacji jakości badanego algorytmu}\label{Section_Jakosc}
 
+    W~celu analizy i~porównania jakości poszczególnych algorytmów przygotowano zestaw parametrów, które będą badane podczas wykonania każdego z~nich. Główną rolę odgrywają tutaj \textbf{punkty kluczowe} oraz \textbf{połączenia} między nimi.
+
+    Jakość algorytmu wyznaczana będzie na podstawie odchyleń tras oraz pozycji punktów charakerystycznych w stosunku do pozycji punktów kluczowych oraz tras pomiędzy nimi.
+
+    Każdy z~gestów posiada serię punktów kluczowych połączonych ze sobą liniami prostymi (w~celu symulacji gładszych połączeń np. okręgu stosuje się odpowiednią ilość punktów pośrednich). Każdy z punktów kluczowych oprócz swojej pozycji posiada również \textit{numer klatki wideo} w~której występuje.
+
+    W~określonych przez punkty kluczowe klatkach animacji następuje przeszukanie wszystkich dostępnych w~danej chwili czasu \textit{t} punktów charakterystycznych i~obliczana jest ich odległość od punktu kluczowego. Do porównania wybierana jest nabliższy punkt zgodnie z~metryką euklidesową.
+
+    W~klatkach pośrednich analizowana jest odległość wszystkich punktów charakterystycznych od aktualnej \textit{trasy}. Dzięki temu, wiemy jak wygląda dystrybucja punktów charakterystycznych w~okół śledzonej trasy.
+
+    Warto zauważyć, że taki sposób weryfikacji odporny jest na zmiany (poprzez dokładanie lub usuwanie) punktów charakerystycznych.
+
+    Biorąc pod uwagę dwa wspomniane parametry tj. \textbf{odchylenie minimalne od punktu kluczowego w~danej klatce sekwencji wideo} oraz \textbf{wektor odchyleń punktów charakterystycznych od trasy} możemy skutecznie porównać jakość badanych algorytmów między sobą.
+
   \section{Procedura weryfikacji wydajności badanego algorytmu}\label{Section_Wydajnosc}
+
+    W~celu analizy i~porównania wydajności poszczególnych algorytmów przygotowano zestaw parametrów, które obliczane będą podczas wykonania każdego algorytmu. Ujednolicenie to ma celu wypracowanie wspólnego wzorca porównawczego różnych algorytmów o~zupełnie innej zasadzie działania oraz implementacji.
+
+    Główne parametry porównawcze opierają się na pomiarach czasu wykonania oraz własnościami statystycznymi wyciągniętymi z~pomiarów.
+
+    Pierwszy pomar to \textbf{czas pracy algorytmu na pojedynczej klatce}. Z~wartości pomiarów dla wszystkich klatek sekwencji wideo wyciągnięte zostaną własności statystyczne tj. \textit{średnia arytmetyczna}, \textit{mediana}, \textit{odchylenie standardowe}.
+
+    Kolejnym pomiarem jest \textbf{sumaryczny czas przetwarzania algorytmu}. Warto zauważyć, że nie będzie on nigdy mniejszy od nominalnego czasu trwania sekwencji wideo. Sumaryczny czas może być jedynie równy wartości nominalnej w~przypadku, gdy przetwarzanie pojedynczej klatki wideo odbędzie się w~czasie mniejszym bądź równym wartości niezbędnej do odczekania przed wyświetleniem następnej klatki. Czasu oczekiwania jest ściśle związany z~wartością \textit{częstotliwości klatek na sekundę} analizowanej sekwencji wideo.
+
+    Następna wartość to \textbf{odchylenie sumarycznego czasu wykonania od czasu nominalnego} wyrażona w~procentach.
+
+    Ostatni parametr to próba klasyfikacji wszystkich algorytmów według stopnia ich złożoności. Każdy algorytm będzie poddany analizie pod kątem wyselekcjonowanego zbioru operacji dominujących, w~celu wyznaczenia \textbf{złożoności obliczeniowej oraz pamięciowej}.
 
 
 \chapter{Specyfikacja wewnętrzna}\label{Chapter_SpecyfikacjaWewnetrzna}
@@ -178,11 +204,11 @@
 
 \chapter{Analiza wyników badań}\label{Chapter_AnalizaRezultatow}
 
-  \section{Wyniki weryfikacji jakościowej badanych algorytmów}\label{Section_Quality}
+  \section{Wyniki weryfikacji jakości badanych algorytmów}\label{Section_Quality}
 
   \section{Wnioski badań jakości}\label{Section_QualityWnioski}
 
-  \section{Wyniki weryfikacji wydajnościowej badanych algorytmów}\label{Section_Performance}
+  \section{Wyniki weryfikacji wydajności badanych algorytmów}\label{Section_Performance}
 
   \section{Wnioski badań wydajności}\label{Section_PerformanceWnioski}
 
