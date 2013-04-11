@@ -26,7 +26,9 @@ namespace common {
         FrameProcessor(cv::Mat& frame): frameReference(frame) {}
 
         void operator() (FrameTransformer* transformer) {
+          transformer->beforeFrame(frameReference);
           transformer->process(frameReference);
+          transformer->afterFrame(frameReference);
         }
 
       private:
@@ -81,10 +83,13 @@ namespace common {
     void VideoStream::processFrames() {
       cv::Mat frame;
 
+      beforeVideo();
+
       while (true) {
         _implementation->input_video.read(frame);
 
         if (frame.empty()) {
+          afterVideo();
           break;
         }
 

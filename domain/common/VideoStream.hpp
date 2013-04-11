@@ -18,6 +18,10 @@ namespace common {
         void open(const std::string& input);
         void transfer(const std::string& output);
 
+      protected:
+        virtual void beforeVideo() {};
+        virtual void afterVideo() {};
+
       private:
         bool isValid() const;
         void processFrames();
