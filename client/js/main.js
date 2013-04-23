@@ -117,7 +117,7 @@
 
   // Changing movies in select control.
   function getTextFromActivePositionInSelect() {
-    return $("option[value='%value']".replace("%value", $("#movies").value)).innerText;
+    return $("#movies option[value='%value']".replace("%value", $("#movies").value)).innerText;
   }
 
   // Mouse event handlers.

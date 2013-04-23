@@ -1,11 +1,15 @@
 #include <iostream>
 
 #include "../implementations/PointsMarker.hpp"
+#include "../implementations/LucasKanadeTracker.hpp"
+#include "../implementations/BackgroundExtractor.hpp"
 
 #include "AlgorithmFactory.hpp"
 
 static const std::string names[] = {
-  PointsMarker::Name
+  PointsMarker::Name,
+  LucasKanadeTracker::Name,
+  BackgroundExtractor::Name
 };
 
 static size_t names_length = sizeof(names) / sizeof(names[0]);
@@ -15,6 +19,14 @@ AlgorithmFactory::AlgorithmsCollection AlgorithmFactory::algorithms(names, names
 PointsAwareFrameTransformer* AlgorithmFactory::createAlgorithm(const std::string& method) {
   if (method == PointsMarker::Name) {
     return new PointsMarker();
+  }
+
+  if (method == LucasKanadeTracker::Name) {
+    return new LucasKanadeTracker();
+  }
+
+  if (method == BackgroundExtractor::Name) {
+    return new BackgroundExtractor();
   }
 
   return 0;

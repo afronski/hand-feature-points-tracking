@@ -17,6 +17,8 @@ exporter = [ "./domain/exporter/main.cpp" ]
 kalman   = [ "./domain/kalman-filter/main.cpp" ]
 tracking = [
     "./domain/tracking/implementations/PointsMarker.cpp",
+    "./domain/tracking/implementations/LucasKanadeTracker.cpp",
+    "./domain/tracking/implementations/BackgroundExtractor.cpp",
     "./domain/tracking/factories/AlgorithmFactory.cpp",
     "./domain/tracking/main.cpp"
 ]
