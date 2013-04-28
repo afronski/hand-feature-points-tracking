@@ -1,15 +1,15 @@
 #include <iostream>
 
 #include "../implementations/PointsMarker.hpp"
-#include "../implementations/LucasKanadeTracker.hpp"
-#include "../implementations/BackgroundExtractor.hpp"
+#include "../implementations/SparseOpticalFlowTracker.hpp"
+#include "../implementations/DenseOpticalFlowTracker.hpp"
 
 #include "AlgorithmFactory.hpp"
 
 static const std::string names[] = {
   PointsMarker::Name,
-  LucasKanadeTracker::Name,
-  BackgroundExtractor::Name
+  SparseOpticalFlowTracker::Name,
+  DenseOpticalFlowTracker::Name
 };
 
 static size_t names_length = sizeof(names) / sizeof(names[0]);
@@ -21,12 +21,12 @@ PointsAwareFrameTransformer* AlgorithmFactory::createAlgorithm(const std::string
     return new PointsMarker();
   }
 
-  if (method == LucasKanadeTracker::Name) {
-    return new LucasKanadeTracker();
+  if (method == SparseOpticalFlowTracker::Name) {
+    return new SparseOpticalFlowTracker();
   }
 
-  if (method == BackgroundExtractor::Name) {
-    return new BackgroundExtractor();
+  if (method == DenseOpticalFlowTracker::Name) {
+    return new DenseOpticalFlowTracker();
   }
 
   return 0;

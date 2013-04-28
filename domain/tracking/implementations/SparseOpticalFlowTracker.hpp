@@ -1,9 +1,9 @@
-#ifndef __LUCAS_KANADE_TRACKER_HPP__
-#define __LUCAS_KANADE_TRACKER_HPP__
+#ifndef __SPARSE_OPTICAL_FLOW_TRACKER_HPP__
+#define __SPARSE_OPTICAL_FLOW_TRACKER_HPP__
 
 #include "../../common/FrameTransformers.hpp"
 
-class HornSchunckTracker : public PointsAwareFrameTransformer {
+class SparseOpticalFlowTracker : public PointsAwareFrameTransformer {
   public:
     static const std::string Name;
 
