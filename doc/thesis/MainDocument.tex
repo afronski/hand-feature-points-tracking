@@ -137,6 +137,14 @@
         \end{table}
 }
 
+\makeatletter
+\renewcommand\fs@ruled{\def\@fs@cfont{\bfseries}\let\@fs@capt\floatc@ruled
+  \def\@fs@pre{\hrule height1.0pt depth0pt \kern2pt}
+  \def\@fs@post{\vskip-1.5\baselineskip\kern2pt\hrule\relax}%
+  \def\@fs@mid{\kern2pt\hrule\kern2pt}
+  \let\@fs@iftopcapt\iftrue}
+\makeatother
+
 \floatstyle{ruled}
 \newfloat{sample}{thp}{lop}
 \floatname{sample}{Przykład}
@@ -157,7 +165,9 @@
 %\input{spis_oznaczen}
 
 \mainmatter
-\input{Chapters}
+\input{Theory}
+\input{Internals}
+\input{Results}
 
 \addcontentsline{toc}{chapter}{\bibname}
 \bibliography{MainDocument}

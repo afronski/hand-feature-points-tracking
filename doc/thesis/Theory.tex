@@ -36,15 +36,12 @@
       \subsubsection{TV-L}
       \cite{TVL107}
 
-      \subsubsection{Problem doboru cech do śledzenia dla algorytmów opartych o przepływ optyczny}
+      \subsubsection{Problem doboru cech do śledzenia dla algorytmów opartych o~przepływ optyczny}
       \cite{GoodFeaturesToTrack94}
 
     \subsection{Algorytm oparty o~filtr cząsteczkowy}\label{Subsection_ParticleFilter}
       \cite{ParticleFilter05}
       \cite{FingertipParticleFilter11}
-
-    \subsection{Algorytm oparty o~filtr Kalmana}\label{Subsection_Kalman}
-      \cite{KalmanFilter95}
 
     \subsection{Algorytm oparty o~decyzyjne drzewa losowe}\label{Subsection_RandomizedTrees}
       \cite{RandomizedTrees06}
@@ -63,7 +60,7 @@
 
     \gest{Okrąg}
          {Gest wykonywany na tle twarzy lub ciała.}
-         {Okrąg o promieniu 20 cm.}
+         {Okrąg o~promieniu 20 cm.}
          {Prawa dłoń.}
          {Okrąg wykonywany do kamery otwartą dłonią.}
          {Kierunek ruchu jest zgodny z~ruchem wskazówek zegara.}
@@ -130,9 +127,9 @@
 
     W~celu analizy i~porównania jakości poszczególnych algorytmów przygotowano zestaw parametrów, które będą badane podczas wykonania każdego z~nich. Główną rolę odgrywają tutaj \textbf{punkty kluczowe} oraz \textbf{połączenia} między nimi.
 
-    Jakość algorytmu wyznaczana będzie na podstawie odchyleń tras oraz pozycji punktów charakerystycznych w stosunku do pozycji punktów kluczowych oraz tras pomiędzy nimi.
+    Jakość algorytmu wyznaczana będzie na podstawie odchyleń tras oraz pozycji punktów charakerystycznych w~stosunku do pozycji punktów kluczowych oraz tras pomiędzy nimi.
 
-    Każdy z~gestów posiada serię punktów kluczowych połączonych ze sobą liniami prostymi (w~celu symulacji gładszych połączeń np. okręgu stosuje się odpowiednią ilość punktów pośrednich). Każdy z punktów kluczowych oprócz swojej pozycji posiada również \textit{numer klatki wideo} w~której występuje.
+    Każdy z~gestów posiada serię punktów kluczowych połączonych ze sobą liniami prostymi (w~celu symulacji gładszych połączeń np. okręgu stosuje się odpowiednią ilość punktów pośrednich). Każdy z~punktów kluczowych oprócz swojej pozycji posiada również \textit{numer klatki wideo} w~której występuje.
 
     W~określonych przez punkty kluczowe klatkach animacji następuje przeszukanie wszystkich dostępnych w~danej chwili czasu \textit{t} punktów charakterystycznych i~obliczana jest ich odległość od punktu kluczowego. Do porównania wybierana jest nabliższy punkt zgodnie z~metryką euklidesową.
 
@@ -155,64 +152,3 @@
     Następna wartość to \textbf{odchylenie sumarycznego czasu wykonania od czasu nominalnego} wyrażona w~procentach.
 
     Ostatni parametr to próba klasyfikacji wszystkich algorytmów według stopnia ich złożoności. Każdy algorytm będzie poddany analizie pod kątem wyselekcjonowanego zbioru operacji dominujących, w~celu wyznaczenia \textbf{złożoności obliczeniowej oraz pamięciowej}.
-
-
-\chapter{Specyfikacja wewnętrzna}\label{Chapter_SpecyfikacjaWewnetrzna}
-
-  \section{Wykorzystane technologie}\label{Section_Technologie}
-
-    \subsection{C++}\label{Subsection_Cpp}
-
-      \subsubsection{Standard ISO C++ z~roku~2003}
-        \cite{CppStroustrup}\cite{EffectiveCpp}\cite{MoreEffectiveCpp}
-
-      \subsubsection{Object Oriented Programming}
-
-      \subsubsection{Zastosowanie \textit{OOP} w~wizji komputerowej}
-
-    \subsection{STL}\label{Subsection_STL}
-
-      \subsubsection{Opis biblioteki}
-        \cite{EffectiveStl}
-
-      \subsubsection{Szablony}
-
-      \subsubsection{Algorytmy}
-
-      \subsubsection{Funktory}
-
-    \subsection{OpenCV}\label{Subsection_OpenCV}
-
-      \subsubsection{Opis biblioteki}
-        \cite{LearningOpenCV}
-
-      \subsubsection{Podstawowe koncepcje wykorzystywane przy pracy z OpenCV}
-        \cite{OpenCVCookbook}
-
-    \subsection{Narzędzia pomocniczne}\label{Subsection_PomocniczeTechnologie}
-
-      \subsubsection{R}
-
-      \subsubsection{Automatyzacja pracy i~koncepcja "ciągłej integracji"}
-        Bash, Scons, FFmpeg.
-
-      \subsubsection{HTML5, CSS3 i~warstwa pośrednia oparta o~node.js}
-
-  \section{Szczegóły techniczne implementacji wybranych algorytmów}
-
-\chapter{Specyfikacja zewnętrzna}\label{Chapter_SpecyfikacjaZewnetrzna}
-
-\chapter{Analiza wyników badań}\label{Chapter_AnalizaRezultatow}
-
-  \section{Wyniki weryfikacji jakości badanych algorytmów}\label{Section_Quality}
-
-  \section{Wnioski badań jakości}\label{Section_QualityWnioski}
-
-  \section{Wyniki weryfikacji wydajności badanych algorytmów}\label{Section_Performance}
-
-  \section{Wnioski badań wydajności}\label{Section_PerformanceWnioski}
-
-  \section{Proponowane usprawnienia}\label{Section_Usprawnienia}
-    \cite{HandOverFaceOcclusion07}
-
-\chapter{Podsumowanie}\label{Section_Podsumowanie}

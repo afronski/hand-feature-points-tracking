@@ -1,0 +1,175 @@
+\chapter{Specyfikacja wewnętrzna}\label{Chapter_SpecyfikacjaWewnetrzna}
+
+  \section{Wykorzystane technologie}\label{Section_Technologie}
+
+    \subsection{C++}\label{Subsection_Cpp}
+      Proces tworzenia oprogramowania przeszedł diametralne zmiany w~ostatnim dziesięcioleciu. Sformułowanie w~roku~2001 tzw. \textit{manifestu metodyk zwinnych} poruszyło klasyczny model tworzenia oprogramowania. Wspomniana ewolucja dotknęła także języki programowania. W~obecnych czasach zdecydowanie większą popularnością cieszą się języki dynamiczne (w~większości przypadków \textit{interpretowane} takie jak \textit{Ruby}, \textit{Python} lub \textit{JavaScript}), lub kompilowane do kodu pośredniego, specyficznego dla danej platformy uruchomieniowej (przykładem są języki \textit{Java} oraz \textit{C\#}).
+
+      Przymiotniki \textit{lekki} i~\textit{zwinny}, będące podstawą wspomnianego manifestu są przede wszystkim fundamentem języków dynamicznych, ale również tych ewoluujących bardzo szybko. Język \textit{C++} zdecydowanie nie należy do tej grupy. To język statycznie typowany, o~dużej dojrzałości, czerpiący pełnymi garściami z~równie znanego poprzednika jakim jest język \textit{C}. Niestety ewoluuje on bardzo wolno (co związane jest z~dojrzałością oraz próbami zachowania kompatybilności wstecznej z~poprzednikiem), przez co stracił popularność w~obecnych czasach.
+
+      Nadal jednak to języki kompilowane do kodu maszynowego, pod konkretną architekturę i~model procesora są w~wielu zastosowaniach niezastąpione. Tworzenie niskopoziomowego oprogramowania, tworzenie sterowników urządzeń czy aplikacji o~maksymalnych wymaganiach określonych w~zakresie wydajności to obszary gdzie język \textit{C++} i~jego poprzednicy są nadal najpopularniejszym i~najefektywniejszym wyborem. Przetwarzanie obrazów i~algorytmy wizyjne zdecydowanie należą do ostatniej grupy, przez co wszystkie najpopularniejsze biblioteki i~znaczące algorytmy są implementowane właśnie w~tych językach.
+
+      \subsubsection{Standard ISO C++ z~roku~2003}
+      Obowiązującym standardem języka \textit{C++} jest standard \textit{ISO/IEC 14882:1998} (\textit{Standard for the C++ Programming Language}) z drobnymi poprawkami zatwierdzonymi w~2003~r. (\textit{ISO/IEC 14882:2003}). W~2009 roku ogłoszono nowy standard (tzw.~\textit{C++0x}), który zaczął obowiązywać od 12 sierpnia 2011 roku, lecz wciąż oczekuje na opublikowanie (\textit{ISO/IEC 14882:2011}).
+
+      Ostatnia wersja, wciąż oczekująca na publikację, wprowadza wiele nowości zdecydowanie ułatwiających tworzenie oprogramowania. Ujednolicono wiele koncepcji i~co najważniejsze znacznie poszerzono bibliotekę standardową co ułatwi pracę programistów i~zredukuje ilość zewnętrznych zależności niezbędnych do kompilacji. Duży udział w~rozszerzeniu biblioteki standardowej miała społeczność i~autorzy poszczególnych modułów biblioteki \textit{boost}, która jest najważniejszą i~najpopularniejszą biblioteką (wyłączając bibliotekę standardową) w~środowisku programistów \textit{C++}.
+
+      W pracy wykorzystano stabilną i~dojrzałą wersję standardu z~roku 2003. Istnieje wiele publikacji (najpopularniejszymi są \cite{EffectiveCpp}, \cite{MoreEffectiveCpp}, \cite{EffectiveStl} oraz \cite{Alexandrescu}) oraz materiałów na temat (biblioteka \textit{MSDN} oraz dokumentacja biblioteki \textit{STL}), jak efektywnie korzystać z~dostępnej funkcjonalności i~przede wszystkim jak unikać \textit{pułapek} oraz w~jaki sposób efektywnie korzystać z~mnogości dostępnych paradygmatów i~rozwiązań udostępnionych w~specyfikacji języka.
+
+      \subsubsection{Programowanie Obiektowe}
+      Język \textit{C++} jest językiem wieloparadygmatowym, jednak dominującym paradygmatem tworzenia oprogramowania w~języku \textit{C++} jest tzw. \textit{programowanie obiektowe} (ang. \textit{Object Oriented Programming} w~skrócie \textit{OOP}). Wspomniany wyżej standard z~2003~roku posiada największe wsparcie właśnie dla tego paradygmatu, dodatkowo w~czasach największej popularności tego języka to właśnie programowanie obiektowe było najpopularniejsze.
+
+      Koncepcja programowania obiektowego sięga języka \textit{Simula 67}, następnie dopracowano wszystkie koncepty w~języku \textit{Smalltalk}. Sam język \textit{C++}, którego pierwsza koncepcja pojawiła się w~1979 roku, intensywnie korzysta z~elementów obiektowości wprowadzonych właśnie w~języku \textit{Simula}, jak również z~języków takich jak \textit{Algol}, \textit{Ada} czy \textit{ML} \cite{CppStroustrup}.
+
+      Programowanie obiektowe opiera się na czterech filarach, którymi są:
+      \begin{itemize}
+        \item \textbf{Abstrakcja} - Każdy obiekt w~systemie służy jako model abstrakcyjnego \textit{wykonawcy}, który może wykonywać pracę, opisywać i~zmieniać swój stan oraz komunikować się z~innymi obiektami w~systemie bez ujawniania, w~jaki sposób zaimplementowano dane cechy. Procesy, funkcje lub metody mogą być również abstrahowane, a~kiedy tak się dzieje, konieczne są rozmaite techniki rozszerzania abstrakcji.
+
+        \item \textbf{Hermetyzacja} - Potocznie: ukrywanie implementacji, dokładnie: \textit{enkapsulacja}. Zapewnia, że obiekt nie może zmieniać stanu wewnętrznego innych obiektów w~nieoczekiwany sposób. Tylko własne metody obiektu są uprawnione do zmiany jego stanu. Każdy typ obiektu prezentuje innym obiektom swój interfejs, który określa dopuszczalne metody współpracy. Pewne języki~osłabiają to założenie, dopuszczając pewien poziom bezpośredniego (kontrolowanego) dostępu do stanu wewnętrznego obiektu. Ograniczają w~ten sposób poziom abstrakcji. Przykładowo w~niektórych kompilatorach języka \textit{C++} istnieje możliwość tymczasowego wyłączenia mechanizmu enkapsulacji; otwiera to dostęp do wszystkich pól i~metod prywatnych, ułatwiając programistom pracę nad pośrednimi etapami tworzenia kodu i~znajdowaniem błędów.
+
+        \item \textbf{Polimorfizm} - Referencje i~kolekcje obiektów mogą dotyczyć obiektów różnego typu, a~wywołanie metody dla referencji spowoduje zachowanie odpowiednie dla pełnego typu obiektu wywoływanego. Jeśli dzieje się to w~czasie działania programu, to nazywa się to \textit{późnym wiązaniem} lub \textit{wiązaniem dynamicznym}. Niektóre języki udostępniają bardziej statyczne (w trakcie kompilacji) rozwiązania polimorfizmu – na przykład szablony i~przeciążanie operatorów w~\textit{C++} \cite{CppStroustrup}.
+
+        \item \textbf{Dziedziczenie} - Porządkuje i~wspomaga polimorfizm, i~enkapsulację dzięki umożliwieniu definiowania, i~tworzenia specjalizowanych obiektów na podstawie bardziej ogólnych. Dla obiektów specjalizowanych nie trzeba redefiniować całej funkcjonalności, lecz tylko tę, której nie ma obiekt ogólniejszy. W typowym przypadku powstają grupy obiektów zwane \textit{klasami}, oraz grupy klas zwane \textit{hierarchiami dziedziczenia}. Odzwierciedlają one wspólne cechy obiektów.
+      \end{itemize}
+
+      \subsubsection{Zastosowanie programowania obiektowego w~wizji komputerowej}
+      \textit{Jakość} jest subiektywnym i~niemierzalnym współczynnikiem podstawowego budulca aplikacji, jakim jest kod źródłowy. Niezmiernie ważnym jest, aby podczas procesu tworzenia oprogramowania, korzystać ze~zbioru sprawdzonych praktyk i~rozwiązań oraz pilnować spójności tworzonego produktu końcowego. Równie ważnym elementem jest dobór paradygmatu, w~jakim tworzona jest implementacja, do możliwości głównego narzędzia jakim jest język programowania i~wykorzystane biblioteki.
+
+      Implementacja zaprezentowana w~pracy magisterskiej oparta jest na języku \textit{C++} oraz bibliotece \textit{OpenCV}, dlatego zastosowanym paradygmatem jest opisywane \textit{programowanie obiektowe}. Zgodnie z~pierwszym z~podstawowych filarów programowania obiektowego - \textit{Abstrakcją} - każda implementacja określonego algorytmu śledzenia punktów charakterystycznych jest wyabstrahowanym wykonawcą. Wszystkie implementacje korzystają z~wspólnej abstrakcyjnej klasy bazowej, natomiast detale i~sposób interakcji z~biblioteką oraz sekwencją obrazów został ukryty wewnątrz konkretnych przypadków.
+
+      W~tym przypadku wykorzystanie abstrakcyjnej klasy bazowej to użycie \textit{Strategii}, jednego z~\textit{czynnościowych wzorców projektowych}. Zgodnie z~definicją zamieszczoną w~\cite{PatternsGoF} ten wzorzec projektowy definiuje rodzinę wymiennych algorytmów i~kapsułkuje je w postaci klas. Dzięki temu możliwe jest wymienne stosowanie każdego z~nich w~trakcie działania aplikacji niezależnie od korzystających z~nich klientów.
+
+      Kolejną ważna abstrakcją z~punktu widzenia algorytmów przetwarzania sekwencji wideo jest klasa strumienia o~nazwie \textit{VideoStream}, która zostanie dokładnie opisana w~rozdziale \ref{Section_ImplementationDetails}. Tworzy ona abstrakcję sekwencji klatek, wraz z~możliwością wykorzystania jednego lub wielu algorytmów zgodnych z~wspomnianym wzorcem \textit{Strategii}. Dodatkowo klasa ta umożliwia otoczenie wywołań metod przetwarzających pojedynczą klatkę i~cały strumień wideo, w~celu pomiaru czasu wykonania lub ilości zużytej pamięci.
+
+    \subsection{STL}\label{Subsection_STL}
+
+      \subsubsection{Opis biblioteki}
+      Główną częścią biblioteki standardowej języka \textit{C++} jest \textit{standardowa biblioteka szablonów} (ang. \textit{Standard Template Library}). Zawiera ona algorytmy, pojemniki, iteratory i~inne konstrukcje w~formie szablonów, przetestowane oraz gotowe do użycia przy tworzeniu oprogramowania. Głównym architektem w~początkowym stadium rozwoju tej biblioteki był \textit{Alexander Stepanov} i~na początku powstawała ona jako niezależna biblioteka rozwijana przez firmę \textit{Hewlett Packard}. Z~czasem większość przyjętych tam form wyewoluowała do formy biblioteki standardowej (w~standardzie z~roku 2003 znajduje się praktycznie większość konceptów przeniesionych ze wspomnianego pierwowzoru). Dominującym paradygmatem wykorzystywanym w~\textit{STL} jest programowanie generyczne i~dzięki temu jej składniki dobrze współpracują, z~typami wbudowanymi w~język, samą bibliotekę jak i~tymi zdefiniowanymi przez użytkownika.
+
+      \subsubsection{Szablony}
+      Fundamentem biblioteki \textit{STL} i~paradygmatu programowania generycznego (\textit{uogólnionego}) jest funkcjonalność \textit{Szablonów} dostarczana przez język \textit{C++}. Jest to możliwość tworzenia kodu programu bez wcześniejszej znajomości typów danych, na których ten będzie operował. Ten typ programowania umożliwia językom statycznie typowanym na polimorfizm typów.
+
+      Wykorzystanie szablonów w~programach pozwala skupić się bardziej na algorytmach niż na danych jakie są przetwarzane. Użycie szablonów pozwala zredukować ilość nadmiarowego kodu ponieważ jedną funkcjonalność można zaprogramować dla wielu typów danych. Następnie kompilator w konkretnym przypadku precyzuje typ i~odpowiednio dostosowuje np. wywołania funkcji. Podczas kompilacji następuje tak zwana konkretyzacja szablonu (ang. \textit{template instantiation}), podczas której kompilator na podstawie typów danych przekazanych wzorcowi generuje kod właściwy do obsługi danego typu.
+
+      \subsubsection{Algorytmy}
+      Jedną z~podstawowych koncepcji zwartych w~\textit{STL} jest koncepcja algorytmu działającego w~oderwaniu od implementacji pojemnika. Do mediacji między pojemnikiem a~faktyczną implementacją wykorzystywany jest wzorzec \textit{Iterator} (szczegóły można znaleźć w~\cite{PatternsGoF}). Każdy z~kontenerów implementuje określony zestaw \textit{iteratorów}, które umożliwiają poruszanie się po kolejnych elementach zebranych w~kolekcji.
+
+      Odstąpienie od powiązania abstrakcyjnego algorytmu z~implementacją pojemnika wiąże się z~wykorzystaniem \textit{idiomów}, które zostaną szerzej opisane w~jednej z~poniższych sekcji.
+
+      Dodatkowo niektóre kolekcje posiadają własne implementacje algorytmów, przykładem może być algorytm sortowania dla kontenera list dwukierunkowych \textit{list}. W~takim przypadku zaleceniem jest wykorzystanie metody zaimplementowanej w~kontenerze, ponieważ w~większości przypadków będzie ona zoptymalizowana (dzięki wiedzy o~wewnętrznej strukturze i~implementacji danej struktury) \cite{EffectiveStl}. Wydajniejsze rozwiązanie jest obarczone w~tym przypadku powiązaniem między algorytmem a~konkretną implementacją kolekcji.
+
+      \subsubsection{Funktory}
+      Kolejnym bardzo ważnym konceptem zastosowanym w~bibliotece \textit{STL} jest abstrakcja \textit{Funktora} (ang. Functors) lub inaczej \textit{Obiektu Funkcyjnego}. Jest to klasa z~przeładowanym operatorem wywołania metody (\textit{operator()}). Możliwe jest parametryzowanie stworzonego obiektu za pomocą konstruktora oraz przechowywanie wewnętrznego stanu \textit{funktora} wewnątrz pól klasy. Ponieważ \textit{obiekt funkcyjny} i~wskaźniki na funkcje mogą być wywołane za pomocą tej samej składni mogą być stosowane zamiennie właśnie jako argumenty szablonów.
+
+      Najpopularniejszą koncepcją zwiazaną z~\textit{funktorami} jest \textit{Predykat}. Jest to koncept zaczerpnięty z~matematyki. Jest to definicja pewnej funkcji logicznej (\textit{boolowskiej}) o~dowolnej dziedzinie i~przeciwdziedzinie będącej zbiorem wartości logicznych (\textit{prawda}, \textit{fałsz}). W~przypadku \textit{STL} wewnętrzna implementacja funktora na podstawie parametrów wejściowych podejmuje decyzje o~przypisaniu określonej wartości logicznej związanej z~przekazanymi argumentami.
+
+      \subsubsection{Idiomy}\label{Idioms}
+      Bardzo ważnym elementem podczas wykorzystywania \textit{standardowej biblioteki szablonów} jest trzymanie się określonych warunków wymaganych od typów zdefiniowanych przez użytkownika, ale także zbioru wypracowanych technik zwanych \textit{idiomami}. Pomocnym źródłem jest pozycja \cite{EffectiveStl} ilustrująca wiele przykładów wspomnianych idiomów oraz prezentująca potencjalne pułapki i~sytuacje których jako użytkownicy biblioteki powinniśmy unikać. Poniżej zamieszczony został przykład jednego z~idiomów zwanego \textit{erase-remove}, służącego do zwolnienia miejsca w~pojemniku zajmowanego przez elementy oznaczone jako usunięte (ponieważ algorytm \textit{remove} sam w~sobie nie usuwa elementów zgromadzonych w~kontenerze, jedynie przenosi je na koniec i~oznacza jako usunięte, faktyczne usunięcie może wykonać dopiero metoda \textit{erase} zaimplementowana w~określonym pojemniku).
+
+      \begin{sample}[ht]
+        \begin{verbatim}
+std::vector<int> v = { 0, 1, 2, 3, 4, 5, 6 };
+
+// Usunięcie elementów o wartości 5.
+v.erase(std::remove(v.begin(), v.end(), 5), v.end());
+        \end{verbatim}
+        \caption{Idiom erase-remove wykorzystywany w~bibiliotece STL}
+        \label{EraseRemoveIdiom}
+      \end{sample}
+
+    \subsection{OpenCV}\label{Subsection_OpenCV}
+
+      \subsubsection{Opis biblioteki}
+      \textit{OpenCV} jest jedną z~najpopularniejszych bibliotek (jeśli nie najpopularniejszą) związanych z~wizją komputerową. Zawiera funkcje wykorzystywane do obróbki obrazu, sekwencji wideo jak również i~struktury służące do uczenia maszynowego lub funkcje pomocnicze dla graficznego interfejsu użytkownika.
+
+      Oparta jest na otwartej licencji \textit{BSD} i~jej rozwój został zapoczątkowany została przez firmę \textit{Intel} w~1999 roku. Jest ona napisana w~języku \textit{C++} i~głównym interfejs programistyczny jest dostosowany właśnie do tego języka, niemniej starsze implementacje przygotowane w~języku \textit{C} są ciągle dostępne i~istnieje możliwość ich wykorzystania.
+
+      \textit{OpenCV} jest wieloplatformową biblioteką, w~pełni współpracującą z~systemami operacyjnymi \textit{Mac OS X}, \textit{Microsoft Windows} i~\textit{Linux}. W~momencie tworzenia pracy magisterskiej wykorzystywana była aktualnie dostępna wersja o~numerze \textit{2.4.3}. Popularność tej biblioteki przyniosła, z~pomocą społeczności, interfejsy programistyczne do praktycznie każdego popularnego języka programowania. Warto nadmienić, że obecnie wszelkiego rodzaju nowe funkcjonalności implementowane są w~języku \textit{C++}, włączając w~to wsparcie dla platform \textit{CUDA} i~podobnych.
+
+      Dokumentacja dostępna na oficjalnej stronie internetowej jest obszerna i~wraz z~zamieszczonymi przykładami tworzy kompletny poradnik. Dodatkowo istnieje kilka pozycji literaturowych na rynkach zagranicznych, które zostały wykorzystane przy tworzeniu pracy \cite{LearningOpenCV}, \cite{OpenCVCookbook}.
+
+      \subsubsection{Podstawowe koncepcje wykorzystywane przy pracy z~OpenCV}
+      W~kontekście pracy magisterskiej biblioteka \textit{OpenCV} udostępnia wiele konceptów, które ułatwiają pracę i~pozwalają skupić się na faktycznej implementacji algorytmów. Intensywnie wykorzystywane są następujące elementy:
+      \begin{itemize}
+        \item Wczytywanie i~zapis różnorakich formatów sekwencji wideo.
+        \item Podstawowe operacje i~filtry zdefiniowane jako pojęcia wizji komputerowej.
+        \item Metody pomocnicze wspomajace implementację algorytmów śledzenia punktów charakterystycznych.
+        \item Struktury ułatwiające realizację algorytmów opartych o~uczenie maszynowe.
+      \end{itemize}
+
+      Oprócz elementów zawartych w~bibliotece \textit{OpenCV} niezbędne było również wprowadzenie nowych abstrakcji ułatwiających operowanie na sekwencjach wideo (które zostały pobieżnie omówione w~sekcji \textit{Zastosowanie programowania obiektowego w~wizji komputerowej} i~zostaną omówione dokładniej w~podrozdziale \ref{Section_ImplementationDetails}).
+
+    \subsection{Narzędzia pomocniczne}\label{Subsection_PomocniczeTechnologie}
+
+      \subsubsection{Język R}
+      \textit{GNU R} to język programowania i~środowisko do obliczeń statystycznych oraz wizualizacji wyników. \textit{R} jest podstawowym językiem programowania w bioinformatyce, ale znajduje zastosowanie w~każdej innej dziedzinie nauki wymagającej analizy statystycznej i~prezentacji wyników w~postaci różnego rodzaju wykresów.
+
+      W~pracy magisterskiej zostały wykorzystane skrypty opierające się o~pakiety analizy statystycznej oraz prezentacji wyników pomiarów poszczególnych implementacji i~algorytmów. Poniżej zaprezentowano przykładowy skrypt, pozostałe wykresy oraz analiza statystyczna znajdują się w~rodziale \ref{Chapter_AnalizaRezultatow}.
+
+      \begin{sample}[ht]
+        \begin{verbatim}
+runningTime <- rnorm(3000)
+runningTimeHistogram <- hist(runningTime, breaks = 50, plot = FALSE)
+
+plot(runningTimeHistogram, col = "red")
+        \end{verbatim}
+        \caption{Skrypt przygotowujący wykres czasu wykonania każdego z~algorytmów}
+        \label{ChartForRunningTimePerAlgorithm}
+      \end{sample}
+
+      \subsubsection{HTML5, CSS3 i~warstwa pośrednia oparta o~NodeJS}
+      Ważnym elementem jest selekcja punktów charakterystycznych w~zarejestrowanych sekwencjach wideo. W~tym celu przygotowane zostało proste narzędzie oparte w~całości na technologiach internetowych. Interfejs użytkownika został zaprojektowany i~przygotowany za pomocą \textit{HTML5} oraz \textit{CSS3}.
+
+      Za warstwę pośrednią (spająjącą interfejs użytkownika oraz implementacje algorytmów przygotowane w~języku \textit{C++}) odpowiada środowisko uruchomieniowe \textit{NodeJS}. Jest to środowisko uruchomieniowe oprogramowywane za pomocą języka \textit{JavaScript}, które wraz z~biblioteką \textit{express} umożliwia udostępnienie statycznych zasobów (takich jak skrypty, kaskadowe arkusze stylów oraz pliki \textit{HTML}) oraz stworzenie i~również udostępnienie REST API (ang. \textit{REpresentational State Transfer Application Programming Interface}) za pomocą którego wybrane punkty, algorytm oraz wybrana sekwencja wideo przesyłane są do aplikacji napisanych w~języku \textit{C++}.
+
+      Dzięki zastosowaniu technologii internetowych w~łatwy i~efektywny sposób stworzono interfejs użytkownika (co wymagałoby dużo większego nakładu pracy w~przypadku takiej samej implementacji w~jęzku \textit{C++}), zachowano wieloplatformowość programu pomocniczego oraz odpowiednio rozdzielono odpowiedzialności pomiędzy poszczególnymi warstwami, nie zanieczyczając domeny aplikacji (implementacja algorytmów przetwarzania sekwencji wideo) niepotrzebnymi szczegółami.
+
+      \subsubsection{Automatyzacja pracy}
+      Wszystkie procesy, zarówno dotyczące budowania aplikacji jak i~zbierania pomiarów oraz generacji wyników, są silnie zautomatyzowane. Kluczowym elementem w~tym przypadku jest system budowania \textit{SCons} oparty o~język programowania \textit{Python} oraz narzędzia pomocnicze: język skryptowy \textit{Bash} i~narzędzie \textit{FFmpeg}.
+
+      Automatyzacja procesu budowania ułatwia w~znacznym stopniu proces tworzenia oraz testowania oprogramowania, która w~przypadku języka \textit{C++} oraz większych aplikacji może być kłopotliwa. Dzięki zastosowaniu systemu budowania opartego o~język interpretowany (w~tym przypadku \textit{Python}) ułatwia wykorzystanie skryptów budowania na innym systemie operacyjnym niż został oryginalnie przewidziany - jedyną dodatkową zależnością będzie interpreter. W~przypadku zastosowania klasycznego systemu budowania opartego o~program \textit{Makefile}, ponowne wykorzystanie na platformie \textit{Windows} byłoby znacznie utrudnione - \textit{SCons} kosztem jednego dodatkowego elementu sprowadza ponowne wykorzystanie skryptów budowania do instalacji wspomnianej zależności. Poniżej zaprezentowano wycinek skryptu budowania dla opisywanego narzędzia.
+
+      \begin{sample}[ht]
+        \begin{verbatim}
+environment = Environment(CPPFLAGS = "-O3 -Wall")
+
+openCV = [ "opencv_core",
+           "opencv_highgui",
+           "opencv_video",
+           "opencv_imgproc" ]
+
+libraries = openCV + [ "common" ]
+exporter = [ "./domain/exporter/main.cpp" ]
+
+# ...
+
+environment.Program("./bin/export-first-frame",
+                    exporter,
+                    LIBS = libraries,
+                    LIBPATH = "./bin")
+        \end{verbatim}
+        \caption{Fragment skryptu automatyzującego procesu budowania}
+        \label{BuildingProcessScript}
+      \end{sample}
+
+      Uruchamianie, akwizycja danych testowych w~początkowej fazie tworzenia oprogramowania oraz konwersja wideo do najróżniejszych formatów została zrealizowana za pomocą skryptów \textit{Bash} i~narzędzia \textit{FFmpeg}. Dzięki krótkim skryptom (kilka linii kodu źródłowego) udało się sprowadzić do minimum procesy, które programista musiałby wykonywać ręcznie. Poniżej znajduje się fragment jednego ze skryptów pomocniczych.
+
+      \newpage
+      \begin{sample}[ht]
+        \begin{verbatim}
+#!/bin/sh
+
+# ...
+
+for file in *.avi; do
+  ffmpeg -i $file -r 25
+         -f webm -b:v 20M videos-converted/${file%%.*}.webm
+done
+        \end{verbatim}
+        \caption{Fragment skryptu konwertującego pliki AVI do formatu WEBM}
+        \label{UtilityScript}
+      \end{sample}
+
+  \section{Szczegóły techniczne implementacji wybranych algorytmów}\label{Section_ImplementationDetails}
+
+\chapter{Specyfikacja zewnętrzna}\label{Chapter_SpecyfikacjaZewnetrzna}
