@@ -7,45 +7,59 @@
 \chapter{Problem śledzenia punktów charakterystycznych w~sekwencjach wideo}
 
   \section{Opis dziedziny problemu}\label{Section_Problematyka}
-    \cite{SalientPointsTracking05}
-    \cite{GoodFeaturesToTrack94}
-    \cite{LucasKanadeTracker81}
+    Gdy mamy do czynienia z~sekwencjami wideo, przekształconymi do serii obrazów, bardzo częstym wymaganiem jest możliwość śledzenia punktu przez cały czas trwania sekwencji. Zagadnienie to rozszerza koncepcję wyodrębnienia cech charakterystycznych ze~statycznego obrazu, ponieważ wymaga analizy ruchu i~trajektorii śledzonego obiektu. Takie rozszerzone podejście wymaga dwuetapowego przetwarzania podzielonego na \textit{identyfikację punktów charakterystycznych} i~\textit{modelowanie ruchu śledzonych punktów charakterystycznych}.
+
+    Problem identyfikacji punktów charakterystycznych polega na znalezieniu fragmentu obrazu w~aktualnej ramce, o~pewnej ważnej dla algorytmu charakterystyce, i~zidentyfikowanie go w~kolejnej klatce sekwencji wideo. Problemem powiązanym z~opisywanym zagadnieniem jest śledzenie niezidentyfikowanych jeszcze elementów ramki sekwencji wideo, których ważna z~punktu widzenia śledzenia i~algorytmu charakterystyka związana jest z~ruchem, lub dokładniej, określonymi parametrami związanymi z~poruszaniem się obiektu (kierunek, szybkość etc.). Wspomniane podejście wymaga śledzenia punktów wizualnie się odznaczających (inaczej \textit{wybitnych} lub \textit{charakterystycznych}) a~nie całych obiektów.
+
+    Drugi etap polegający na modelowaniu ruchu śledzonych punktów jest pomocny przy próbie wyodrębnienia szczegółowych informacji na temat trajektorii, obwiedni lub kształtu śledzonych punktów z~często zniekształconych, zaszumionych danych wyznaczonych przez etap pierwszy. W~większości przypadków do wyznaczenia trajektorii i~np. przewidywania dalszego ruchu niezbędny jest złożony aparat matematyczny zaaplikowany w~przestrzeni dwu lub trójwymiarowej (w~zależności od charakteru danych wejściowych i~wymagań dotyczących analizowanego elementu).
 
   \section{Podstawowe definicje}\label{Section_Definicje}
+    Zanim opisany zostanie problem doboru cech dla algorytmów śledzenia punktów charakterystycznych, należy wprowadzić zbiór definicji, w~celu ujednolicenia słownictwa wykorzystywanego w~pracy.
+
+    \textbf{Klatką} (lub \textit{ramką}, \textit{obrazem}) nazywamy macierz kolorów (w~takim przypadku pojedynczym elementem składowym macierzy jest wektor trójelementowy lub czteroelementowy, zwany dalej \textit{krotką kolorów}) lub intensywności (wtedy pojedynczym elementem składowym jest liczba rzeczywista z~obustronnie domkniętego przedziału $<0.0, 1.0>$). Parametrami charakterystycznymi ramki są jej wymiary (\textit{wysokość} i~\textit{szerokość}) określone z~dokładnością do pojedynczego piksela oraz \textit{głębia kolorów}.
+
+    \textbf{Sekwencją wideo} (lub \textit{animacją}) nazywamy skończony zbiór klatek o~identycznych wymiarach i~identycznej głębi kolorów. Oprócz wspomnianych elementów animacja posiada również \textbf{czas trwania} określony w~sekundach (lub jednostkach pochodnych) oraz \textbf{długość sekwencji wideo} określona za pomocą mocy zbioru ramek.
+
+    Kolejną z~wartości charakterystycznych sekwencji wideo jest ilość \textbf{ramek na sekundę} zwana również \textit{częstotliwością przetwarzania sekwencji wideo} (ang. \textit{Frames Per Second}, FPS). Odwrotność częstotliwości przetwarzania określa \textbf{czas przetwarzania pojedynczej klatki} analizowanej sekwencji.
+
+    Dla przykładu sekwencja wideo o~podanych parametrach: \[ f_{wideo} = 24 [FPS] = 24 [Hz] \] posiada następujący czas przetwarzania pojedynczej ramki: \[ t_{przetwarzania} = \frac{1}{24 [Hz]} = 41,67 [ms] \]
+
+
+
     \cite{SalientPointsTracking05}
     \cite{GoodFeaturesToTrack94}
     \cite{LucasKanadeTracker81}
 
   \section{Problem doboru cech dla algorytmów śledzenia punktów charakterystycznych}
-      \cite{GoodFeaturesToTrack94}
+    \cite{GoodFeaturesToTrack94}
 
-  \section{Analiza i~porównanie wybranych algorytmów}\label{Section_Algorytmy}
+\chapter{Analiza i~porównanie wybranych algorytmów}\label{Section_Algorytmy}
 
-    \subsection{Algorytmy oparte o~przepływ optyczny}\label{Subsection_OpticalFlow}
+  \subsection{Algorytmy oparte o~przepływ optyczny}\label{Subsection_OpticalFlow}
 
-      \subsubsection{Ogólny zarys algorytmów opartych o~przepływ optyczny}
-      \cite{OpticalFlowNonPriori05}
-      \cite{LucasKanadeTracker81}
+    \subsubsection{Ogólny zarys algorytmów opartych o~przepływ optyczny}
+    \cite{OpticalFlowNonPriori05}
+    \cite{LucasKanadeTracker81}
 
-      \subsubsection{Rzadki przepływ optyczny (algorytm Lucas - Kanade)}
-      \cite{OpenCvOpticalFlow04}
+    \subsubsection{Rzadki przepływ optyczny (algorytm Lucas - Kanade)}
+    \cite{OpenCvOpticalFlow04}
 
-      \subsubsection{Gęsty przepływ optyczny (algorytm Gunnara Farnebäcka)}
-      \cite{GunnarFarneback03}
+    \subsubsection{Gęsty przepływ optyczny (algorytm Gunnara Farnebäcka)}
+    \cite{GunnarFarneback03}
 
-      \subsubsection{TV-L}
-      \cite{TVL107}
+    \subsubsection{TV-L}
+    \cite{TVL107}
 
-    \subsection{Algorytmy oparte punkty kluczowe i~analizę wybitności}\label{Subsection_SaliencyKeypoints}
-      \cite{SalientPointsTracking05}
+  \subsection{Algorytmy oparte punkty kluczowe i~analizę wybitności}\label{Subsection_SaliencyKeypoints}
+    \cite{SalientPointsTracking05}
 
-    \subsection{Algorytm oparty o~filtr cząsteczkowy}\label{Subsection_ParticleFilter}
-      \cite{ParticleFilter05}
-      \cite{FingertipParticleFilter11}
+  \subsection{Algorytm oparty o~filtr cząsteczkowy}\label{Subsection_ParticleFilter}
+    \cite{ParticleFilter05}
+    \cite{FingertipParticleFilter11}
 
-    \subsection{Algorytm oparty o~decyzyjne drzewa losowe}\label{Subsection_RandomizedTrees}
-      \cite{RandomizedTrees06}
-      \cite{TwoStageRandomizedTrees11}
+  \subsection{Algorytm oparty o~decyzyjne drzewa losowe}\label{Subsection_RandomizedTrees}
+    \cite{RandomizedTrees06}
+    \cite{TwoStageRandomizedTrees11}
 
 \chapter{Specyfikacja przeprowadzonych badań}\label{Chapter_SpecyfikacjaPrzeprowadzonychBadan}
 
