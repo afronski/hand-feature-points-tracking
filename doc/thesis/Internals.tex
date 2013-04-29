@@ -172,4 +172,10 @@ done
 
   \section{Szczegóły techniczne implementacji wybranych algorytmów}\label{Section_ImplementationDetails}
 
+  Funkcja $goodFeaturesToTrack()$ zajmuje się wyznaczaniem narożników zgodnie z~definicją \textit{Shi} - \textit{Tomasi} zaprezentowaną w~pracy \cite{GoodFeaturesToTrack94}. Oblicza ona potrzebne wartości drugich pochodnych (za pomocą operatorów \textit{Sobela}) i~z nich dalej obliczane są wartości własne.
+
+  Jako parametr wejściowy przekazuje się obraz z~jednym kanałem opisującym intensywność (jako pojedynczy bajt lub liczba zmiennoprzecinkowa pojedynczej prezycji). Funkcja zwraca wartości własne dla każdego piksela obrazu oraz listę narożników, które spełniają definicję wartych obserwacji i~śledzenia.
+
+  Możliwe jest obliczenie wartości z~klasycznej definicji \textit{Harrisa} za pomocą parametru \textit{use\_harris}. Do przekazania współczynnika niezbędnego do obliczenia różnicy wyznacznika macierzy $H(p)$ od tej samej macierzy służy następny argument o~nazwie \textit{k}.
+
 \chapter{Specyfikacja zewnętrzna}\label{Chapter_SpecyfikacjaZewnetrzna}

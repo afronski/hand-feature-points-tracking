@@ -7,7 +7,7 @@
 \chapter{Problem śledzenia punktów charakterystycznych w~sekwencjach wideo}
 
   \section{Opis dziedziny problemu}\label{Section_Problematyka}
-    Gdy mamy do czynienia z~sekwencjami wideo, przekształconymi do serii obrazów, bardzo częstym wymaganiem jest możliwość śledzenia punktu przez cały czas trwania sekwencji. Zagadnienie to rozszerza koncepcję wyodrębnienia cech charakterystycznych ze~statycznego obrazu, ponieważ wymaga analizy ruchu i~trajektorii śledzonego obiektu. Takie rozszerzone podejście wymaga dwuetapowego przetwarzania podzielonego na \textit{identyfikację punktów charakterystycznych} i~\textit{modelowanie ruchu śledzonych punktów charakterystycznych}.
+    Mając do czynienia z~sekwencjami wideo, przekształconymi do serii obrazów, bardzo częstym wymaganiem jest możliwość śledzenia punktu przez cały czas trwania sekwencji. Zagadnienie to rozszerza koncepcję wyodrębnienia cech charakterystycznych ze~statycznego obrazu, ponieważ wymaga analizy ruchu i~trajektorii śledzonego obiektu. Takie rozszerzone podejście wymaga dwuetapowego przetwarzania podzielonego na \textit{identyfikację punktów charakterystycznych} i~\textit{modelowanie ruchu śledzonych punktów charakterystycznych}.
 
     Problem identyfikacji punktów charakterystycznych polega na znalezieniu fragmentu obrazu w~aktualnej ramce, o~pewnej ważnej dla algorytmu charakterystyce, i~zidentyfikowanie go w~kolejnej klatce sekwencji wideo. Problemem powiązanym z~opisywanym zagadnieniem jest śledzenie niezidentyfikowanych jeszcze elementów ramki sekwencji wideo, których ważna z~punktu widzenia śledzenia i~algorytmu charakterystyka związana jest z~ruchem, lub dokładniej, określonymi parametrami związanymi z~poruszaniem się obiektu (kierunek, szybkość etc.). Wspomniane podejście wymaga śledzenia punktów wizualnie się odznaczających (inaczej \textit{wybitnych} lub \textit{charakterystycznych}) a~nie całych obiektów.
 
@@ -26,7 +26,7 @@
 
     Dla przykładu, sekwencja wideo o~\textit{ilości ramek na sekundę} równej 24 \textit{FPS} posiada częstotliwość: \[ f_{wideo} = 24 [FPS] = 24 [Hz] \] a~z~tej wartości wynika następujący czas przetwarzania pojedynczej ramki: \[ t_{przetwarzania} = \frac{1}{24 [Hz]} = 41,67 [ms] \]
 
-    \textbf{Punktem charakterystycznym} nazywamy punkt ramki animacji wraz z~jego otoczeniem (tzw. \textit{okno}) niezbędnym do wyznaczenia parametrów wyróżniających i~umożliwiających śledzenie. Rozmiar okna oraz sposób wyznaczania własności charakteryzujących dany punkt i~jego wybitność został dokładnie omówiony w~rozdziale \ref{Section_GoodGeaturesToTrack}.
+    \textbf{Punktem charakterystycznym} nazywamy punkt ramki animacji wraz z~jego otoczeniem (tzw. \textit{okno}, \cite{SalientPointsTracking05}) niezbędnym do wyznaczenia parametrów wyróżniających i~umożliwiających śledzenie. Rozmiar okna oraz sposób wyznaczania własności charakteryzujących dany punkt i~jego wybitność został dokładnie omówiony w~rozdziale \ref{Section_GoodGeaturesToTrack}.
 
     \textbf{Punktem kluczowym} nazywamy pośredni punkt wyznaczający ważną część pokonywanej trasy, lub kształtu. Pomiar odległości w~metryce euklidesowej między punktem kluczowym a~najbliższym śledzonym punktem charakterystycznym jest podstawowym parametrem jakościowym wykorzystywanym do porównania algorytmów między sobą (dokładny opis znajduje się w rozdziale~\ref{Section_Jakosc}).
 
@@ -35,9 +35,48 @@
     \textbf{Kształtem} (lub \textit{trajektorią}, \textit{obwiednią}) nazywamy zbiór punktów kluczowych połączonych za pomocą wspomnianych wyżej odcinków. Sama definicja poza nazwą i~pewną wzrokową wizualizacją nie niesie bezpośrednio ze sobą żadnych informacji jakościowych. Pośrednio, ostre lub gładkie zakończenia oraz rogi stworzonych kształtów pozwalają na wizualne zbadanie jakości trajektorii wyznaczonej przez śledzone punkty i~odstępstw od oryginalnego kształtu.
 
   \section{Problem doboru cech dla algorytmów śledzenia punktów charakterystycznych}\label{Section_GoodGeaturesToTrack}
-    \cite{SalientPointsTracking05}
-    \cite{GoodFeaturesToTrack94}
-    \cite{LucasKanadeTracker81}
+    Wybór punktów charakterystycznych dla problemu śledzenia ich w~sekwencji wideo jest kluczowym elementem z~punktu widzenia jakości wyznaczonego rozwiązania końcowego. Jeśli wyobrazimy sobie sekwencję wideo jedynie ze strukturą o~powtarzalnej teksturze, to wybór charakterystycznej elementu okaże się bardzo trudny. Wiele punktów będzie identycznych lub bardzo podobnych do siebie i~śledzenie jednego wybranego pomiędzy kolejnymi ramkami animacji jest z~góry skazane na porażkę. Z~drugiej strony, jeśli mamy do dyspozycji unikalny fragment, wybierając go mamy duże szanse odnaleźć go w~następnych ramkach.
+
+    Podejście intuicyjne do tego problemu, polegające na poszukiwaniu odróżniającego się szczegółu jest krótkowzroczne. Przy wyborze charakterystycznej cechy możemy się kierować dużą wartością pochodnej w~punkcie - tego typu wartości oznaczają najczęściej \textbf{krawędź}. Niestety, podstawowa cechą \textit{krawędzi} jest to, że wiele punktów leżących na niej posiada identyczne wartości (prowadzi to do tzw. "problemu szczeliny", który omówiony został poniżej). Potrzebne są bardziej unikalne właściwości.
+
+    Pierwsze podejście do problemu doboru cech, pozwoliło nam odkryć bardzo ważną własność dotyczącą wartości pochodnej. Okazuje się, że jeśli wartości pochodnej w~dwóch równoległych do siebie kierunkach są duże, to dany punkt jest dużo bardziej unikalny w~skali całej ramki - nazywamy go wtedy \textbf{narożnikiem}.
+
+    Najpowszechniej używana definicja \textit{narożnika} została przygotowana przez \textit{Harrisa} (szczegóły zawarte w~pracy \cite{Harris88}) i~z~niej również korzystają autorzy w~pracy \cite{GoodFeaturesToTrack94}.
+
+    Definicja opiera się macierzy drugich pochodnych intensywności obrazu w~określonym punkcie ($\partial^2 x$, $\partial^2 y$, $\partial x\partial y$). W~szczególności możemy obliczyć wartości wartości wspominanych pochodnych dla całej ramki animacji tworząc w~ten sposób nową ramkę przechowującą wartości drugich pochodnych nazwaną \textit{obrazem Hesjanów}. Hesjan (lub dokładniej \textit{macierz Hessego}) definiujemy następująco ($I$ jest intensywnością piksela $p$ obrazu):
+
+    \[
+      H(p) =
+        \begin{bmatrix}
+          \frac{\partial^2 I}{\partial x^2} & \frac{\partial^2 I}{\partial x\partial y} \\
+          \frac{\partial^2 I}{\partial x\partial y} & \frac{\partial^2 I}{\partial y^2} \\
+        \end{bmatrix}_{p}
+    \]
+
+    Dla powyższej definicji narożnika kolejnym ważnym elementem jest \textit{macierz autokorelacji drugich pochodnych} dla każdego śledzonego punktu otoczonego \textit{oknem} o~określonych, małych wymiarach. Macierz autokorelacji jest zdefiniowana w~następujący sposób ($w_{i,j}$ jest współczynnikiem zależnym od zastosowanego okna):
+
+    \[
+      M(x, y) =
+        \begin{bmatrix}
+            \displaystyle\sum\limits_{K \le i, j \le K}
+              \scalemath{0.75}{w_{i,j} I_{x}^{2} (x + i, y + j)} &
+            \displaystyle\sum\limits_{K \le i, j \le K}
+              \scalemath{0.75}{w_{i,j} I_{x} (x + i, y + j) I_{y} (x + i, y + j)} \\
+
+            \displaystyle\sum\limits_{-K \le i, j \le K}
+              \scalemath{0.75}{w_{i,j} I_{x} (x + i, y + j) I_{y} (x + i, y + j)} &
+            \displaystyle\sum\limits_{-K \le i, j \le K}
+              \scalemath{0.75}{w_{i,j} I_{y}^{2} (x + i, y + j)} \\
+        \end{bmatrix}
+    \]
+
+    Przy tak zdefiniowanej \textit{macierzy autokorelacji} narożnikiem zgodnie z~definicją \textit{Harrisa} nazywamy miejsce, dla którego powyższa macierz posiada \textit{dwie duże wartości własne}. Oznacza to, że w~danym punkcie istnieje krawędź (lub faktura) rozciągająca się w~dwóch kierunkach, tak jak w~przypadku rzeczywistego narożnika. Warto zauważyć, że dzięki zastosowaniu drugiej pochodnej całość jest niewrażliwa na stałą wartość pierwszej pochodnej (druga pochodna będzie wtedy równa $0$).
+
+    Zastosowanie wartości własnych dla tej definicji ma kilka dodatkowych zalet. Dzięki wybraniu miejsc posiadających duże wartości własne (a~w konsekwencji wektory własne) zyskujemy niewrażliwość wybranego fragmentu na rotację. Dodatkowo dwie duże wartości własne, stanowią same w~sobie bardzo dobre wartości do śledzenia w~przyszłych klatkach animacji.
+
+    Badając definicję \textit{Harrisa} autorzy pracy \cite{GoodFeaturesToTrack94} \textit{Shi} oraz \textit{Tomasi} zauważyli, że dobrym \textit{narożnikiem} można nazwać taki element, którego mniejsza z~obliczonych wartości własnych jest zawsze większa od pewnego przyjętego \textit{minimalnego progu}. Taki sposób wyznaczania narożników daje w~większości przypadków dużo lepsze rezultaty niż oryginalna definicja. W~rozdziale \ref{Section_ImplementationDetails} została omówiona dokładnie procedura $goodFeaturesToTrack()$ korzystającą z~powyżej własności.
+
+    Inną bardzo ważną definicją jest \textit{Skaloniezmiennicze przekształcenie cech} (ang. \textit{Scale-invariant feature transform}, w skrócie \textit{SIFT}) opisane w~pracy \cite{SalientPointsTracking05}. Pozwala ona na wykrycie cech w~obrazie, które są odporne na skalowanie i~rotację i~translację. Omawiane cechy uzyskane są dzieki obliczeniu kierunku dominującego gradientu w~określonym położeniu i~naniesieniu wartości do lokalnego histogramu na podstawie jego orientacji. Dzięki temu przy odpowiednio małych przekształceniach afinicznych śledzone cechy nie zmieniają się.
 
 \chapter{Analiza i~porównanie wybranych algorytmów}\label{Section_Algorytmy}
 
