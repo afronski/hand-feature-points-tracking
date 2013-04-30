@@ -1,3 +1,22 @@
 \chapter{Środowisko uruchomieniowe}\label{Chapter_EnvironmentAppendix}
   \section{Zależności}\label{Section_Dependencies}
-  \section{Instalacja}\label{Section_Installation}
+
+  Poniżej zebrane zostały zależności niezbędne do uruchomienia środowiska uruchomieniowego:
+  \begin{itemize}
+    \item Interpreter języka \textit{Python} w~wersji z~rodziny \textit{2.7.x},
+    \item Narzędzie budowania \textit{SCons},
+    \item Kompilator języka C++ (w~zależności od systemu operacyjnego \textit{GCC} lub \textit{Microsoft Visual Studio 2012 C++ Compiler}),
+    \item Biblioteka \textit{OpenCV} w~wersji \textit{2.4.3} skompilowana pod odpowiedni system operacyjny,
+    \item Środowisko uruchomieniowe \textit{node.js} w~wersji z~rodziny \textit{0.8.x},
+    \item Interpreter języka \textit{R} w~wersji z~rodziny \textit{2.15.x}.
+  \end{itemize}
+
+  \section{Instalacja i~uruchomienie}\label{Section_Installation}
+
+  Po zainstalowaniu niezbędnych środowisk, narzędzi oraz bibliotek dostarczonych wraz z~kodem źródłowym na nośniku dołączonym do pracy, należy skopiować katalog \textit{src} w~dowolne miejsce na dysku twardym, gdzie nasz użytkownik posiada prawa zapisu. Następnie należy uruchomić skrypt, zależny od posiadanego systemu operacyjnego.
+
+  Dla platformy \textit{Microsoft Windows}, z~linii poleceń znajdując się w~tym katalogu należy wykonać skrypt \textit{run.bat}, który ustawia odpowiednie zmienne środowiskowe i~przystępuje do kompilacji oraz uruchomienia badań.
+
+  Dla platform kompatybilnych z~systemem \textit{Linux} i~powłoką skryptów systemowych \textit{Bash}, należy postąpić analogicznie wywołując skrypt \textit{run.sh}.
+
+  Rezultaty badań, wraz z~wykresami po zakończeniu procesu znajdą się w~katalogu \textit{results} wewnątrz uprzednio skopiowanego katalogu.

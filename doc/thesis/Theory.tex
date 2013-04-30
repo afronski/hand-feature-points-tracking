@@ -83,7 +83,14 @@
   \section{Algorytmy oparte o~przepływ optyczny}\label{Subsection_OpticalFlow}
 
     \subsection{Ogólny zarys algorytmów opartych o~przepływ optyczny}
-    Przy śledzeniu punktów charakterystycznych, bardzo często nie posiadamy szczegółowej wiedzy o~środowisku i~obserwowanym podmiocie. W~takiej sytuacji własności algorytmów opartych o~przepływ optyczny sprawdzają się najlepiej, ponieważ sam ruch i~zmiany zachodzące pomiędzy kolejnymi klatkami animacji same w~sobie niosą najwięcej informacji\cite{OpticalFlowNonPriori05}.
+    Przy śledzeniu punktów charakterystycznych, bardzo często nie posiadamy szczegółowej wiedzy o~środowisku i~obserwowanym podmiocie. W~takiej sytuacji własności algorytmów opartych o~przepływ optyczny sprawdzają się najlepiej, ponieważ sam ruch i~zmiany zachodzące pomiędzy kolejnymi klatkami animacji same w~sobie niosą najwięcej informacji\cite{OpticalFlowNonPriori05}. Poniżej zilustrowano zasadę działania przepływu optycznego:
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{OpticalFlowDescription}
+      \caption[Ilustracja działania przepływu optycznego]{Ilustracja działania przepływu optycznego}
+      \label{fig:OpticalFlowDescription}
+    \end{figure}
 
     Przypisując wektor prędkości (lub przemieszczenie, różnicę odległości jaką piksel przebył od swojego ostatniego położenia w~poprzedniej ramce sekwencji wideo) do każdego piksela, tworzymy obraz przepływu optycznego nazwany \textit{gęstym} (został on szczegółowo omówiony w~\ref{Subsection_DenseOpticalFlow}). Powstały obraz nazywamy \textit{wektorowym polem prędkości}. Podczas obserwacji tego typu metod, łatwo zauważyć, że wiele wektorów prędkości na obrazie posiada długość $0$ (innymi słowy, piksele w~tych miejscach się nie poruszają) i~można pokusić się o~optymalizację metody gęstej poprzez wprowadzenie okna obserwacji nazwanego \textit{blokiem}. Taki rodzaj gęstego przepływu optycznego nazywamy \textit{dopasowywaniem bloków}, nie został on jednak wzięty pod uwagę w~przeprowadzonych badaniach.
 
@@ -93,7 +100,7 @@
 
     Zupełnie innym podejściem jest zastosowanie...
 
-    W~kolejnych sekcjach zostały szczegółowo omówione algorytmy przepływu optycznego rzadkiego, gęstego oraz metoda oparta o~całowitą zmienność i~normę L1.
+    W~kolejnych sekcjach zostały szczegółowo omówione algorytmy przepływu optycznego rzadkiego, gęstego oraz metoda $TV-L_{1}$.
 
     \subsection{Rzadki przepływ optyczny (algorytm Lucas-Kanade)}
     \cite{OpenCvOpticalFlow04}
