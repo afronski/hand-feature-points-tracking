@@ -74,28 +74,37 @@
 
     Zastosowanie wartości własnych dla tej definicji ma kilka dodatkowych zalet. Dzięki wybraniu miejsc posiadających duże wartości własne (a~w konsekwencji wektory własne) zyskujemy niewrażliwość wybranego fragmentu na rotację. Dodatkowo dwie duże wartości własne, stanowią same w~sobie bardzo dobre wartości do śledzenia w~przyszłych klatkach animacji.
 
-    Badając definicję \textit{Harrisa} autorzy pracy \cite{GoodFeaturesToTrack94} \textit{Shi} oraz \textit{Tomasi} zauważyli, że dobrym \textit{narożnikiem} można nazwać taki element, którego mniejsza z~obliczonych wartości własnych jest zawsze większa od pewnego przyjętego \textit{minimalnego progu}. Taki sposób wyznaczania narożników daje w~większości przypadków dużo lepsze rezultaty niż oryginalna definicja. W~rozdziale \ref{Section_ImplementationDetails} została omówiona dokładnie procedura $goodFeaturesToTrack()$ korzystającą z~powyżej własności.
+    Badając definicję \textit{Harrisa} autorzy pracy \cite{GoodFeaturesToTrack94}, \textit{Shi} oraz \textit{Tomasi}, zauważyli, że dobrym \textit{narożnikiem} (w~sensie jakościowym) można nazwać taki element, którego mniejsza z~obliczonych wartości własnych jest zawsze większa od pewnego przyjętego \textit{minimalnego progu}. Taki sposób wyznaczania narożników daje w~większości przypadków dużo lepsze rezultaty niż oryginalna definicja. W~rozdziale \ref{Section_ImplementationDetails} została omówiona dokładnie procedura $goodFeaturesToTrack()$ korzystającą z~powyżej własności.
 
-    Inną bardzo ważną definicją jest \textit{Skaloniezmiennicze przekształcenie cech} (ang. \textit{Scale-invariant feature transform}, w skrócie \textit{SIFT}) opisane w~pracy \cite{SalientPointsTracking05}. Pozwala ona na wykrycie cech w~obrazie, które są odporne na skalowanie i~rotację i~translację. Omawiane cechy uzyskane są dzieki obliczeniu kierunku dominującego gradientu w~określonym położeniu i~naniesieniu wartości do lokalnego histogramu na podstawie jego orientacji. Dzięki temu przy odpowiednio małych przekształceniach afinicznych śledzone cechy nie zmieniają się.
+    Inną bardzo ważną definicją jest \textit{Skaloniezmiennicze przekształcenie cech} (ang. \textit{Scale-invariant feature transform}, w skrócie \textit{SIFT}) opisane w~pracy \cite{SalientPointsTracking05}. Pozwala ona na wykrycie cech w~obrazie, które są odporne na skalowanie, rotację i~przesunięcie. Omawiane cechy obliczane są na podstawie kierunku dominującego gradientu w~określonym położeniu i~naniesieniu wartości do lokalnego histogramu na podstawie jego orientacji. Dzięki temu, przy odpowiednio małych przekształceniach afinicznych (w~omawiamym przypadku, pomiędzy dwoma bezpośrednio sąsiadującymi klatkami sekwencji wideo) obserwowane cechy nie zmieniają się.
 
 \chapter{Analiza i~porównanie wybranych algorytmów}\label{Section_Algorytmy}
 
   \section{Algorytmy oparte o~przepływ optyczny}\label{Subsection_OpticalFlow}
 
     \subsection{Ogólny zarys algorytmów opartych o~przepływ optyczny}
-    \cite{OpticalFlowNonPriori05}
-    \cite{LucasKanadeTracker81}
+    Przy śledzeniu punktów charakterystycznych, bardzo często nie posiadamy szczegółowej wiedzy o~środowisku i~obserwowanym podmiocie. W~takiej sytuacji własności algorytmów opartych o~przepływ optyczny sprawdzają się najlepiej, ponieważ sam ruch i~zmiany zachodzące pomiędzy kolejnymi klatkami animacji same w~sobie niosą najwięcej informacji\cite{OpticalFlowNonPriori05}.
 
-    \subsection{Rzadki przepływ optyczny (algorytm Lucas - Kanade)}
+    Przypisując wektor prędkości (lub przemieszczenie, różnicę odległości jaką piksel przebył od swojego ostatniego położenia w~poprzedniej ramce sekwencji wideo) do każdego piksela, tworzymy obraz przepływu optycznego nazwany \textit{gęstym} (został on szczegółowo omówiony w~\ref{Subsection_DenseOpticalFlow}). Powstały obraz nazywamy \textit{wektorowym polem prędkości}. Podczas obserwacji tego typu metod, łatwo zauważyć, że wiele wektorów prędkości na obrazie posiada długość $0$ (innymi słowy, piksele w~tych miejscach się nie poruszają) i~można pokusić się o~optymalizację metody gęstej poprzez wprowadzenie okna obserwacji nazwanego \textit{blokiem}. Taki rodzaj gęstego przepływu optycznego nazywamy \textit{dopasowywaniem bloków}, nie został on jednak wzięty pod uwagę w~przeprowadzonych badaniach.
+
+    Obliczenie \textit{wektorowego pola prędkości} jest zadaniem złożonym obliczeniowo. Złożoność asymptotyczna wynosi $O(Cnm)$, gdzie $C$ jest stałą związaną z~obliczeniami wektora prędkości dla danego punktu i~$n$ oraz $m$ są wymiarami klatki animacji. Omawiana stała posiada bardzo duży wpływ na końcową postać złożoności ze~względu na zastosowanie metody interpolacji między śledzonymi punktami w~celu uzyskania jednoznacznego rezultatu.
+
+    Gęsty przepływ optyczny, mimo intuicyjnej definicji, jest metodą o~bardzo dużym koszcie obliczeniowym. Próba zredukowania obliczanego pola wektorów doprowadziła do stworzenia metody \textit{dopasowania bloków} omówionej powyżej. Intuicyjnie, możliwe jest jeszcze większe ograniczenie złożoności, poprzez śledzenie tylko charakterystycznej grupy punktów, poprzez zastosowanie \textit{definicji narożnika} omówionej szczegółowo w~rozdziale \ref{Section_GoodGeaturesToTrack} oraz artykułach \cite{LucasKanadeTracker81} i~\cite{GoodFeaturesToTrack94}. Właśnie takie sformułowanie problemu nazywane jest \textit{rzadkim przepływem optycznym}. Koszt obliczeniowy jest dużo mniejszy niż w~przypadku gęstego przepływu i~jest wprost proporcjonalny do mocy zbioru punktów charakterystycznych, która w~zdecydowanej większości przypadków jest dużo mniejsza od ilości punktów obrazu.
+
+    Zupełnie innym podejściem jest zastosowanie...
+
+    W~kolejnych sekcjach zostały szczegółowo omówione algorytmy przepływu optycznego rzadkiego, gęstego oraz metoda oparta o~całowitą zmienność i~normę L1.
+
+    \subsection{Rzadki przepływ optyczny (algorytm Lucas-Kanade)}
     \cite{OpenCvOpticalFlow04}
 
-    \subsection{Gęsty przepływ optyczny (algorytm Farnebäcka)}
+    \subsection{Gęsty przepływ optyczny (algorytm Farnebäcka)}\label{Subsection_DenseOpticalFlow}
     \cite{GunnarFarneback03}
 
-    \subsection{TV-L}
+    \subsection{Przepływ optyczny $TV-L_{1}$}
     \cite{TVL107}
 
-  \section{Algorytmy oparte punkty kluczowe i~analizę wybitności}\label{Subsection_SaliencyKeypoints}
+  \section{Algorytmy oparte punkty kluczowe}\label{Subsection_SaliencyKeypoints}
     \cite{SalientPointsTracking05}
 
   \section{Algorytm oparty o~filtr cząsteczkowy}\label{Subsection_ParticleFilter}
