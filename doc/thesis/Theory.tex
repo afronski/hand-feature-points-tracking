@@ -40,11 +40,12 @@
 
     \begin{figure}[!ht]
       \centering
-      %\includegraphics[width=14cm]{ApertureProblem}
+      \includegraphics[width=14cm]{ApertureProblem}
       \caption[Wizualizacja tzw. problemu szczeliny]{Wizualizacja tzw. \textit{problemu szczeliny}}
       \label{fig:ApertureProblem}
     \end{figure}
 
+  \newpage
   \section{Problem doboru cech dla algorytmów śledzenia punktów charakterystycznych}\label{Section_GoodGeaturesToTrack}
     Wybór punktów charakterystycznych dla problemu śledzenia ich w~sekwencji wideo jest kluczowym elementem z~punktu widzenia jakości wyznaczonego rozwiązania końcowego. Jeśli wyobrazimy sobie sekwencję wideo jedynie ze strukturą o~powtarzalnej teksturze, to wybór charakterystycznej elementu okaże się bardzo trudny. Wiele punktów będzie identycznych lub bardzo podobnych do siebie i~śledzenie jednego wybranego pomiędzy kolejnymi ramkami animacji jest z~góry skazane na porażkę. Z~drugiej strony, jeśli mamy do dyspozycji unikalny fragment, wybierając go mamy duże szanse odnaleźć go w~następnych ramkach.
 
@@ -64,6 +65,7 @@
         \end{bmatrix}_{p}
     \]
 
+    \newpage
     Dla powyższej definicji narożnika kolejnym ważnym elementem jest \textit{macierz autokorelacji drugich pochodnych} dla każdego śledzonego punktu otoczonego \textit{oknem} o~określonych, małych wymiarach. Macierz autokorelacji jest zdefiniowana w~następujący sposób ($w_{i,j}$ jest współczynnikiem zależnym od zastosowanego okna):
 
     \[
@@ -87,7 +89,11 @@
 
     Badając definicję \textit{Harrisa} autorzy pracy \cite{GoodFeaturesToTrack94}, \textit{Shi} oraz \textit{Tomasi}, zauważyli, że dobrym \textit{narożnikiem} (w~sensie jakościowym) można nazwać taki element, którego mniejsza z~obliczonych wartości własnych jest zawsze większa od pewnego przyjętego \textit{minimalnego progu}. Taki sposób wyznaczania narożników daje w~większości przypadków dużo lepsze rezultaty niż oryginalna definicja. W~rozdziale \ref{Section_ImplementationDetails} została omówiona dokładnie procedura $goodFeaturesToTrack()$ korzystającą z~powyżej własności.
 
-    Inną bardzo ważną definicją jest \textit{Skaloniezmiennicze przekształcenie cech} (ang. \textit{Scale-invariant feature transform}, w skrócie \textit{SIFT}) opisane w~pracy \cite{SalientPointsTracking05}. Pozwala ona na wykrycie cech w~obrazie, które są odporne na skalowanie, rotację i~przesunięcie. Omawiane cechy obliczane są na podstawie kierunku dominującego gradientu w~określonym położeniu i~naniesieniu wartości do lokalnego histogramu na podstawie jego orientacji. Dzięki temu, przy odpowiednio małych przekształceniach afinicznych (w~omawiamym przypadku, pomiędzy dwoma bezpośrednio sąsiadującymi klatkami sekwencji wideo) obserwowane cechy nie zmieniają się.
+    Inną bardzo ważną definicją jest \textit{Skaloniezmiennicze przekształcenie cech} (ang. \textit{Scale-invariant feature transform}, w skrócie \textit{SIFT}) opisane w~pracy \cite{SalientPointsTracking05}. Pozwala ona na wykrycie cech w~obrazie, które są odporne na skalowanie, rotację i~przesunięcie. W~przypadku ogolnym omawiane cechy obliczane są na podstawie kierunku dominującego gradientu w~określonym położeniu i~naniesieniu wartości do lokalnego histogramu na podstawie jego orientacji. Dzięki temu, przy odpowiednio małych przekształceniach afinicznych (w~omawiamym przypadku, pomiędzy dwoma bezpośrednio sąsiadującymi klatkami sekwencji wideo) obserwowane cechy nie zmieniają się.
+
+    Metoda została opracowana przez Davida L\"{o}we w~roku 1999. Ogólna idea algorytmu opiera się na wyekstrahowaniu punktów kluczowych do odpowiedniej struktury danych, następnie obiekt jest identyifikowany w~nowym obrazie pojedynczo, na podstawie odległości w~metryce euklidesowej oraz pomocą wektora cech. Z~pełnego zbioru dopasowań wybierane zostają tylko te punkty, które zgadzają się pod względem położenia, skali i~orientacji. Dzięki zastosowaniu efektywnej struktury danych (w~proponowanej implementacji tablicy haszowanej) identyfikacja skupisk śledzonych punktów i~wybór (za pomocą uogólnionej \textit{transformaty Hough}) najwierniej odpowiadających oryginalnie śledzonemu obiektowi przebiega bezproblemowo. Następnie, każdy zidentyfikowany klaster 3~lub więcej punktów podlega weryfikacji hipotezy przynależności do śledzonego punktu. Skupiska nie pasujące do omawianej hipotezy zostają odrzucone, klastry wyznaczone przez poprzednie kroki z~poprawnie zweryfikowaną hipotezą z~dużym prawdopodobieństem należą do śledzonego obiektu.
+
+    \textit{SIFT} nie został zbadany w~pracy magisterskiej, ze względu na zupełnie inne podejście do kwestii wyznaczania punktów charakterystycznych. Ponadto, \textit{Skaloniezmiennicze przekształcenie cech} w~wariancie \textit{L\"{o}we}, odporne na częściowe przesłanianie, jest opatentowanym algorytmem w~Stanch Zjednoczonych.
 
 \chapter{Analiza i~porównanie wybranych algorytmów}\label{Section_Algorytmy}
 
@@ -109,7 +115,7 @@
 
     Gęsty przepływ optyczny, mimo intuicyjnej definicji, jest metodą o~bardzo dużym koszcie obliczeniowym. Próba zredukowania obliczanego pola wektorów doprowadziła do stworzenia metody \textit{dopasowania bloków} omówionej powyżej. Intuicyjnie, możliwe jest jeszcze większe ograniczenie złożoności, poprzez śledzenie tylko charakterystycznej grupy punktów, poprzez zastosowanie \textit{definicji narożnika} omówionej szczegółowo w~rozdziale \ref{Section_GoodGeaturesToTrack} oraz artykułach \cite{LucasKanadeTracker81} i~\cite{GoodFeaturesToTrack94}. Właśnie takie sformułowanie problemu nazywane jest \textit{rzadkim przepływem optycznym}. Koszt obliczeniowy jest dużo mniejszy niż w~przypadku gęstego przepływu i~jest wprost proporcjonalny do mocy zbioru punktów charakterystycznych, która w~zdecydowanej większości przypadków jest dużo mniejsza od ilości punktów obrazu.
 
-    W~kolejnych sekcjach zostały szczegółowo omówione algorytmy przepływu optycznego rzadkiego oraz gęstego.
+    Poniżej zostały szczegółowo omówione algorytmy przepływu optycznego rzadkiego oraz gęstego.
 
     \subsection{Rzadki przepływ optyczny (algorytm Lucas-Kanade)}
     Oryginalna idea algorytmu opracowanego przez parę \textit{Lucas} - \textit{Kanade} została zaproponowana w~1981 roku w~pracy \cite{LucasKanadeTracker81} i~początkowo była próbą stworzenia algorytmu wariantu \textit{gęstego} o~mniejszej złożoności obliczeniowej. Poprzez łatwość zaaplikowania reguł stworzonej metody do listy punktów charakterystycznych obrazu wejściowego została jedną z~najważniejszych metod wariantu \textit{rzadkiego}.
@@ -118,6 +124,7 @@
 
     Aby uniknąć sytuacji w~której dobrane okno jest zbyt małe stosuje się tzw. wariant \textit{piramidalny} algorytmu LK opisany dokładnie w~pracy \cite{OpenCvOpticalFlow04}. Na wstępie dla aktualnej klatki animacji budowana jest piramida obrazów o~stopniowanej jakości oraz rozmiarze. Śledzenie rozpoczyna się od największego i~najmniej szczegółowego obrazu stopniowo przechodząc do mniejszych, bogatszych w~szczegóły stopni piramidy. Dzięki temu, szybszy i~bardziej dynamiczny ruch może zostać złapany nawet poprzez mniejsze okna dookoła punktów charakterystycznych.
 
+    \newpage
     Algorytm rzadkiego przepływu optycznego zaproponowany przez parę \textit{Lucas} - \textit{Kanade} został oparty na trzech podstawowych definicjach:
     \begin{itemize}
       \item Twierdzenie o~stałej jasności - Śledzony piksel obrazu nie zmienia swojej jasności (w~przypadku analizy obrazów kolorowych mówimy o~\textit{Regule niezmienności koloru}) podczas ruchu pomiędzy klatkami.
@@ -133,27 +140,45 @@
 
     W~przestrzeni jednowymiarowej skorzystamy z~pierwszej definicji, zastępując funkcję jasności $f(x,t)$ wyrażeniem $I(x(t), t)$ zakładając zależność zmiennej $x$ od $t$. Po skorzystaniu z~twierdzenia o~pochodnej funkcji złożonej otrzymujemy: \[ \underbrace{ \left. \frac{\partial I}{\partial x}\right|_{t} }_{I_{x}} \underbrace{ \left(\frac{\partial x}{\partial t}\right) }_{\mathbf{v}} + \underbrace{ \left. \frac{\partial I}{\partial t}\right|_{x(t)} }_{I_{t}} = 0 \] gdzie $I_{x}$ jest pochodną pierwszego obrazu, $I_{t}$ jest pochodną obrazu następnej klatki a~$\mathbf{v}$ jest poszukiwanym wektorem prędkości. Po przekształceniu otrzymujemy równanie dla przypadku jednowymiarowego: \[ \mathbf{v} = -\frac{I_{t}}{I_{x}} \]
 
+    \newpage
     Obserwując krawędź w~przypadku jednowymiarowym, jak na rysunku \ref{fig:EdgeVelocity1D}, poruszamy się wzdłuż osi $x$ od większych wartości po lewej stronie w~stronę wartości mniejszych po stronie prawej. Jak zdefiniowano powyżej, poszukiwana jest prędkość $\mathbf{v}$ z~jaką punkt na krawędzi się porusza. Zgodnie z~obliczeniami w~miarę poruszania się wzdłuż osi odciętych szybkość rośnie wraz z~nachyleniem. Dodatkowo ujemny znak kompensuje nachylenie.
 
     \begin{figure}[!ht]
       \centering
-      %\includegraphics[width=14cm]{EdgeVelocity1D}
-      \caption[Wizualizacja pomiaru szybkości poruszania się krawędzi dla przypadku jednowymiarowego]{Wizualizacja pomiaru szybkości poruszania się krawędzi dla przypadku jednowymiarowego wraz z~prezentacją podejścia iteracyjnego}
+      \includegraphics[width=14cm]{EdgeVelocity1D}
+      \caption[Wizualizacja pomiaru szybkości poruszania się krawędzi dla przypadku jednowymiarowego]{Wizualizacja pomiaru szybkości poruszania się krawędzi dla przypadku jednowymiarowego}
       \label{fig:EdgeVelocity1D}
     \end{figure}
 
     Niestety, jasność nie zawsze będzie stała, i~nasze założenie nie będzie w~takim przypadku prawdziwe - w~konsekwencji nie otrzymamy dokładnego wektora prędkości. Możemy jednak, dla małych odległości, przybliżyć się do rozwiązania \textit{iteracyjną metodą Newtona}, obliczając kolejne pochodne po czasie. Przy założeniu, że kolejne klatki reprezentują niewielki ruch, rozwiązanie jest szybkozbieżne (wystarcza około 5 iteracji), jeśli jednak pierwsze przybliżenie będzie niedokładne, zaproponowana metoda będzie rozbieżna.
 
-    Próba przeniesienia proponowanego rozwiązania na przypadek dwuwymiarowy wymaga dodania współrzędnej $y$, co modyfikuje opisane równanie do postaci: \[I_{x}\mathbf{u} + I_{y}\mathbf{v} + I_{t} = 0\]
-
-    Niestety równanie jest niedookreślone w~tej postaci, ponieważ dla każdego piksela posiadamy dwie niewiadome. Oznacza to, że na poziomie pojedynczych pikseli nie jest możliwe uzyskanie dokładnego rozwiązania dla ruchu w~przestrzeni dwuwymiarowej. W~takim przypadku możliwe jest jedynie rozwiązanie składnika ruchu który jest równoległy do linii, wyznaczonej przez równanie przepływu. Matematyczna i~geometryczna reprezentacja znajduje się na rysunku \ref{fig:From1dTo2d}.
-
     \begin{figure}[!ht]
       \centering
-      %\includegraphics[width=14cm]{From1dTo2d}
-      \caption[Przejście z~przestrzeni jednowymiarowej do dwuwymiarowej]{Przejście z~przestrzeni jednowymiarowej do dwuwymiarowej}
-      \label{fig:From1dTo2d}
+      \includegraphics[width=14cm]{Iterations}
+      \caption[Podejście iteracyjne przy wyznaczaniu wektora prędkości]{Podejście iteracyjne przy wyznaczaniu wektora prędkości}
+      \label{fig:Iterations}
     \end{figure}
+
+    Próba przeniesienia proponowanego rozwiązania na przypadek dwuwymiarowy wymaga dodania współrzędnej $y$, co modyfikuje opisane równanie do postaci: \[I_{x}\mathbf{u} + I_{y}\mathbf{v} + I_{t} = \mathbf{0} \]
+
+    Niestety równanie jest niedookreślone w~tej postaci, ponieważ dla każdego piksela posiadamy dwie niewiadome. Oznacza to, że na poziomie pojedynczych pikseli nie jest możliwe uzyskanie dokładnego rozwiązania dla ruchu w~przestrzeni dwuwymiarowej. W~takim przypadku możliwe jest jedynie rozwiązanie składnika ruchu który jest równoległy do linii, wyznaczonej przez równanie przepływu, co jest zaprezentowane poniżej:
+
+    \[ I_{x}\mathbf{u} + I_{y}\mathbf{v} + I_{t} = \mathbf{0} \]
+
+    \[ \nabla \mathbf{I}^{T} \mathbf{u} = -\mathbf{I_{t}} \]
+    \[
+      \mathbf{u} =
+        \begin{bmatrix}
+          u \\
+          v \\
+        \end{bmatrix}
+      \hspace{20pt}
+      \nabla \mathbf{I} =
+        \begin{bmatrix}
+          I_{x} \\
+          I_{y} \\
+        \end{bmatrix}
+    \]
 
     Aby rozwiązać przypadek dwuwymiarowy bez wspomnianego problemu, niezbędne jest skorzystanie z~trzeciego twierdzenia o~jednolitej przestrzeni. Jeśli grupa pikseli porusza się z~identyczną prędkością i~należy fizycznie do jednego obiektu, możliwe jest wykorzystanie ich własności do rozwiązania omawianego równania, poprzez zastosowanie okna (najczęstszy wybór to: 3 na 3, 5 na 5 lub 7 na 7 pikseli), dla którego w~centrum znajduje się śledzony punkt. Dla okna o~rozmiarze 3 na 3 uzyskamy 9 dodatkowych równań, dzięki czemu niedookreślony układ równań staje się nadokreślonym, co zostało zilustrowane poniżej:
 
@@ -221,7 +246,7 @@
 
     \begin{figure}[!ht]
       \centering
-      %\includegraphics[width=14cm]{OpticalFlowPyramids}
+      \includegraphics[width=14cm]{OpticalFlowPyramids}
       \caption[Prezentacja koncepcji piramid wykorzystywanych w~algorytmie Lucas-Kanade]{Prezentacja koncepcji piramid wykorzystywanych w~algorytmie Lucas-Kanade. Estymacja przepływu optycznego od reprezentacji zgrubnej do szczegółowej}
       \label{fig:OpticalFlowPyramids}
     \end{figure}
@@ -229,10 +254,35 @@
     Algorytm w~wariancie \textit{piramidalnym} tworzy dwie struktury dla aktualnej i~następnej ramki. Następnie przegląda dostępne klatki animacji od najmniejszej (najwyższej) do największej, najbardziej szczegółowej (najniższej). Dzięki temu eliminuje problemy związane z~naruszeniem drugiego twierdzenia (o~małym ruchu pomiędzy klatkami). Oszacowane wartości pojawiające się po analizie mniej szczegółowej ramki są wejściem do analizy ramki umieszczonej na następnym poziomie, dzięki temu za pomocą kolejnych poziomów obliczone rozwiązanie jest coraz bardziej dokładne.
 
     \subsection{Gęsty przepływ optyczny (algorytm Farnebäcka)}\label{Subsection_DenseOpticalFlow}
-    \cite{GunnarFarneback03}
+    Idea algorytmu gęstego przepływu optycznego wydaje się dużo bliższa intuicji, jednak przez próbę obliczenia pola wektorów prędkości dla całej klatki obrazu jest metodą dużo bardziej kosztowną obliczeniowo. W~przypadku omówionego wyżej algorytmu w~wersji \textit{rzadkiej} stworzonych zostało wiele założeń, które nie zostaną nigdy spełnione w~niektórych realnych zastosowaniach. Algorytm Farnebäcka opisany szczegółowo w~pracy \cite{GunnarFarneback03} powstał właśnie z~takiej potrzeby. Motywacją do stworzenia algorytmu była praca w~warunkach gdzie kamera wystawiona była na duże drgania i~obraz posiadał dużo zakłóceń z~tego powodu.
 
-  \section{Algorytmy oparte punkty kluczowe}\label{Subsection_SaliencyKeypoints}
-    \cite{SalientPointsTracking05}
+    Pierwszym krokiem algorytmu jest aproksymacja sąsiedztwa w~obu klatkach sekwencji wideo za pomocą wielomianów czwartego stopnia, do czego zastosowano rozwinięcie wielomianowe. Dzięki obserwacji jak nowo wyliczony wielomian zachowuje się po wprowadzeniu przesunięcia i~wprowadzeniu omówionych poniżej poprawek uzyskano wydajny i~dokładny algorytm gęstego przepływu optycznego.
+
+    Podstawowa idea algorytmu opiera się na przybliżeniu sąsiedztwa każdego piksela za pomocą wielomianu. Jednocześnie wykorzystane zostają własności wielomianów czwartego stopnia, dzięki którym otrzymujemy lokalne wartości w~lokalnym układzie współrzędnych. Formalizując powyższy opis, otrzymujemy \[ f(\mathbf{x}) \approx \mathbf{x}^{T}\mathbf{A}\mathbf{x} + \mathbf{b}^{T}\mathbf{x} + c \] gdzie $\mathbf{A}$ jest macierzą symetryczną, $\mathbf{b}$ wektorem a $c$ skalarem. Odpowiednie współczynniki są oszasowane na podstawie ważonej metody najmniejszych kwadratów, pod względem dopasowania do wartości sygnału w~sąsiedztwie badanego piksela.
+
+    Po przybliżeniu za pomocą wielomianu otoczenia badanego punktu, należy zbadać jak stworzona struktura zachowa się pod wpływem idealnego przesunięcia. Mając dany wielomian: \[ f_{1}(\mathbf{x}) = \mathbf{x}^{T}\mathbf{A_{1}}\mathbf{x} + \mathbf{b_{1}}^{T}\mathbf{x} + c_{1} \] tworzymy nowy, poddając pierwszy przesunięciu o~wartość $\mathbf{d}$: \[
+      f_{2}(\mathbf{x}) = f_{1}(\mathbf{x-d}) = (\mathbf{x-d})^{T}\mathbf{A_{1}}(\mathbf{x-d}) + \mathbf{b_{1}}^{T}(\mathbf{x-d}) + c_{1}
+    \] następnie, po przektszałceniu otrzymamy: \[
+        f_{2}(\mathbf{x}) = \mathbf{x}^{T}\mathbf{A_{1}}\mathbf{x} + (\mathbf{b}_{1} - 2\mathbf{A}_{1}d)^{T}\mathbf{x} + \mathbf{d}^{T}\mathbf{A}_{1}\mathbf{d} - \mathbf{b}_{1}^{T}\mathbf{d} + c_{1}
+    \] i~na koniec, po wykonaniu podstawienia, doprowadzamy wielomian do postaci: \[
+        f_{2}(\mathbf{x}) = \mathbf{x}^{T}\mathbf{A_{2}}\mathbf{x} + \mathbf{b_{2}}^{T}\mathbf{x} + c_{2}
+    \] gdzie podstawione wartości wynoszą odpowiednio:
+    \[ \mathbf{A}_{2} = \mathbf{A}_{1} \]
+    \[ \mathbf{b}_{2} = \mathbf{b}_{1} - 2\mathbf{A}_{1}\mathbf{d} \]
+    \[ c_{2} = \mathbf{d}^{T}\mathbf{A}_{1}\mathbf{d} - \mathbf{b}_{1}^{T}\mathbf{d} + c_{1} \]
+
+    Dzięki zaprezentowanej definicji $\mathbf{b}_{2}$ możemy obliczyć przesunięcie $\mathbf{d}$, jeśli macierz $\mathbf{A}_{1}$ jest odwracalna, zgodnie z~przekształceniami:
+    \begin{equation}\label{Equation_GeneralDenseOpticalFlow}
+      2\mathbf{A}_{1}\mathbf{d} = -(\mathbf{b}_{2} - \mathbf{b}_{1})
+    \end{equation}
+    \[ \mathbf{d} = -\frac{1}{2}\mathbf{A}_{1}^{-1}(\mathbf{b}_{2} - \mathbf{b}_{1}) \]
+    Co najważniejsze, obserwacja jest możliwa do zaaplikowania w~każdym wymiarze (przypadek uogólniony).
+
+    Mimo, iż zaprezentowany przypadek jest czysto teoretyczny (przez wprowadzone założenia, że \textit{sygnał jest pojedynczym wielomianem} oraz, że \textit{dwa sygnały łączy jedynie przesunięcie}) to jest nadal aplikowalny dla sygnału rzeczywistego. Jedynym wyzwaniem jest, aby dla równania \ref{Equation_GeneralDenseOpticalFlow} jak najbardziej ograniczyć wpływ błędów na wartość obliczonego przesunięcia. Aby ograniczyć wpływ błędu na wartość końcową wykorzystuje się ważoną metodę najmniejszych kwadratów dla sąsiedztwa analizowanego piksela. Dodatkowym ulepszeniem jest możliwość parametryzacji przesunięcia pod kątem doboru parametru dla określonych typów ruchu.
+
+    Ostatnie założenie dotyczące \textit{ograniczenia natury różnicy pomiędzy dwoma sygnałami} może zostać wyelimininowane poprzez zastosowanie wiedzy \textit{a prori}, którą posiadamy na temat ruchu. Nie jesteśmy ograniczeni do porównania wielomianów obliczonych w~tym samym punkcie, więc korzystając z~wartości przemieszczenia zaokrąglonego do części całkowitej możemy obliczyć pierwsze oszacowanie a~następnie skupić się tylko na różnicy pomiędzy estymacją a~wartością docelową (różnica będzie dużo mniejsza).
+
+    W~celu zoptymalizowania algorytmu, Farnebäck zaproponował podobne rozwiązanie jak w~\textit{piramidalnym wariancie algorytmu Lucas-Kanade} polegające na wykorzystaniu iteracyjnego podejścia i~piramidy przeskalowanych obrazów. Tak jak w~powyższym przypadku, algorytm zaczyna od mniej szczegółowych ramek, przechodząc co iterację do coraz bardziej szczegółowych obrazów.
 
   \section{Algorytm oparty o~filtr cząsteczkowy}\label{Subsection_ParticleFilter}
     \cite{ParticleFilter05}
