@@ -1,8 +1,12 @@
 *.avi
 *.webm
+*.MOV
+*.mov
 assets/*.png
 
 node_modules/
+
+doc/materials/useful/Random Forest/
 
 bin/*
 *.o

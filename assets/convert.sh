@@ -8,5 +8,5 @@ mv *_tracking_result.avi $BACKUP
 
 # Convert videos to WEBM format.
 for file in *.avi; do
-  ffmpeg -i $file -r 25 -f webm -b:v 20M videos-converted/${file%%.*}.webm
+  ffmpeg -i $file -q:v 0 -vcodec libvpx videos-converted/${file%%.*}.webm
 done

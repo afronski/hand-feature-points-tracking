@@ -49,7 +49,7 @@
   \section{Problem doboru cech dla algorytmów śledzenia punktów charakterystycznych}\label{Section_GoodGeaturesToTrack}
     Wybór punktów charakterystycznych dla problemu śledzenia ich w~sekwencji wideo jest kluczowym elementem z~punktu widzenia jakości wyznaczonego rozwiązania końcowego. Jeśli wyobrazimy sobie sekwencję wideo jedynie ze strukturą o~powtarzalnej teksturze, to wybór charakterystycznej elementu okaże się bardzo trudny. Wiele punktów będzie identycznych lub bardzo podobnych do siebie i~śledzenie jednego wybranego pomiędzy kolejnymi ramkami animacji jest z~góry skazane na porażkę. Z~drugiej strony, jeśli mamy do dyspozycji unikalny fragment, wybierając go mamy duże szanse odnaleźć go w~następnych ramkach.
 
-    Podejście intuicyjne do tego problemu, polegające na poszukiwaniu odróżniającego się szczegółu jest krótkowzroczne. Przy wyborze charakterystycznej cechy możemy się kierować dużą wartością pochodnej w~punkcie - tego typu wartości oznaczają najczęściej \textbf{krawędź}. Niestety, podstawowa cechą \textit{krawędzi} jest to, że wiele punktów leżących na niej posiada identyczne wartości (prowadzi to do tzw. "problemu szczeliny", który omówiony został powyżej). Potrzebne są bardziej unikalne właściwości.
+    Podejście intuicyjne do tego problemu, polegające na poszukiwaniu odróżniającego się szczegółu jest krótkowzroczne. Przy wyborze charakterystycznej cechy możemy się kierować dużą wartością pochodnej w~punkcie - tego typu wartości oznaczają najczęściej \textbf{krawędź}. Niestety, podstawowa cechą \textit{krawędzi} jest to, że wiele punktów leżących na niej posiada identyczne wartości (prowadzi to do tzw. \"problemu szczeliny\", który omówiony został powyżej). Potrzebne są bardziej unikalne właściwości.
 
     Pierwsze podejście do problemu doboru cech, pozwoliło nam odkryć bardzo ważną własność dotyczącą wartości pochodnej. Okazuje się, że jeśli wartości pochodnej w~dwóch równoległych do siebie kierunkach są duże, to dany punkt jest dużo bardziej unikalny w~skali całej ramki - nazywamy go wtedy \textbf{narożnikiem}.
 
@@ -91,9 +91,9 @@
 
     Inną bardzo ważną definicją jest \textit{Skaloniezmiennicze przekształcenie cech} (ang. \textit{Scale-invariant feature transform}, w skrócie \textit{SIFT}) opisane w~pracy \cite{SalientPointsTracking05}. Ponadto, omawiany algorytm w~wariancie \textit{L\"{o}we}, odpornym na częściowe przesłanianie, jest opatentowanym algorytmem w~Stanch Zjednoczonych.
 
-    Algorytm pozwala na wykrycie cech w~obrazie, które są odporne na skalowanie, rotację i~przesunięcie. W~przypadku ogolnym omawiane cechy obliczane są na podstawie kierunku dominującego gradientu w~określonym położeniu i~naniesieniu wartości do lokalnego histogramu na podstawie jego orientacji. Dzięki temu, przy odpowiednio małych przekształceniach afinicznych (w~omawiamym przypadku, pomiędzy dwoma bezpośrednio sąsiadującymi klatkami sekwencji wideo) obserwowane cechy nie zmieniają się.
+    Algorytm pozwala na wykrycie cech w~obrazie, które są odporne na skalowanie, rotację i~przesunięcie. W~przypadku ogolnym omawiane cechy obliczane są na podstawie kierunku dominującego gradientu w~określonym położeniu i~naniesieniu wartości do lokalnego histogramu na podstawie jego orientacji. Dzięki temu, przy odpowiednio małych przekształceniach afinicznych (w~omawianym przypadku, pomiędzy dwoma bezpośrednio sąsiadującymi klatkami sekwencji wideo) obserwowane cechy nie zmieniają się.
 
-    Metoda została opracowana przez Davida L\"{o}we w~roku 1999. Ogólna idea algorytmu opiera się na wyekstrahowaniu punktów kluczowych do odpowiedniej struktury danych, następnie obiekt jest identyifikowany w~nowym obrazie pojedynczo, na podstawie odległości w~metryce euklidesowej oraz pomocą wektora cech. Z~pełnego zbioru dopasowań wybierane zostają tylko te punkty, które zgadzają się pod względem położenia, skali i~orientacji. Dzięki zastosowaniu efektywnej struktury danych (w~proponowanej implementacji tablicy haszowanej) identyfikacja skupisk śledzonych punktów i~wybór (za pomocą uogólnionej \textit{transformaty Hough}) najwierniej odpowiadających oryginalnie śledzonemu obiektowi przebiega bezproblemowo. Następnie, każdy zidentyfikowany klaster trzech lub więcej punktów podlega weryfikacji hipotezy przynależności do śledzonego punktu. Skupiska nie pasujące do omawianej hipotezy zostają odrzucone, klastry wyznaczone przez poprzednie kroki z~poprawnie zweryfikowaną hipotezą z~dużym prawdopodobieństem należą do śledzonego obiektu.
+    Metoda została opracowana przez Davida L\"{o}we w~roku 1999. Ogólna idea algorytmu opiera się na wyekstrahowaniu punktów kluczowych do odpowiedniej struktury danych, następnie obiekt jest identyfikowany w~nowym obrazie pojedynczo, na podstawie odległości w~metryce euklidesowej oraz pomocą wektora cech. Z~pełnego zbioru dopasowań wybierane zostają tylko te punkty, które zgadzają się pod względem położenia, skali i~orientacji. Dzięki zastosowaniu efektywnej struktury danych (w~proponowanej implementacji tablicy haszowanej) identyfikacja skupisk śledzonych punktów i~wybór (za pomocą uogólnionej \textit{transformaty Hough}) najwierniej odpowiadających oryginalnie śledzonemu obiektowi przebiega bezproblemowo. Następnie, każdy zidentyfikowany klaster trzech lub więcej punktów podlega weryfikacji hipotezy przynależności do śledzonego punktu. Skupiska nie pasujące do omawianej hipotezy zostają odrzucone, klastry wyznaczone przez poprzednie kroki z~poprawnie zweryfikowaną hipotezą z~dużym prawdopodobieństwem należą do śledzonego obiektu.
 
 \chapter{Analiza i~porównanie wybranych algorytmów}\label{Section_Algorytmy}
 
@@ -129,7 +129,7 @@
     \begin{itemize}
       \item Twierdzenie o~stałej jasności - Śledzony piksel obrazu nie zmienia swojej jasności (w~przypadku analizy obrazów kolorowych mówimy o~\textit{Regule niezmienności koloru}) podczas ruchu pomiędzy klatkami.
       \item Twierdzenie o~niewielkim ruchu - Śledzony fragment powierzchni porusza się o~niewielką odległość z~klatki na klatkę. Innymi słowy, \textit{ilość klatek sekwencji wideo} jest na tyle wysoka aby transformacja śledzonego punktu pomiędzy dwoma ramkami była wykonywana na małym fragmencie całego obrazu klatki.
-      \item Twierdzenie o~jednolitej przestrzeni - Punkty sąsiadujące z~śledzonym należą do tej samej powierzchni, poruszającej się zgodnie z~tym samym wektorem prędkości i~są zrzutowane w~bezpośredniej bliskości punktu charakterystycznego.
+      \item Twierdzenie o~jednolitej przestrzeni - Punkty sąsiadujące z~śledzonym należą do tej samej powierzchni, poruszającej się zgodnie z~tym samym wektorem prędkości i~są rzutowane w~bezpośredniej bliskości punktu charakterystycznego.
     \end{itemize}
 
     Dla uproszczenia wyjaśnień przyjęty został obraz w~skali szarości o~jednym kanale opisanym liczbą zmiennoprzecinkową.
@@ -150,7 +150,7 @@
       \label{fig:EdgeVelocity1D}
     \end{figure}
 
-    Niestety, jasność nie zawsze będzie stała, i~nasze założenie nie będzie w~takim przypadku prawdziwe - w~konsekwencji nie otrzymamy dokładnego wektora prędkości. Możemy jednak, dla małych odległości, przybliżyć się do rozwiązania \textit{iteracyjną metodą Newtona}, obliczając kolejne pochodne po czasie. Przy założeniu, że kolejne klatki reprezentują niewielki ruch, rozwiązanie jest szybkozbieżne (wystarcza około 5 iteracji), jeśli jednak pierwsze przybliżenie będzie niedokładne, zaproponowana metoda będzie rozbieżna.
+    Niestety, jasność nie zawsze będzie stała, i~nasze założenie nie będzie w~takim przypadku prawdziwe - w~konsekwencji nie otrzymamy dokładnego wektora prędkości. Możemy jednak, dla małych odległości, przybliżyć się do rozwiązania \textit{iteracyjną metodą Newtona}, obliczając kolejne pochodne po czasie. Przy założeniu, że kolejne klatki reprezentują niewielki ruch, rozwiązanie jest szybko zbieżne (wystarcza około 5 iteracji), jeśli jednak pierwsze przybliżenie będzie niedokładne, zaproponowana metoda będzie rozbieżna.
 
     \begin{figure}[!ht]
       \centering
@@ -180,7 +180,7 @@
         \end{bmatrix}
     \]
 
-    Aby rozwiązać przypadek dwuwymiarowy bez wspomnianego problemu, niezbędne jest skorzystanie z~trzeciego twierdzenia o~jednolitej przestrzeni. Jeśli grupa pikseli porusza się z~identyczną prędkością i~należy fizycznie do jednego obiektu, możliwe jest wykorzystanie ich własności do rozwiązania omawianego równania, poprzez zastosowanie okna (najczęstszy wybór to: 3 na 3, 5 na 5 lub 7 na 7 pikseli), dla którego w~centrum znajduje się śledzony punkt. Dla okna o~rozmiarze 3 na 3 uzyskamy 9 dodatkowych równań, dzięki czemu niedookreślony układ równań staje się nadokreślonym, co zostało zilustrowane poniżej:
+    Aby rozwiązać przypadek dwuwymiarowy bez wspomnianego problemu, niezbędne jest skorzystanie z~trzeciego twierdzenia o~jednolitej przestrzeni. Jeśli grupa pikseli porusza się z~identyczną prędkością i~należy fizycznie do jednego obiektu, możliwe jest wykorzystanie ich własności do rozwiązania omawianego równania, poprzez zastosowanie okna (najczęstszy wybór to: 3 na 3, 5 na 5 lub 7 na 7 pikseli), dla którego w~centrum znajduje się śledzony punkt. Dla okna o~rozmiarze 3 na 3 uzyskamy 9 dodatkowych równań, dzięki czemu niedookreślony układ równań staje się nadokreślony, co zostało zilustrowane poniżej:
 
     \[
       \underbrace{
@@ -240,7 +240,7 @@
       \end{bmatrix} = (A^{T}A)^{-1} A^{T}b
     \]
 
-    Aby rozwiązać powysze równanie, część $(A^{T}A)$ musi być odwracalna, a~warunek odwracalności zostanie spełniony wtedy tylko wtedy gdy omawiany fragment posiada rząd równy $2$. Powyższe wymaganie zostanie spełnione, gdy wspomniana macierz posiada dwa duże wektory własne. Przywołując \textit{definicję Harissa} z~rozdziału \ref{Section_GoodGeaturesToTrack} dokładnie takie własności uzyskamy tworząc okno wokół śledzonego punktu, który jest \textit{narożnikiem}. Z~wykorzystaniem takiego piksela jesteśmy w~stanie rozwiązać powyższy układ równań wyznaczając wektory prędkości w~dwuwymiarowej przestrzeni.
+    Aby rozwiązać powyższe równanie, część $(A^{T}A)$ musi być odwracalna, a~warunek odwracalności zostanie spełniony wtedy tylko wtedy gdy omawiany fragment posiada rząd równy $2$. Powyższe wymaganie zostanie spełnione, gdy wspomniana macierz posiada dwa duże wektory własne. Przywołując \textit{definicję Harissa} z~rozdziału \ref{Section_GoodGeaturesToTrack} dokładnie takie własności uzyskamy tworząc okno wokół śledzonego punktu, który jest \textit{narożnikiem}. Z~wykorzystaniem takiego piksela jesteśmy w~stanie rozwiązać powyższy układ równań wyznaczając wektory prędkości w~dwuwymiarowej przestrzeni.
 
     Ostatnim problemem jest zachowanie trzech twierdzeń dla obrazów gorszej jakości. Większości kamer dostępnych dla użytkowników końcowych pracuje z~częstotliwością 30 Hz, więc duże i~niespójne obszary ruchu są powszechnym problemem. Czysta implementacja algorytmu rzadkiego przepływu optycznego Lucas-Kanade nie radzi sobie z~takim rodzajem zakłóceń zbyt dobrze (problemem jest rozmiar okna, które zwiększone do dużych rozmiarów, aby objęło cały duży i~niespójny obszar ruchu łamie trzecie twierdzenie). Rozwiązaniem problemu jest wykorzystanie wariantu algorytmu LK zwanego \textit{piramidalnym}, ze względu na zastosowaną konstrukcję wewnątrz implementacji algorytmu. Na rysunku \ref{fig:OpticalFlowPyramids} możemy znaleźć wizualizację omawianej struktury.
 
@@ -258,11 +258,11 @@
 
     Pierwszym krokiem algorytmu jest aproksymacja sąsiedztwa w~obu klatkach sekwencji wideo za pomocą wielomianów czwartego stopnia, do czego zastosowano rozwinięcie wielomianowe. Dzięki obserwacji jak nowo wyliczony wielomian zachowuje się po wprowadzeniu przesunięcia i~wprowadzeniu omówionych poniżej poprawek uzyskano wydajny i~dokładny algorytm gęstego przepływu optycznego.
 
-    Podstawowa idea algorytmu opiera się na przybliżeniu sąsiedztwa każdego piksela za pomocą wielomianu. Jednocześnie wykorzystane zostają własności wielomianów czwartego stopnia, dzięki którym otrzymujemy lokalne wartości w~lokalnym układzie współrzędnych. Formalizując powyższy opis, otrzymujemy \[ f(\mathbf{x}) \approx \mathbf{x}^{T}\mathbf{A}\mathbf{x} + \mathbf{b}^{T}\mathbf{x} + c \] gdzie $\mathbf{A}$ jest macierzą symetryczną, $\mathbf{b}$ wektorem a $c$ skalarem. Odpowiednie współczynniki są oszasowane na podstawie ważonej metody najmniejszych kwadratów, pod względem dopasowania do wartości sygnału w~sąsiedztwie badanego piksela.
+    Podstawowa idea algorytmu opiera się na przybliżeniu sąsiedztwa każdego piksela za pomocą wielomianu. Jednocześnie wykorzystane zostają własności wielomianów czwartego stopnia, dzięki którym otrzymujemy lokalne wartości w~lokalnym układzie współrzędnych. Formalizując powyższy opis, otrzymujemy \[ f(\mathbf{x}) \approx \mathbf{x}^{T}\mathbf{A}\mathbf{x} + \mathbf{b}^{T}\mathbf{x} + c \] gdzie $\mathbf{A}$ jest macierzą symetryczną, $\mathbf{b}$ wektorem a $c$ skalarem. Odpowiednie współczynniki są oszacowane na podstawie ważonej metody najmniejszych kwadratów, pod względem dopasowania do wartości sygnału w~sąsiedztwie badanego piksela.
 
     Po przybliżeniu za pomocą wielomianu otoczenia badanego punktu, należy zbadać jak stworzona struktura zachowa się pod wpływem idealnego przesunięcia. Mając dany wielomian: \[ f_{1}(\mathbf{x}) = \mathbf{x}^{T}\mathbf{A_{1}}\mathbf{x} + \mathbf{b_{1}}^{T}\mathbf{x} + c_{1} \] tworzymy nowy, poddając pierwszy przesunięciu o~wartość $\mathbf{d}$: \[
       f_{2}(\mathbf{x}) = f_{1}(\mathbf{x-d}) = (\mathbf{x-d})^{T}\mathbf{A_{1}}(\mathbf{x-d}) + \mathbf{b_{1}}^{T}(\mathbf{x-d}) + c_{1}
-    \] następnie, po przektszałceniu otrzymamy: \[
+    \] następnie, po przekształceniu otrzymamy: \[
         f_{2}(\mathbf{x}) = \mathbf{x}^{T}\mathbf{A_{1}}\mathbf{x} + (\mathbf{b}_{1} - 2\mathbf{A}_{1}d)^{T}\mathbf{x} + \mathbf{d}^{T}\mathbf{A}_{1}\mathbf{d} - \mathbf{b}_{1}^{T}\mathbf{d} + c_{1}
     \] i~na koniec, po wykonaniu podstawienia, doprowadzamy wielomian do postaci: \[
         f_{2}(\mathbf{x}) = \mathbf{x}^{T}\mathbf{A_{2}}\mathbf{x} + \mathbf{b_{2}}^{T}\mathbf{x} + c_{2}
@@ -278,19 +278,16 @@
     \[ \mathbf{d} = -\frac{1}{2}\mathbf{A}_{1}^{-1}(\mathbf{b}_{2} - \mathbf{b}_{1}) \]
     Co najważniejsze, obserwacja jest możliwa do zaaplikowania w~każdym wymiarze (przypadek uogólniony).
 
-    Mimo, iż zaprezentowany przypadek jest czysto teoretyczny (przez wprowadzone założenia, że \textit{sygnał jest pojedynczym wielomianem} oraz, że \textit{dwa sygnały łączy jedynie przesunięcie}) to jest nadal aplikowalny dla sygnału rzeczywistego. Jedynym wyzwaniem jest, aby dla równania \ref{Equation_GeneralDenseOpticalFlow} jak najbardziej ograniczyć wpływ błędów na wartość obliczonego przesunięcia. Aby ograniczyć wpływ błędu na wartość końcową wykorzystuje się ważoną metodę najmniejszych kwadratów dla sąsiedztwa analizowanego piksela. Dodatkowym ulepszeniem jest możliwość parametryzacji przesunięcia pod kątem doboru parametru dla określonych typów ruchu.
+    Mimo, iż zaprezentowany przypadek jest czysto teoretyczny (przez wprowadzone założenia, że \textit{sygnał jest pojedynczym wielomianem} oraz, że \textit{dwa sygnały łączy jedynie przesunięcie}) to jest nadal możliwy do zaaplikowania dla sygnału rzeczywistego. Jedynym wyzwaniem jest, aby dla równania \ref{Equation_GeneralDenseOpticalFlow} jak najbardziej ograniczyć wpływ błędów na wartość obliczonego przesunięcia. Aby ograniczyć wpływ błędu na wartość końcową wykorzystuje się ważoną metodę najmniejszych kwadratów dla sąsiedztwa analizowanego piksela. Dodatkowym ulepszeniem jest możliwość parametryzacji przesunięcia pod kątem doboru parametru dla określonych typów ruchu.
 
-    Ostatnie założenie dotyczące \textit{ograniczenia natury różnicy pomiędzy dwoma sygnałami} może zostać wyelimininowane poprzez zastosowanie wiedzy \textit{a prori}, którą posiadamy na temat ruchu. Nie jesteśmy ograniczeni do porównania wielomianów obliczonych w~tym samym punkcie, więc korzystając z~wartości przemieszczenia zaokrąglonego do części całkowitej możemy obliczyć pierwsze oszacowanie a~następnie skupić się tylko na różnicy pomiędzy estymacją a~wartością docelową (różnica będzie dużo mniejsza).
+    Ostatnie założenie dotyczące \textit{ograniczenia natury różnicy pomiędzy dwoma sygnałami} może zostać wyeliminowane poprzez zastosowanie wiedzy \textit{a~priori}, którą posiadamy na temat ruchu. Nie jesteśmy ograniczeni do porównania wielomianów obliczonych w~tym samym punkcie, więc korzystając z~wartości przemieszczenia zaokrąglonego do części całkowitej możemy obliczyć pierwsze oszacowanie a~następnie skupić się tylko na różnicy pomiędzy estymacją a~wartością docelową (różnica będzie dużo mniejsza).
 
     W~celu zoptymalizowania algorytmu, Farnebäck zaproponował podobne rozwiązanie jak w~\textit{piramidalnym wariancie algorytmu Lucas-Kanade} polegające na wykorzystaniu iteracyjnego podejścia i~piramidy przeskalowanych obrazów. Tak jak w~powyższym przypadku, algorytm zaczyna od mniej szczegółowych ramek, przechodząc co iterację do coraz bardziej szczegółowych obrazów.
-
-  \section{Algorytm oparty o~filtr cząsteczkowy}\label{Subsection_ParticleFilter}
-    \cite{ParticleFilter05}
-    \cite{FingertipParticleFilter11}
 
   \section{Algorytm oparty o~decyzyjne drzewa losowe}\label{Subsection_RandomizedTrees}
     \cite{RandomizedTrees06}
     \cite{TwoStageRandomizedTrees11}
+    \cite{RealTimeRandomizedTrees05}
 
 \chapter{Specyfikacja przeprowadzonych badań}\label{Chapter_SpecyfikacjaPrzeprowadzonychBadan}
 
@@ -344,7 +341,7 @@
 
     \gest{Duża litera L}
          {Gest wykonywany na jednolitej i~gładkiej powierzchni.}
-         {Litera "L" o~wysokości 7 cm.}
+         {Litera \"L\" o~wysokości 7 cm.}
          {Złączone palce prawej dłoni.}
          {Kształt litery zarysowują czubki palców.}
          {Gest powinien być wykonywany przez poruszanie tylko złączonymi palcami, nie samą dłonią.}
@@ -365,19 +362,32 @@
 
   \section{Akwizycja i~obróbka danych wejściowych}\label{Section_Akwizycja}
 
+  Akwizycja obrazów:
+  - Aparat:
+    - Nikon D7000
+  - Obiektyw:
+    - Nikor, 50mm, 1:1.4
+  - Statyw.
+  - Parametry nagrywanej sekwencji wideo:
+    - FPS: 25 kl/s
+    - Rozdzielczość: 1280x720
+    - ISO: 320
+    - f, T:
+      - 2.5, 320
+
   \section{Procedura weryfikacji jakości badanego algorytmu}\label{Section_Jakosc}
 
     W~celu analizy i~porównania jakości poszczególnych algorytmów przygotowano zestaw parametrów, które będą badane podczas wykonania każdego z~nich. Główną rolę odgrywają tutaj \textbf{punkty kluczowe} oraz \textbf{połączenia} między nimi.
 
-    Jakość algorytmu wyznaczana będzie na podstawie odchyleń tras oraz pozycji punktów charakerystycznych w~stosunku do pozycji punktów kluczowych oraz tras pomiędzy nimi.
+    Jakość algorytmu wyznaczana będzie na podstawie odchyleń tras oraz pozycji punktów charakterystycznych w~stosunku do pozycji punktów kluczowych oraz tras pomiędzy nimi.
 
     Każdy z~gestów posiada serię punktów kluczowych połączonych ze sobą liniami prostymi (w~celu symulacji gładszych połączeń np. okręgu stosuje się odpowiednią ilość punktów pośrednich). Każdy z~punktów kluczowych oprócz swojej pozycji posiada również \textit{numer klatki wideo} w~której występuje.
 
-    W~określonych przez punkty kluczowe klatkach animacji następuje przeszukanie wszystkich dostępnych w~danej chwili czasu \textit{t} punktów charakterystycznych i~obliczana jest ich odległość od punktu kluczowego. Do porównania wybierana jest nabliższy punkt zgodnie z~metryką euklidesową.
+    W~określonych przez punkty kluczowe klatkach animacji następuje przeszukanie wszystkich dostępnych w~danej chwili czasu \textit{t} punktów charakterystycznych i~obliczana jest ich odległość od punktu kluczowego. Do porównania wybierana jest najbliższy punkt zgodnie z~metryką euklidesową.
 
     W~klatkach pośrednich analizowana jest odległość wszystkich punktów charakterystycznych od aktualnej \textit{trasy}. Dzięki temu, wiemy jak wygląda dystrybucja punktów charakterystycznych w~okół śledzonej trasy.
 
-    Warto zauważyć, że taki sposób weryfikacji odporny jest na zmiany (poprzez dokładanie lub usuwanie) punktów charakerystycznych.
+    Warto zauważyć, że taki sposób weryfikacji odporny jest na zmiany (poprzez dokładanie lub usuwanie) punktów charakterystycznych.
 
     Biorąc pod uwagę dwa wspomniane parametry tj. \textbf{odchylenie minimalne od punktu kluczowego w~danej klatce sekwencji wideo} oraz \textbf{wektor odchyleń punktów charakterystycznych od trasy} możemy skutecznie porównać jakość badanych algorytmów między sobą.
 
@@ -387,7 +397,7 @@
 
     Główne parametry porównawcze opierają się na pomiarach czasu wykonania oraz własnościami statystycznymi wyciągniętymi z~pomiarów.
 
-    Pierwszy pomar to \textbf{czas pracy algorytmu na pojedynczej klatce}. Z~wartości pomiarów dla wszystkich klatek sekwencji wideo wyciągnięte zostaną własności statystyczne tj. \textit{średnia arytmetyczna}, \textit{mediana}, \textit{odchylenie standardowe}.
+    Pierwszy pomiar to \textbf{czas pracy algorytmu na pojedynczej klatce}. Z~wartości pomiarów dla wszystkich klatek sekwencji wideo wyciągnięte zostaną własności statystyczne tj. \textit{średnia arytmetyczna}, \textit{mediana}, \textit{odchylenie standardowe}.
 
     Kolejnym pomiarem jest \textbf{sumaryczny czas przetwarzania algorytmu}. Warto zauważyć, że nie będzie on nigdy mniejszy od nominalnego czasu trwania sekwencji wideo. Sumaryczny czas może być jedynie równy wartości nominalnej w~przypadku, gdy przetwarzanie pojedynczej klatki wideo odbędzie się w~czasie mniejszym bądź równym wartości niezbędnej do odczekania przed wyświetleniem następnej klatki. Czasu oczekiwania jest ściśle związany z~wartością \textit{częstotliwości klatek na sekundę} analizowanej sekwencji wideo.
 

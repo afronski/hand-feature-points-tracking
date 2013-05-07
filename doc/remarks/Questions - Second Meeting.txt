@@ -1,7 +1,21 @@
-0. Chęć obrony w czerwcu (wspomnieć o tym).
+Notatki:
 
-1. Ile metod ma być zaimplementowanych?
-  - Są dwie (Optical Flow: Sparse i Dense).
-  - Są dwie następne w planach (oparte o particle filters i randomized forest).
+Czerwiec?
+  - Jest okej.
 
-2. Jak się zabrać za ML i randomized forest - co jest wektorem cech i jak powiązać wideo, cechy?
+3 Metody;
+  - Przepływ optyczny (gęsty i rzadki).
+  - Lasy losowe.
+
+Akwizycja obrazów:
+  - Aparat:
+    - Nikon D7000
+  - Obiektyw:
+    - Nikor, 50mm, 1:1.4
+  - Statyw.
+  - Parametry nagrywanej sekwencji wideo:
+    - FPS: 25 kl/s
+    - Rozdzielczość: 1280x720
+    - ISO: 320
+    - f, T:
+      - 2.5, 320
