@@ -19,7 +19,7 @@
       \subsubsection{Programowanie Obiektowe}
       Język \textit{C++} jest językiem wieloparadygmatowym, jednak dominującym paradygmatem tworzenia oprogramowania w~języku \textit{C++} jest tzw. \textit{programowanie obiektowe} (ang. \textit{Object Oriented Programming} w~skrócie \textit{OOP}). Wspomniany wyżej standard z~2003~roku posiada największe wsparcie właśnie dla tego paradygmatu, dodatkowo w~czasach największej popularności tego języka to właśnie programowanie obiektowe było najpopularniejsze.
 
-      Koncepcja programowania obiektowego sięga języka \textit{Simula 67}, następnie dopracowano wszystkie koncepty w~języku \textit{Smalltalk}. Sam język \textit{C++}, którego pierwsza koncepcja pojawiła się w~1979 roku, intensywnie korzysta z~elementów obiektowości wprowadzonych właśnie w~języku \textit{Simula}, jak również z~języków takich jak \textit{Algol}, \textit{Ada} czy \textit{ML} \cite{CppStroustrup}.
+      Koncepcja programowania obiektowego sięga języka \textit{Simula 67}, następnie dopracowano wszystkie koncepty w~języku \textit{Smalltalk}. Sam język \textit{C++}, którego pierwsza koncepcja pojawiła się w~1979 roku, intensywnie korzysta z~elementów programowania obiektowego wprowadzonych właśnie w~języku \textit{Simula}, jak również z~języków takich jak \textit{Algol}, \textit{Ada} czy \textit{ML} \cite{CppStroustrup}.
 
       Programowanie obiektowe opiera się na czterech filarach, którymi są:
       \begin{itemize}
@@ -29,7 +29,7 @@
 
         \item \textbf{Polimorfizm} - Referencje i~kolekcje obiektów mogą dotyczyć obiektów różnego typu, a~wywołanie metody dla referencji spowoduje zachowanie odpowiednie dla pełnego typu obiektu wywoływanego. Jeśli dzieje się to w~czasie działania programu, to nazywa się to \textit{późnym wiązaniem} lub \textit{wiązaniem dynamicznym}. Niektóre języki udostępniają bardziej statyczne (w trakcie kompilacji) rozwiązania polimorfizmu – na przykład szablony i~przeciążanie operatorów w~\textit{C++} \cite{CppStroustrup}.
 
-        \item \textbf{Dziedziczenie} - Porządkuje i~wspomaga polimorfizm, i~enkapsulację dzięki umożliwieniu definiowania, i~tworzenia specjalizowanych obiektów na podstawie bardziej ogólnych. Dla obiektów specjalizowanych nie trzeba redefiniować całej funkcjonalności, lecz tylko tę, której nie ma obiekt ogólniejszy. W typowym przypadku powstają grupy obiektów zwane \textit{klasami}, oraz grupy klas zwane \textit{hierarchiami dziedziczenia}. Odzwierciedlają one wspólne cechy obiektów.
+        \item \textbf{Dziedziczenie} - Porządkuje i~wspomaga polimorfizm, i~enkapsulację dzięki umożliwieniu definiowania, i~tworzenia specjalizowanych obiektów na podstawie bardziej ogólnych. Dla obiektów specjalizowanych nie trzeba przedefiniowywać całej funkcjonalności, lecz tylko tę, której nie ma obiekt ogólniejszy. W typowym przypadku powstają grupy obiektów zwane \textit{klasami}, oraz grupy klas zwane \textit{hierarchiami dziedziczenia}. Odzwierciedlają one wspólne cechy obiektów.
       \end{itemize}
 
       \subsubsection{Zastosowanie programowania obiektowego w~wizji komputerowej}
@@ -61,7 +61,7 @@
       \subsubsection{Funktory}
       Kolejnym bardzo ważnym konceptem zastosowanym w~bibliotece \textit{STL} jest abstrakcja \textit{Funktora} (ang. Functors) lub inaczej \textit{Obiektu Funkcyjnego}. Jest to klasa z~przeładowanym operatorem wywołania metody (\textit{operator()}). Możliwe jest parametryzowanie stworzonego obiektu za pomocą konstruktora oraz przechowywanie wewnętrznego stanu \textit{funktora} wewnątrz pól klasy. Ponieważ \textit{obiekt funkcyjny} i~wskaźniki na funkcje mogą być wywołane za pomocą tej samej składni mogą być stosowane zamiennie właśnie jako argumenty szablonów.
 
-      Najpopularniejszą koncepcją zwiazaną z~\textit{funktorami} jest \textit{Predykat}. Jest to koncept zaczerpnięty z~matematyki. Jest to definicja pewnej funkcji logicznej (\textit{boolowskiej}) o~dowolnej dziedzinie i~przeciwdziedzinie będącej zbiorem wartości logicznych (\textit{prawda}, \textit{fałsz}). W~przypadku \textit{STL} wewnętrzna implementacja funktora na podstawie parametrów wejściowych podejmuje decyzje o~przypisaniu określonej wartości logicznej związanej z~przekazanymi argumentami.
+      Najpopularniejszą koncepcją związaną z~\textit{funktorami} jest \textit{Predykat}. Jest to koncept zaczerpnięty z~matematyki. Jest to definicja pewnej funkcji logicznej (\textit{boolowskiej}) o~dowolnej dziedzinie i~przeciwdziedzinie będącej zbiorem wartości logicznych (\textit{prawda}, \textit{fałsz}). W~przypadku \textit{STL} wewnętrzna implementacja funktora na podstawie parametrów wejściowych podejmuje decyzje o~przypisaniu określonej wartości logicznej związanej z~przekazanymi argumentami.
 
       \subsubsection{Idiomy}\label{Idioms}
       Bardzo ważnym elementem podczas wykorzystywania \textit{standardowej biblioteki szablonów} jest trzymanie się określonych warunków wymaganych od typów zdefiniowanych przez użytkownika, ale także zbioru wypracowanych technik zwanych \textit{idiomami}. Pomocnym źródłem jest pozycja \cite{EffectiveStl} ilustrująca wiele przykładów wspomnianych idiomów oraz prezentująca potencjalne pułapki i~sytuacje których jako użytkownicy biblioteki powinniśmy unikać. Poniżej zamieszczony został przykład jednego z~idiomów zwanego \textit{erase-remove}, służącego do zwolnienia miejsca w~pojemniku zajmowanego przez elementy oznaczone jako usunięte (ponieważ algorytm \textit{remove} sam w~sobie nie usuwa elementów zgromadzonych w~kontenerze, jedynie przenosi je na koniec i~oznacza jako usunięte, faktyczne usunięcie może wykonać dopiero metoda \textit{erase} zaimplementowana w~określonym pojemniku).
@@ -73,7 +73,7 @@ std::vector<int> v = { 0, 1, 2, 3, 4, 5, 6 };
 // Usunięcie elementów o wartości 5.
 v.erase(std::remove(v.begin(), v.end(), 5), v.end());
         \end{verbatim}
-        \caption{Idiom erase-remove wykorzystywany w~bibiliotece STL}
+        \caption{Idiom erase-remove wykorzystywany w~bibliotece STL}
         \label{EraseRemoveIdiom}
       \end{sample}
 
@@ -86,25 +86,25 @@ v.erase(std::remove(v.begin(), v.end(), 5), v.end());
 
       \textit{OpenCV} jest wieloplatformową biblioteką, w~pełni współpracującą z~systemami operacyjnymi \textit{Mac OS X}, \textit{Microsoft Windows} i~\textit{Linux}. W~momencie tworzenia pracy magisterskiej wykorzystywana była aktualnie dostępna wersja o~numerze \textit{2.4.3}. Popularność tej biblioteki przyniosła, z~pomocą społeczności, interfejsy programistyczne do praktycznie każdego popularnego języka programowania. Warto nadmienić, że obecnie wszelkiego rodzaju nowe funkcjonalności implementowane są w~języku \textit{C++}, włączając w~to wsparcie dla platform \textit{CUDA} i~podobnych.
 
-      Dokumentacja dostępna na oficjalnej stronie internetowej jest obszerna i~wraz z~zamieszczonymi przykładami tworzy kompletny poradnik. Dodatkowo istnieje kilka pozycji literaturowych na rynkach zagranicznych, które zostały wykorzystane przy tworzeniu pracy \cite{LearningOpenCV}, \cite{OpenCVCookbook}.
+      Dokumentacja dostępna na oficjalnej stronie internetowej jest obszerna i~wraz z~zamieszczonymi przykładami tworzy kompletny poradnik. Dodatkowo istnieje kilka pozycji bibliograficznych na rynkach zagranicznych, które zostały wykorzystane przy tworzeniu pracy \cite{LearningOpenCV}, \cite{OpenCVCookbook}.
 
       \subsubsection{Podstawowe koncepcje wykorzystywane przy pracy z~OpenCV}
       W~kontekście pracy magisterskiej biblioteka \textit{OpenCV} udostępnia wiele konceptów, które ułatwiają pracę i~pozwalają skupić się na faktycznej implementacji algorytmów. Intensywnie wykorzystywane są następujące elementy:
       \begin{itemize}
         \item Wczytywanie i~zapis różnorakich formatów sekwencji wideo.
         \item Podstawowe operacje i~filtry zdefiniowane jako pojęcia wizji komputerowej.
-        \item Metody pomocnicze wspomajace implementację algorytmów śledzenia punktów charakterystycznych.
+        \item Metody pomocnicze wspomagajace implementację algorytmów śledzenia punktów charakterystycznych.
         \item Struktury ułatwiające realizację algorytmów opartych o~uczenie maszynowe.
       \end{itemize}
 
       Oprócz elementów zawartych w~bibliotece \textit{OpenCV} niezbędne było również wprowadzenie nowych abstrakcji ułatwiających operowanie na sekwencjach wideo (które zostały pobieżnie omówione w~sekcji \textit{Zastosowanie programowania obiektowego w~wizji komputerowej} i~zostaną omówione dokładniej w~podrozdziale \ref{Section_ImplementationDetails}).
 
-    \subsection{Narzędzia pomocniczne}\label{Subsection_PomocniczeTechnologie}
+    \subsection{Narzędzia pomocnicze}\label{Subsection_PomocniczeTechnologie}
 
       \subsubsection{Język R}
       \textit{GNU R} to język programowania i~środowisko do obliczeń statystycznych oraz wizualizacji wyników. \textit{R} jest podstawowym językiem programowania w bioinformatyce, ale znajduje zastosowanie w~każdej innej dziedzinie nauki wymagającej analizy statystycznej i~prezentacji wyników w~postaci różnego rodzaju wykresów.
 
-      W~pracy magisterskiej zostały wykorzystane skrypty opierające się o~pakiety analizy statystycznej oraz prezentacji wyników pomiarów poszczególnych implementacji i~algorytmów. Poniżej zaprezentowano przykładowy skrypt, pozostałe wykresy oraz analiza statystyczna znajdują się w~rodziale \ref{Chapter_AnalizaRezultatow}.
+      W~pracy magisterskiej zostały wykorzystane skrypty opierające się o~pakiety analizy statystycznej oraz prezentacji wyników pomiarów poszczególnych implementacji i~algorytmów. Poniżej zaprezentowano przykładowy skrypt, pozostałe wykresy oraz analiza statystyczna znajdują się w~rozdziale \ref{Chapter_AnalizaRezultatow}.
 
       \begin{sample}[ht]
         \begin{verbatim}
@@ -120,9 +120,9 @@ plot(runningTimeHistogram, col = "red")
       \subsubsection{HTML5, CSS3 i~warstwa pośrednia oparta o~NodeJS}
       Ważnym elementem jest selekcja punktów charakterystycznych w~zarejestrowanych sekwencjach wideo. W~tym celu przygotowane zostało proste narzędzie oparte w~całości na technologiach internetowych. Interfejs użytkownika został zaprojektowany i~przygotowany za pomocą \textit{HTML5} oraz \textit{CSS3}.
 
-      Za warstwę pośrednią (spająjącą interfejs użytkownika oraz implementacje algorytmów przygotowane w~języku \textit{C++}) odpowiada środowisko uruchomieniowe \textit{NodeJS}. Jest to środowisko uruchomieniowe oprogramowywane za pomocą języka \textit{JavaScript}, które wraz z~biblioteką \textit{express} umożliwia udostępnienie statycznych zasobów (takich jak skrypty, kaskadowe arkusze stylów oraz pliki \textit{HTML}) oraz stworzenie i~również udostępnienie REST API (ang. \textit{REpresentational State Transfer Application Programming Interface}) za pomocą którego wybrane punkty, algorytm oraz wybrana sekwencja wideo przesyłane są do aplikacji napisanych w~języku \textit{C++}.
+      Za warstwę pośrednią (spajającą interfejs użytkownika oraz implementacje algorytmów przygotowane w~języku \textit{C++}) odpowiada środowisko uruchomieniowe \textit{NodeJS}. Jest to środowisko uruchomieniowe oprogramowywane za pomocą języka \textit{JavaScript}, które wraz z~biblioteką \textit{express} umożliwia udostępnienie statycznych zasobów (takich jak skrypty, kaskadowe arkusze stylów oraz pliki \textit{HTML}) oraz stworzenie i~również udostępnienie REST API (ang. \textit{REpresentational State Transfer Application Programming Interface}) za pomocą którego wybrane punkty, algorytm oraz wybrana sekwencja wideo przesyłane są do aplikacji napisanych w~języku \textit{C++}.
 
-      Dzięki zastosowaniu technologii internetowych w~łatwy i~efektywny sposób stworzono interfejs użytkownika (co wymagałoby dużo większego nakładu pracy w~przypadku takiej samej implementacji w~jęzku \textit{C++}), zachowano wieloplatformowość programu pomocniczego oraz odpowiednio rozdzielono odpowiedzialności pomiędzy poszczególnymi warstwami, nie zanieczyczając domeny aplikacji (implementacja algorytmów przetwarzania sekwencji wideo) niepotrzebnymi szczegółami.
+      Dzięki zastosowaniu technologii internetowych w~łatwy i~efektywny sposób stworzono interfejs użytkownika (co wymagałoby dużo większego nakładu pracy w~przypadku takiej samej implementacji w~języku \textit{C++}), zachowano wieloplatformowość programu pomocniczego oraz odpowiednio rozdzielono odpowiedzialności pomiędzy poszczególnymi warstwami, nie zanieczyszczając domeny aplikacji (implementacja algorytmów przetwarzania sekwencji wideo) niepotrzebnymi szczegółami.
 
       \subsubsection{Automatyzacja pracy}
       Wszystkie procesy, zarówno dotyczące budowania aplikacji jak i~zbierania pomiarów oraz generacji wyników, są silnie zautomatyzowane. Kluczowym elementem w~tym przypadku jest system budowania \textit{SCons} oparty o~język programowania \textit{Python} oraz narzędzia pomocnicze: język skryptowy \textit{Bash} i~narzędzie \textit{FFmpeg}.
@@ -174,7 +174,7 @@ done
 
   Funkcja $goodFeaturesToTrack()$ zajmuje się wyznaczaniem narożników zgodnie z~definicją \textit{Shi} - \textit{Tomasi} zaprezentowaną w~pracy \cite{GoodFeaturesToTrack94}. Oblicza ona potrzebne wartości drugich pochodnych (za pomocą operatorów \textit{Sobela}) i~z nich dalej obliczane są wartości własne.
 
-  Jako parametr wejściowy przekazuje się obraz z~jednym kanałem opisującym intensywność (jako pojedynczy bajt lub liczba zmiennoprzecinkowa pojedynczej prezycji). Funkcja zwraca wartości własne dla każdego piksela obrazu oraz listę narożników, które spełniają definicję wartych obserwacji i~śledzenia.
+  Jako parametr wejściowy przekazuje się obraz z~jednym kanałem opisującym intensywność (jako pojedynczy bajt lub liczba zmiennoprzecinkowa pojedynczej precyzji). Funkcja zwraca wartości własne dla każdego piksela obrazu oraz listę narożników, które spełniają definicję wartych obserwacji i~śledzenia.
 
   Możliwe jest obliczenie wartości z~klasycznej definicji \textit{Harrisa} za pomocą parametru \textit{use\_harris}. Do przekazania współczynnika niezbędnego do obliczenia różnicy wyznacznika macierzy $H(p)$ od tej samej macierzy służy następny argument o~nazwie \textit{k}.
 

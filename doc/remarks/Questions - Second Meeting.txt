@@ -1,0 +1,7 @@
+0. Chęć obrony w czerwcu (wspomnieć o tym).
+
+1. Ile metod ma być zaimplementowanych?
+  - Są dwie (Optical Flow: Sparse i Dense).
+  - Są dwie następne w planach (oparte o particle filters i randomized forest).
+
+2. Jak się zabrać za ML i randomized forest - co jest wektorem cech i jak powiązać wideo, cechy?
