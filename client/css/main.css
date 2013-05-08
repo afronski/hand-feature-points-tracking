@@ -5,13 +5,13 @@ body {
   font-size: 62.5%;
 }
 
-canvas {
-  cursor: crosshair;
-}
-
 label {
   font-size: 1.5em;
   margin-right: 33px;
+}
+
+.keypoints {
+  cursor: crosshair;
 }
 
 .bordered {
@@ -98,12 +98,22 @@ label {
   width: 480px;
 }
 
-#send-coordinates {
+#invoke {
+  width: 600px;
+  font-size: 1.5em;
+}
+
+#save {
   width: 200px;
   font-size: 1.5em;
 }
 
 #clear {
+  width: 200px;
+  font-size: 1.5em;
+}
+
+#undo {
   width: 200px;
   font-size: 1.5em;
 }

@@ -4,7 +4,7 @@
 
 var PORT = 9292,
 
-    FirstFramePostFix = "_first_frame.png",
+    FramePostFix = "_frame.png",
     ResultMovieBeforeConversionPostFix = "_tracking_result.avi",
     ResultMoviePostFix = "_tracking_result.webm",
 
@@ -86,39 +86,39 @@ var PORT = 9292,
       return !!result ? result : null;
     },
 
-    extractFirstFrame = function(movieObject) {
+    extractFrame = function(movieObject, frameNumber) {
       if (!!movieObject) {
-        if (execSync.code(util.format("./bin/export-first-frame %s", movieObject.path)) === 0) {
+        if (execSync.code(util.format("./bin/export-frame %s %s", movieObject.path, frameNumber)) === 0) {
           var filename = path
                           .basename(movieObject.path)
                           .replace(path.extname(movieObject.path), "");
 
-          return util.format("/%s", filename + FirstFramePostFix);
+          return util.format("/%s", filename + FramePostFix);
         }
       }
 
       return null;
     },
 
-    toCoordinates = function(element) {
-      return util.format("%s %s", element.x, element.y);
+    toArgument = function(element) {
+      return util.format("%s", element);
     },
 
-    trackPoints = function(points, movieObject, algorithmId) {
+    trackPoints = function(additionalArguments, movieObject, algorithmId) {
       var trackingInvocation,
           conversionInvocation,
-          pointsList,
+          argumentsList,
           algorithm,
           filename;
 
       if (!!movieObject) {
-        pointsList = points.map(toCoordinates).join(" ");
+        argumentsList = additionalArguments.map(toArgument).join(" ");
         algorithm = algorithms[algorithmId].name;
 
         trackingInvocation = util.format('./bin/tracking %s "%s" %s',
                                          movieObject.path,
                                          algorithm,
-                                         pointsList)
+                                         argumentsList);
 
         debug("Invoking: " + trackingInvocation);
 
@@ -166,24 +166,22 @@ app.get("/frame/:id", function(request, response) {
   var id = parseInt(request.params.id, 10),
       uri;
 
-  debug("Get first frame from AVI with ID " + id);
+  debug(util.format("Get %s frame from AVI with ID %s", request.query.frameNumber, id));
 
-  uri = extractFirstFrame(getById(getMovieList(), id));
+  uri = extractFrame(getById(getMovieList(), id), request.query.frameNumber);
   sendJSON(response, { status: "OK", imageURI: uri });
 });
 
-app.post("/data", function(request, response) {
+app.post("/invoke", function(request, response) {
   var data = request.body,
       movieObject,
       uri = null;
 
-  if (data.points.length > 0) {
-    debug(util.format("Selected video %s with algorithm %s", data.id, data.algorithmId));
-    debug("Save coordinates for salient point: " + prettyPrint(data.points));
+  debug(util.format("Selected video %s with algorithm %s", data.id, data.algorithmId));
+  debug("Additional arguments: " + prettyPrint(data.additionalArguments));
 
-    movieObject = getById(getMovieList(), parseInt(data.id, 10));
-    uri = trackPoints(data.points, movieObject, data.algorithmId);
-  }
+  movieObject = getById(getMovieList(), parseInt(data.id, 10));
+  uri = trackPoints(data.additionalArguments, movieObject, data.algorithmId);
 
   sendJSON(response, { status: "OK", resultMovieURI: uri });
 });

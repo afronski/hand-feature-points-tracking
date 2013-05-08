@@ -7,11 +7,6 @@ scons
 npm install
 cp config/vidStreamer.json node_modules/vid-streamer/config
 
-# Invoke custom scripts.
-pushd assets
-./convert.sh
-popd
-
 # Preparation.
 pkill node
 
