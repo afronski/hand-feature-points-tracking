@@ -16,7 +16,7 @@ static size_t names_length = sizeof(names) / sizeof(names[0]);
 
 AlgorithmFactory::AlgorithmsCollection AlgorithmFactory::algorithms(names, names + names_length);
 
-PointsAwareFrameTransformer* AlgorithmFactory::createAlgorithm(const std::string& method) {
+ArgumentsAwareFrameTransformer* AlgorithmFactory::createAlgorithm(const std::string& method) {
   if (method == PointsMarker::Name) {
     return new PointsMarker();
   }

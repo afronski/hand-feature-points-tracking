@@ -12,6 +12,6 @@ void PointsMarker::process(cv::Mat& frame) {
   }
 }
 
-void PointsMarker::fill(const std::vector<cv::Point>& points) {
-  this->points = points;
+void PointsMarker::fill(const std::vector<std::string>& arguments) {
+  this->points = common::vision::extract_points_from_arguments(arguments, 2);
 }

@@ -21,11 +21,11 @@ var PORT = 9292,
     app = express(),
 
     info = function(text) {
-      console.log(("\t" + text).green);
+      console.log(text.green);
     },
 
     debug = function(text) {
-      console.log(("\t" + text).yellow);
+      console.log(text.yellow);
     },
 
     sendJSON = function(response, object) {
@@ -38,7 +38,7 @@ var PORT = 9292,
     },
 
     prettyPrint = function(object) {
-      return "\n" + JSON.stringify(object, null, 2);
+      return ("\n" + JSON.stringify(object, null, 2)).blue;
     },
 
     notTrackingResults = function(element) {

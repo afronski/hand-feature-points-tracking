@@ -3,12 +3,12 @@
 
 #include "../../common/FrameTransformers.hpp"
 
-class PointsMarker : public PointsAwareFrameTransformer {
+class PointsMarker : public ArgumentsAwareFrameTransformer {
   public:
     static const std::string Name;
 
     virtual void process(cv::Mat& frame);
-    virtual void fill(const std::vector<cv::Point>& points);
+    virtual void fill(const std::vector<std::string>& arguments);
 
   private:
     std::vector<cv::Point> points;

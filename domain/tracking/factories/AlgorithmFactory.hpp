@@ -8,7 +8,7 @@
 
 class AlgorithmFactory {
   public:
-    static PointsAwareFrameTransformer* createAlgorithm(const std::string& method);
+    static ArgumentsAwareFrameTransformer* createAlgorithm(const std::string& method);
 
     static bool isAlgorithmPresent(const std::string& method);
     static void listAllAlgorithms();

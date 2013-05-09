@@ -16,13 +16,13 @@ namespace common {
     }
 
     // Parsing input to the OpenCV structures.
-    std::vector<cv::Point> extract_points_from_arguments(const common::CommandLineInterface& cli,
+    std::vector<cv::Point> extract_points_from_arguments(const std::vector<std::string>& arguments,
                                                          unsigned int start) {
       std::vector<cv::Point> points;
       cv::Point point;
 
-      for (unsigned int count = 0, i = start; i < cli.size(); ++count, ++i) {
-        std::stringstream stream(cli.extractArgument(i));
+      for (unsigned int count = 0, i = start; i < arguments.size(); ++count, ++i) {
+        std::stringstream stream(arguments[i]);
 
         if (count % 2 == 0) {
           stream >> point.x;

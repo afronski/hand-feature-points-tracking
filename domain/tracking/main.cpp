@@ -11,14 +11,17 @@
 
 class TrackerApplication : public common::CommandLineInterface {
   public:
-    TrackerApplication(): CommandLineInterface(1) {}
+    TrackerApplication(): CommandLineInterface(1), printResultsToOutput(false) {}
 
   protected:
     virtual void help() {
       std::cout << "tracking                                              Wojciech Gawroński (2013)" << std::endl;
       std::cout << "Usage:                                                                         " << std::endl;
-      std::cout << " ./tracking input_file_AVI                                                     " << std::endl;
-      std::cout << "     - input_file_AVI - AVI file                                               " << std::endl;
+      std::cout << " ./tracking [--include-results] input_file_AVI method_name [arguments]         " << std::endl;
+      std::cout << "     --include-results - Print profiling results to console (optional)         " << std::endl;
+      std::cout << "     input_file_AVI    - AVI file                                              " << std::endl;
+      std::cout << "     method_name       - Algorithm name                                        " << std::endl;
+      std::cout << "     arguments         - Further arguments provided as an algorithm input      " << std::endl;
       std::cout << "Or:                                                                            " << std::endl;
       std::cout << " ./tracking --list-algorithms                                                  " << std::endl;
       std::cout << "     --list-algorithms - list all implemented algorithms for tracking  points  " << std::endl;
@@ -39,23 +42,34 @@ class TrackerApplication : public common::CommandLineInterface {
         return true;
       }
 
+      if (extractArgument(0) == "--include-results") {
+        arguments.erase(std::remove(arguments.begin(), arguments.end(), "--include-results"));
+        printResultsToOutput = true;
+      }
+
       return false;
     }
 
   private:
+    bool printResultsToOutput;
+
     int saveMovie(const std::string& input, const std::string& method) {
       std::string output = common::path::extractFileName(input) + "_tracking_result.avi";
 
       if (AlgorithmFactory::isAlgorithmPresent(method)) {
         try {
-          PointsAwareFrameTransformer* transformer = AlgorithmFactory::createAlgorithm(method);
+          ArgumentsAwareFrameTransformer* transformer = AlgorithmFactory::createAlgorithm(method);
 
-          transformer->fill(common::vision::extract_points_from_arguments(*this, 2));
+          transformer->fill(this->getArguments());
           common::vision::VideoStream stream;
 
           stream.add(transformer);
           stream.open(input);
           stream.transfer(output);
+
+          if (printResultsToOutput) {
+            transformer->printResults();
+          }
         } catch(const std::exception& exception) {
           std::cerr << exception.what() << std::endl;
 

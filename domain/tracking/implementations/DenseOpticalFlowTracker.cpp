@@ -63,4 +63,4 @@ void DenseOpticalFlowTracker::process(cv::Mat& frame) {
   previousGrayFrame = actualGrayFrame.clone();
 }
 
-void DenseOpticalFlowTracker::fill(const std::vector<cv::Point>& points) {}
+void DenseOpticalFlowTracker::fill(const std::vector<std::string>& arguments) {}

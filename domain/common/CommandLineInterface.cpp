@@ -34,4 +34,8 @@ namespace common {
     return arguments[index];
   }
 
+  std::vector<std::string> CommandLineInterface::getArguments() const {
+    return arguments;
+  }
+
 }

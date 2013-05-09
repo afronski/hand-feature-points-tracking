@@ -17,6 +17,7 @@ namespace common {
         minimum_amount_of_arguments = at_least_so_much_arguments;
       }
 
+      std::vector<std::string> getArguments() const;
       std::string extractArgument(unsigned int index) const;
       unsigned int size() const;
 
@@ -30,8 +31,9 @@ namespace common {
         return false;
       }
 
-    private:
       std::vector<std::string> arguments;
+
+    private:
       unsigned int minimum_amount_of_arguments;
   };
 

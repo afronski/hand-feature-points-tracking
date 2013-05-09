@@ -23,6 +23,6 @@ tracking = [
     "./domain/tracking/main.cpp"
 ]
 
-environment.Program("./bin/export-first-frame", exporter, LIBS = libraries, LIBPATH = "./bin")
+environment.Program("./bin/export-frame", exporter, LIBS = libraries, LIBPATH = "./bin")
 environment.Program("./bin/tracking", tracking, LIBS = libraries, LIBPATH = "./bin")
 environment.Program("./bin/kalman", kalman, LIBS = libraries, LIBPATH = "./bin")

@@ -3,18 +3,19 @@
 
 #include "../../common/FrameTransformers.hpp"
 
-class SparseOpticalFlowTracker : public PointsAwareFrameTransformer {
+class SparseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
   public:
     static const std::string Name;
 
     virtual void process(cv::Mat& frame);
-    virtual void fill(const std::vector<cv::Point>& points);
+    virtual void fill(const std::vector<std::string>& arguments);
 
   private:
     static const double Quality;
     static const double MinimalDistanceBetweenPoints;
     static const cv::Scalar DrawingColor;
     static const double CircleRadius;
+    static const unsigned int MaximumFeaturesCount;
 
     bool newPointsShouldBeAdded();
     void detectFeaturePoints();

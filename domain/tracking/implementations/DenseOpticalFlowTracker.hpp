@@ -3,12 +3,12 @@
 
 #include "../../common/FrameTransformers.hpp"
 
-class DenseOpticalFlowTracker : public PointsAwareFrameTransformer {
+class DenseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
   public:
     static const std::string Name;
 
     virtual void process(cv::Mat& frame);
-    virtual void fill(const std::vector<cv::Point>& points);
+    virtual void fill(const std::vector<cv::string>& arguments);
 
   private:
     static const cv::Scalar MapOverlayColor;

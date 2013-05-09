@@ -12,12 +12,14 @@ class FrameTransformer {
 
     virtual void beforeFrame(cv::Mat& frame) {};
     virtual void afterFrame(cv::Mat& frame) {};
+
+    virtual void printResults() {}
 };
 
-class PointsAwareFrameTransformer : public FrameTransformer {
+class ArgumentsAwareFrameTransformer : public FrameTransformer {
   public:
-    virtual ~PointsAwareFrameTransformer() {}
-    virtual void fill(const std::vector<cv::Point>& points) = 0;
+    virtual ~ArgumentsAwareFrameTransformer() {}
+    virtual void fill(const std::vector<std::string>& arguments) = 0;
 };
 
 #endif
