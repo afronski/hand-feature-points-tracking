@@ -4,10 +4,24 @@
   // Alias.
   var $ = Common.$;
 
+  // Additional arguments logic.
+  function getAdditionalArgumentsFor(algorithmId) {
+    var result = [];
+
+    switch (algorithmId) {
+      // Dense Optical Flow - Grid resolution.
+      case 2:
+        result.push(~~$("#grid-resolution").value);
+        break;
+    }
+
+    return result;
+  }
+
   // Invoking method.
   function onInvoke() {
     var id = $("#movies").value,
-        algorithmId = $("#algorithms").value,
+        algorithmId = ~~$("#algorithms").value,
         data = {
           id: id,
           algorithmId: algorithmId,
@@ -19,6 +33,8 @@
       return;
     }
 
+    data.additionalArguments = getAdditionalArgumentsFor(algorithmId);
+
     if (id < 0) {
       alert("You didn't select any video. Please select any and try again.");
       return;
@@ -27,9 +43,15 @@
     Common.xhrPost("/invoke", data, replaceMovie);
   }
 
-  // Changing movies in select control.
+  // Getting active option in select control.
   function getTextFromActivePositionInSelect() {
     return $("#movies option[value='%value']".replace("%value", $("#movies").value)).innerText;
+  }
+
+  function getSelectedAlgorithmValue() {
+    var algorithms = $("#algorithms");
+
+    return ~~algorithms.options[algorithms.selectedIndex].value;
   }
 
   // Change source for video tag.
@@ -44,6 +66,18 @@
 
     changeVideo(response.resultMovieURI);
     Common.hideOverlay();
+  }
+
+  // Select controls change event handler.
+  function onAlgorithmChanging() {
+    Common.splat($(".parameters-container")).forEach(Common.hideElement);
+
+    switch (getSelectedAlgorithmValue()) {
+      // Dense Optical Flow - Grid resolution.
+      case 2:
+        $("#dense-optical-flow-parameter").classList.remove("hidden");
+        break;
+    }
   }
 
   function onMovieChanging() {
@@ -76,6 +110,8 @@
     Common.toggleButton("#invoke", false);
 
     movies.addEventListener("change", onMovieChanging);
+    algorithms.addEventListener("change", onAlgorithmChanging);
+
     send.addEventListener("click", onInvoke);
   }
 

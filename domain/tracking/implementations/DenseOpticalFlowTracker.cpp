@@ -11,7 +11,6 @@ const std::string DenseOpticalFlowTracker::Name = "Dense Optical Flow";
 
 const cv::Scalar DenseOpticalFlowTracker::MapOverlayColor = cv::Scalar(255, 0, 0);
 const double DenseOpticalFlowTracker::MapOverlayPixelSize = 2.0;
-const unsigned int DenseOpticalFlowTracker::MapOverlayStep = 30;
 
 const double DenseOpticalFlowTracker::PyramidScale = 0.5;
 const int DenseOpticalFlowTracker::PyramidLevels = 3;
@@ -63,4 +62,9 @@ void DenseOpticalFlowTracker::process(cv::Mat& frame) {
   previousGrayFrame = actualGrayFrame.clone();
 }
 
-void DenseOpticalFlowTracker::fill(const std::vector<std::string>& arguments) {}
+void DenseOpticalFlowTracker::fill(const std::vector<std::string>& arguments) {
+  if (arguments.size() > 2) {
+    std::stringstream forConversion(arguments[2]);
+    forConversion >> MapOverlayStep;
+  }
+}

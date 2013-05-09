@@ -5,7 +5,16 @@ window.Common = (function() {
     var results = document.querySelectorAll(selector);
 
     return results.length == 1 ? results[0] : results;
-  };
+  }
+
+  function splat(element) {
+    return Array.isArray(element) ? element : [ element ];
+  }
+
+  // Hide elements
+  function hideElement(element) {
+    element.classList.add("hidden");
+  }
 
   // Methods related with overlay.
   function hideOverlay() {
@@ -54,10 +63,13 @@ window.Common = (function() {
   return {
     $: $,
 
+    splat: splat,
+
     xhrGet: xhrGet,
     xhrPost: xhrPost,
 
     toggleButton: toggleButton,
+    hideElement: hideElement,
 
     hideOverlay: hideOverlay
   };

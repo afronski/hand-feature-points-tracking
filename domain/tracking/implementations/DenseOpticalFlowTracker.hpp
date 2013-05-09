@@ -5,15 +5,18 @@
 
 class DenseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
   public:
+    DenseOpticalFlowTracker(): MapOverlayStep(30) {}
+
     static const std::string Name;
 
     virtual void process(cv::Mat& frame);
     virtual void fill(const std::vector<cv::string>& arguments);
 
   private:
+    unsigned int MapOverlayStep;
+
     static const cv::Scalar MapOverlayColor;
     static const double MapOverlayPixelSize;
-    static const unsigned int MapOverlayStep;
 
     static const double PyramidScale;
     static const int PyramidLevels;
