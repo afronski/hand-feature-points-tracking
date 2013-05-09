@@ -6,8 +6,8 @@ Domain:
   - C++ Standard Library (iostream, string, ...)
   - OpenCV
 
-Thin back-end and simple front-end:
-- node.js (server side back-end)
+Thin middle-end and simple front-end:
+- node.js (server side middle-end)
   - express
   - vid-streamer
   - colors
