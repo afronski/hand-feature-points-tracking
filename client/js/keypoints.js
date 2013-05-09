@@ -86,29 +86,6 @@
     Common.hideOverlay();
   }
 
-  // Frames helper.
-  function loadFrame() {
-    var response = JSON.parse(this.responseText),
-        image = new Image();
-
-    image.addEventListener("load", drawImageOnCanvas);
-    image.src = response.imageURI;
-
-    Common.hideOverlay();
-  }
-
-  function getFrameNumber() {
-    return -1;
-  }
-
-  function getSelectedFrame() {
-    var uri = "/frame/%1?frameNumber=%2"
-            .replace("%1", $("#movies").value)
-            .replace("%2", getFrameNumber());
-
-    Common.xhrGet(uri, loadFrame);
-  }
-
   // Initialization.
   function init() {}
 

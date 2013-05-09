@@ -4,7 +4,6 @@
 
 var PORT = 9292,
 
-    FramePostFix = "_frame.png",
     ResultMovieBeforeConversionPostFix = "_tracking_result.avi",
     ResultMoviePostFix = "_tracking_result.webm",
 
@@ -86,20 +85,6 @@ var PORT = 9292,
       return !!result ? result : null;
     },
 
-    extractFrame = function(movieObject, frameNumber) {
-      if (!!movieObject) {
-        if (execSync.code(util.format("./bin/export-frame %s %s", movieObject.path, frameNumber)) === 0) {
-          var filename = path
-                          .basename(movieObject.path)
-                          .replace(path.extname(movieObject.path), "");
-
-          return util.format("/%s", filename + FramePostFix);
-        }
-      }
-
-      return null;
-    },
-
     toArgument = function(element) {
       return util.format("%s", element);
     },
@@ -162,16 +147,6 @@ app.get("/algorithms", function(request, response) {
   sendJSON(response, getAlgorithmsList());
 });
 
-app.get("/frame/:id", function(request, response) {
-  var id = parseInt(request.params.id, 10),
-      uri;
-
-  debug(util.format("Get %s frame from AVI with ID %s", request.query.frameNumber, id));
-
-  uri = extractFrame(getById(getMovieList(), id), request.query.frameNumber);
-  sendJSON(response, { status: "OK", imageURI: uri });
-});
-
 app.post("/invoke", function(request, response) {
   var data = request.body,
       movieObject,
@@ -184,6 +159,10 @@ app.post("/invoke", function(request, response) {
   uri = trackPoints(data.additionalArguments, movieObject, data.algorithmId);
 
   sendJSON(response, { status: "OK", resultMovieURI: uri });
+});
+
+app.post("/keypoints", function(request, response) {
+  response.send();
 });
 
 app.listen(PORT);
