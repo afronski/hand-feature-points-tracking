@@ -362,21 +362,32 @@
 
   \section{Akwizycja i~obróbka danych wejściowych}\label{Section_Akwizycja}
 
-  Akwizycja obrazów:
-  - 10 osób, każda po 6 gestów
-  - Normalne dzienne oświetlenie + sztuczne oświetlenie pokoju.
-  - Karta SD (95 MB/s)
-  - Aparat:
-    - Nikon D7000
-  - Obiektyw:
-    - Nikor, 50mm, 1:1.4
-  - Statyw.
-  - Parametry nagrywanej sekwencji wideo:
-    - FPS: 25 kl/s
-    - Rozdzielczość: 1280x720
-    - ISO: 320
-    - f, T:
-      - 3.5, 320
+    Przed przeprowadzeniem badań zostały zebrane dane wejściowe w~postaci sekwencji wideo, dokumentujące gesty wykonywane według powyższego protokołu. Proces akwizycji został przeprowadzony na grupie 10 osób, każda z~nich wykonała 6~gestów. Cała procedura wykonywana była w~warunkach normalnego oświetlenia dziennego z~dodatkowym sztucznym oświetleniem umiejscowionym ponad stanowiskiem.
+
+    Stanowisko akwizycji złożone było z~aparatu fotograficznego \textit{Nikon D7000}, popularnie zwanego \textit{lustrzanką}, wraz z~obiektywem Nikor o~ogniskowej 50~mm oraz liczbie przesłony obiektywu $1:1.4$. Sam aparat cyfrowy posiada matrycę \textit{CMOS} o~rozdzielczości $16.2$~MP oraz był wyposażony w~kartę pamięci typu \textit{SD} o~dużej prędkości zapisu oraz odczytu wynoszącej 95~MB/s. Lustrzanka umieszczona była na statywie na wysokości klatki piersiowej filmowanej osoby w~pozycji pionowej.
+
+    Sekwencja wideo była nagrywana w~rodzielczości 1280 na 720 pikseli (720 linii poziomych obrazu), bez przeplotu z~częstotliwością 25 klatek na sekundę. Podczas nagrywania wszystkich sekwencji parametr przysłony wynosił 3.5, czas naświetlania był równy 320 oraz parametr \textit{ISO} posiadał wartość 320.
+
+    Po przeprowadzeniu akwizycji, wyselekcjonowaniu odpowiednich próbek i~nazwaniu ich wszystkie sekwencje wideo zostały przekształcone z~oryginalnego formatu \textit{MOV} (kodek \textit{h264}) na format \textit{AVI} (kodek \textit{MPEG 4.2}) za pomocą skryptu \ref{MOVtoAVIConversion}. Warto zauważyć, że podczas konwersji obraz został również obrócony o~90\degree~przeciwnie do ruchu wskazówek zegara, aby uzyskać naturalne (pionowe) ułożenie zapisanej sekwencji wideo.
+
+      \begin{sample}[ht]
+        \begin{verbatim}
+#!/bin/sh
+
+# ...
+
+pushd "PersonA"
+
+for file in *.MOV; do
+  ffmpeg -i "$file" -q:v 0 -vf "transpose=2"
+         -vcodec msmpeg4v2 ../../Person_A_${file%%.*}.avi
+done
+
+popd
+        \end{verbatim}
+        \caption{Fragment skryptu konwertującego pliki MOV do formatu AVI}
+        \label{MOVtoAVIConversion}
+      \end{sample}
 
   \section{Procedura weryfikacji jakości badanego algorytmu}\label{Section_Jakosc}
 
