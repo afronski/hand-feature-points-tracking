@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FeaturePointList>
+    <hand>
+        <FeaturePoint x="2154" y="2481" category="Wrist" type="WristThumb" />
+        <FeaturePoint x="1797" y="2558" category="Wrist" type="WristPinky" />
+        <FeaturePoint x="2375" y="2130" category="Kciuk" type="Knuckle1" />
+        <FeaturePoint x="2479" y="1925" category="Kciuk" type="Knuckle2" />
+        <FeaturePoint x="2544" y="1780" category="Kciuk" type="Fingertip" />
+        <FeaturePoint x="2278" y="2011" category="Kciuk" type="ConcavePoint" />
+        <FeaturePoint x="2200" y="1754" category="IndexFinger" type="Knuckle1" />
+        <FeaturePoint x="2219" y="1574" category="IndexFinger" type="Knuckle2" />
+        <FeaturePoint x="2219" y="1412" category="IndexFinger" type="Knuckle3" />
+        <FeaturePoint x="2219" y="1266" category="IndexFinger" type="Fingertip" />
+        <FeaturePoint x="2141" y="1745" category="IndexFinger" type="ConcavePoint" />
+        <FeaturePoint x="2064" y="1737" category="MiddleFinger" type="Knuckle1" />
+        <FeaturePoint x="2083" y="1549" category="MiddleFinger" type="Knuckle2" />
+        <FeaturePoint x="2083" y="1369" category="MiddleFinger" type="Knuckle3" />
+        <FeaturePoint x="2089" y="1232" category="MiddleFinger" type="Fingertip" />
+        <FeaturePoint x="1992" y="1737" category="MiddleFinger" type="ConcavePoint" />
+        <FeaturePoint x="1927" y="1754" category="RingFinger" type="Knuckle1" />
+        <FeaturePoint x="1934" y="1608" category="RingFinger" type="Knuckle2" />
+        <FeaturePoint x="1940" y="1463" category="RingFinger" type="Knuckle3" />
+        <FeaturePoint x="1947" y="1309" category="RingFinger" type="Fingertip" />
+        <FeaturePoint x="1856" y="1797" category="RingFinger" type="ConcavePoint" />
+        <FeaturePoint x="1778" y="1857" category="Pinky" type="Knuckle1" />
+        <FeaturePoint x="1778" y="1720" category="Pinky" type="Knuckle2" />
+        <FeaturePoint x="1778" y="1591" category="Pinky" type="Knuckle3" />
+        <FeaturePoint x="1778" y="1472" category="Pinky" type="Fingertip" />
+    </hand>
+    <hand />
+</FeaturePointList>
