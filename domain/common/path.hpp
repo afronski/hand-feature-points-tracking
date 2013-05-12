@@ -8,6 +8,8 @@ namespace common {
 
     std::string extractFileName(const std::string& input);
 
+    bool fileExists(const std::string& input);
+
   }
 }
 

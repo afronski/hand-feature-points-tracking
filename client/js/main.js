@@ -10,7 +10,7 @@
 
     switch (algorithmId) {
       // Dense Optical Flow - Grid resolution.
-      case 2:
+      case 1:
         result.push(~~$("#grid-resolution").value);
         break;
     }
@@ -44,10 +44,6 @@
   }
 
   // Getting active option in select control.
-  function getTextFromActivePositionInSelect() {
-    return $("#movies option[value='%value']".replace("%value", $("#movies").value)).innerText;
-  }
-
   function getSelectedAlgorithmValue() {
     var algorithms = $("#algorithms");
 
@@ -55,16 +51,10 @@
   }
 
   // Change source for video tag.
-  function changeVideo(name) {
-    if (!!name) {
-      $("#player").setAttribute("src", "/videos-converted/%webm".replace("%webm", name));
-    }
-  }
-
   function replaceMovie() {
     var response = JSON.parse(this.responseText);
 
-    changeVideo(response.resultMovieURI);
+    Common.changeVideo(response.resultMovieURI);
     Common.hideOverlay();
   }
 
@@ -74,7 +64,7 @@
 
     switch (getSelectedAlgorithmValue()) {
       // Dense Optical Flow - Grid resolution.
-      case 2:
+      case 1:
         $("#dense-optical-flow-parameter").classList.remove("hidden");
         break;
     }
@@ -93,8 +83,8 @@
       Common.toggleButton("#invoke", true);
       $("#video-container").classList.remove("hidden");
 
-      movie = getTextFromActivePositionInSelect().replace("avi", "webm");
-      changeVideo(movie);
+      movie = Common.getMovieName().replace("avi", "webm");
+      Common.changeVideo(movie);
     }
   }
 
@@ -116,22 +106,6 @@
   }
 
   // Application logic.
-  function buildMovieList() {
-    var response = JSON.parse(this.responseText),
-        movies = $("#movies");
-
-    response.forEach(function(movie) {
-      var option = document.createElement("option");
-
-      option.setAttribute("value", movie.value);
-      option.innerText = movie.name;
-
-      movies.appendChild(option);
-    });
-
-    getAlgorithms();
-  }
-
   function buildAlgorithmsList() {
     var response = JSON.parse(this.responseText),
         algorithms = $("#algorithms");
@@ -149,16 +123,12 @@
     Common.hideOverlay();
   }
 
-  function getMovies() {
-    Common.xhrGet("/movies", buildMovieList);
-  }
-
   function getAlgorithms() {
     Common.xhrGet("/algorithms", buildAlgorithmsList);
   }
 
   function init() {
-    getMovies();
+    Common.getMovies(getAlgorithms);
   }
 
   document.addEventListener("DOMContentLoaded", init, true);

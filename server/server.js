@@ -7,7 +7,15 @@ var PORT = 9292,
     ResultMovieBeforeConversionPostFix = "_tracking_result.avi",
     ResultMoviePostFix = "_tracking_result.webm",
 
+    XmlHeader = '<?xml version="1.0" encoding="utf-8"?>\n<FeaturePointList>\n    <hand>',
+
+    RadiusTag = '        <FeaturePointRadius r="%s" />',
+    PointTag = '        <FeaturePoint x="%s" y="%s" />',
+
+    XmlEnding = '    </hand>\n</FeaturePointList>',
+
     path = require("path"),
+    fs = require("fs"),
     glob = require("glob"),
     util = require("util"),
     express = require("express"),
@@ -78,6 +86,38 @@ var PORT = 9292,
       }
 
       return algorithms;
+    },
+
+    saveKeypoints = function(movieObject, keypoints, radius) {
+      var filename = path.basename(movieObject.path)
+                         .replace(path.extname(movieObject.path), ""),
+          keypointsFile = filename + ".keypoints",
+          xmlFile = filename + ".xml",
+
+          xmlContent = [],
+          content = [];
+
+      content.push(radius.toString());
+      content.push(keypoints.length.toString());
+
+      keypoints.forEach(function(element) {
+        content.push(util.format("%s %s", element.x, element.y));
+      });
+
+      fs.writeFile(util.format("./assets/%s", keypointsFile), content.join("\n"));
+      debug(util.format("File with keypoints (%s) saved.", keypointsFile));
+
+      xmlContent.push(XmlHeader);
+      xmlContent.push(util.format(RadiusTag, radius.toString()));
+
+      keypoints.forEach(function(element) {
+        xmlContent.push(util.format(PointTag, element.x, element.y));
+      });
+
+      xmlContent.push(XmlEnding);
+
+      fs.writeFile(util.format("./assets/%s", xmlFile), xmlContent.join("\n"));
+      debug(util.format("XML file with keypoints (%s) saved.", xmlFile));
     },
 
     getById = function(array, id) {
@@ -162,7 +202,13 @@ app.post("/invoke", function(request, response) {
 });
 
 app.post("/keypoints", function(request, response) {
-  response.send();
+  var data = request.body,
+      movieObject;
+
+  movieObject = getById(getMovieList(), parseInt(data.id, 10));
+  saveKeypoints(movieObject, data.keypoints, data.boundingCircleRadius);
+
+  sendJSON(response, { status: "OK" });
 });
 
 app.listen(PORT);

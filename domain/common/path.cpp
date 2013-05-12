@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "path.hpp"
 
 namespace common {
@@ -11,6 +13,12 @@ namespace common {
       }
 
       return input;
+    }
+
+    bool fileExists(const std::string& input) {
+      std::ifstream ifile(input.c_str());
+
+      return ifile;
     }
 
   }

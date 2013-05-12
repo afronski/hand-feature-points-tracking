@@ -38,6 +38,8 @@ bool AlgorithmFactory::isAlgorithmPresent(const std::string& method) {
 
 void AlgorithmFactory::listAllAlgorithms() {
   for (AlgorithmsCollection::const_iterator it = algorithms.begin(); it != algorithms.end(); ++it) {
-    std::cout << *it << std::endl;
+    if (it->find("testing") == std::string::npos) {
+      std::cout << *it << std::endl;
+    }
   }
 }

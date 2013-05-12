@@ -7,6 +7,7 @@
 #include "../common/VideoStream.hpp"
 #include "../common/CommandLineInterface.hpp"
 
+#include "implementations/PointsMarker.hpp"
 #include "factories/AlgorithmFactory.hpp"
 
 class TrackerApplication : public common::CommandLineInterface {
@@ -54,16 +55,22 @@ class TrackerApplication : public common::CommandLineInterface {
     bool printResultsToOutput;
 
     int saveMovie(const std::string& input, const std::string& method) {
-      std::string output = common::path::extractFileName(input) + "_tracking_result.avi";
+      std::string baseFilename = common::path::extractFileName(input);
+      std::string output = baseFilename + "_tracking_result.avi";
 
       if (AlgorithmFactory::isAlgorithmPresent(method)) {
         try {
           ArgumentsAwareFrameTransformer* transformer = AlgorithmFactory::createAlgorithm(method);
+          ArgumentsAwareFrameTransformer* marker = AlgorithmFactory::createAlgorithm(PointsMarker::Name);
 
+          marker->fill(this->getArguments());
           transformer->fill(this->getArguments());
+
           common::vision::VideoStream stream;
 
+          stream.add(marker);
           stream.add(transformer);
+
           stream.open(input);
           stream.transfer(output);
 

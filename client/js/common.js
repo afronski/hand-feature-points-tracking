@@ -1,4 +1,21 @@
 window.Common = (function() {
+  "use strict";
+
+  // Non-standard currying arguments method.
+  if (!Function.prototype.curry) {
+    Function.prototype.curry = function() {
+      if (arguments.length < 1) {
+          return this;
+      }
+
+      var method = this,
+          args = [].slice.call(arguments);
+
+      return function() {
+          return method.apply(this, args.concat([].slice.call(arguments)));
+      };
+    };
+  }
 
   // Because all JavaScript projects have jQuery ;)
   function $(selector) {
@@ -60,6 +77,41 @@ window.Common = (function() {
     }
   }
 
+  function buildMovieList(callback) {
+    var response = JSON.parse(this.responseText),
+        movies = $("#movies");
+
+    response.forEach(function(movie) {
+      var option = document.createElement("option");
+
+      option.setAttribute("value", movie.value);
+      option.innerText = movie.name;
+
+      movies.appendChild(option);
+    });
+
+    if (typeof(callback) === "function") {
+      callback();
+    }
+  }
+
+  // Movies select helpers.
+  function getMovies(callback) {
+    xhrGet("/movies", buildMovieList.curry(callback));
+  }
+
+  function getMovieName() {
+    var movies = $("#movies");
+
+    return movies.options[movies.selectedIndex].innerText;
+  }
+
+  function changeVideo(name) {
+    if (!!name) {
+      $("#player").setAttribute("src", "/videos-converted/%webm".replace("%webm", name));
+    }
+  }
+
   return {
     $: $,
 
@@ -67,6 +119,10 @@ window.Common = (function() {
 
     xhrGet: xhrGet,
     xhrPost: xhrPost,
+
+    getMovies: getMovies,
+    getMovieName: getMovieName,
+    changeVideo: changeVideo,
 
     toggleButton: toggleButton,
     hideElement: hideElement,
