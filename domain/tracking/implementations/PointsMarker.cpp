@@ -1,5 +1,4 @@
 #include <fstream>
-#include <iostream>
 
 #include "../../common/vision.hpp"
 #include "../../common/path.hpp"

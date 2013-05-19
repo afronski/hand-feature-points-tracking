@@ -15,6 +15,7 @@ tracking = [
     "./domain/tracking/implementations/PointsMarker.cpp",
     "./domain/tracking/implementations/SparseOpticalFlowTracker.cpp",
     "./domain/tracking/implementations/DenseOpticalFlowTracker.cpp",
+    "./domain/tracking/implementations/RandomForestTracker.cpp",
     "./domain/tracking/factories/AlgorithmFactory.cpp",
     "./domain/tracking/main.cpp"
 ]

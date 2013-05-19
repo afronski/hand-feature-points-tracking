@@ -3,13 +3,15 @@
 #include "../implementations/PointsMarker.hpp"
 #include "../implementations/SparseOpticalFlowTracker.hpp"
 #include "../implementations/DenseOpticalFlowTracker.hpp"
+#include "../implementations/RandomForestTracker.hpp"
 
 #include "AlgorithmFactory.hpp"
 
 static const std::string names[] = {
   PointsMarker::Name,
   SparseOpticalFlowTracker::Name,
-  DenseOpticalFlowTracker::Name
+  DenseOpticalFlowTracker::Name,
+  RandomForestTracker::Name
 };
 
 static size_t names_length = sizeof(names) / sizeof(names[0]);
@@ -27,6 +29,10 @@ ArgumentsAwareFrameTransformer* AlgorithmFactory::createAlgorithm(const std::str
 
   if (method == DenseOpticalFlowTracker::Name) {
     return new DenseOpticalFlowTracker();
+  }
+
+  if (method == RandomForestTracker::Name) {
+    return new RandomForestTracker();
   }
 
   return 0;
