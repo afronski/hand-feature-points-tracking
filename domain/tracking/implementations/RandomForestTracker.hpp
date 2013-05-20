@@ -15,6 +15,7 @@ class RandomForestTracker : public ArgumentsAwareFrameTransformer {
 
     virtual void process(cv::Mat& frame);
     virtual void fill(const std::vector<std::string>& arguments);
+    virtual void handleFirstFrame(const cv::Mat& firstFrame);
 
   protected:
     virtual void classifierInitialization();

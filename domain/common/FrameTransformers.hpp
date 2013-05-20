@@ -13,7 +13,9 @@ class FrameTransformer {
     virtual void beforeFrame(cv::Mat& frame) {};
     virtual void afterFrame(cv::Mat& frame) {};
 
-    virtual void printResults() {}
+    virtual void printResults() {};
+
+    virtual void handleFirstFrame(const cv::Mat& frame) {};
 };
 
 class ArgumentsAwareFrameTransformer : public FrameTransformer {

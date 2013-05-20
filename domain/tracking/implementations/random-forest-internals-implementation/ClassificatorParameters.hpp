@@ -5,7 +5,7 @@
 
 class ClassificatorParameters {
   public:
-    std::string InitialImagePath;
+    cv::Mat InitialImage;
     std::string TrainingBaseFolder;
 
     int FeaturePointsCount;

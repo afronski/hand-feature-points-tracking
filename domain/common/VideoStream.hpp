@@ -26,6 +26,8 @@ namespace common {
         bool isValid() const;
         void processFrames();
 
+        cv::Mat getFirstFrame() const;
+
         std::string inputPath;
         std::string outputPath;
 

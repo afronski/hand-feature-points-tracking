@@ -35,6 +35,18 @@ namespace common {
         cv::Mat& frameReference;
     };
 
+    class FirstFrameProcessor {
+      public:
+        FirstFrameProcessor(const cv::Mat& frame): frameReference(frame) {}
+
+        void operator() (FrameTransformer* transformer) {
+          transformer->handleFirstFrame(frameReference);
+        }
+
+      private:
+        cv::Mat frameReference;
+    };
+
     // Protected implementation for class internals.
     struct VideoStream::PIMPL {
       typedef std::vector<FrameTransformer*> TransformersList;
@@ -100,6 +112,19 @@ namespace common {
       }
     }
 
+    cv::Mat VideoStream::getFirstFrame() const {
+      cv::Mat frame;
+
+      _implementation->input_video.read(frame);
+      _implementation->input_video.set(CV_CAP_PROP_POS_FRAMES, 0);
+
+      if (frame.empty()) {
+        throw new std::logic_error("VideoStream cannot obtain first frame of animation!");
+      }
+
+      return frame;
+    }
+
     void VideoStream::open(const std::string& input) {
       inputPath = input;
 
@@ -115,6 +140,10 @@ namespace common {
       if (!_implementation->input_video.isOpened()) {
         throw new std::runtime_error("We can't open input video!");
       }
+
+      // Send first frame to all transformers.
+      FirstFrameProcessor sendFirstFrame(getFirstFrame());
+      std::for_each(_implementation->transformers.begin(), _implementation->transformers.end(), sendFirstFrame);
     }
 
     void VideoStream::transfer(const std::string& output) {
