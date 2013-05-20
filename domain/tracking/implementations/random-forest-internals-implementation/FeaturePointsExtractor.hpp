@@ -1,7 +1,7 @@
 #ifndef __FEATURE_POINTS_EXTRACTOR_HPP__
 #define __FEATURE_POINTS_EXTRACTOR_HPP__
 
-class Feature;
+#include "Feature.hpp"
 
 typedef std::vector<cv::Mat> ImagesList;
 typedef std::pair<Feature, ImagesList> FeatureWithFragments;
