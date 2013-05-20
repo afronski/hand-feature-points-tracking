@@ -2,7 +2,7 @@
 
 #include "Feature.hpp"
 
-const std::string FileNamePostFix = "_feature.txt";
+const std::string FileNamePostFix = "feature-point-parameters.txt";
 
 // Internal methods.
 static int square(int a) {

@@ -10,6 +10,9 @@ namespace common {
 
     bool fileExists(const std::string& input);
 
+    bool directoryExists(const std::string& input);
+
+    void makeDir(const std::string& input);
   }
 }
 

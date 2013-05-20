@@ -30,17 +30,17 @@ FeaturesCollection FeaturePointsExtractor::getFeatures() const {
 void FeaturePointsExtractor::filterCorrectedOutImageFeaturePoints(
                                 const cv::Size& boundaries,
                                 FeaturesStore& features) {
-
+// TODO
 }
 
 void FeaturePointsExtractor::filterRareFeaturePoints(FeaturesStore& features) {
-
+// TODO
 }
 
 void FeaturePointsExtractor::extractPatches(
                                 const ImageAndTransformationStore& intermediateData,
                                 FeaturesStore& features) {
-
+// TODO
 }
 
 void FeaturePointsExtractor::extractFeaturePointsFromImage(

@@ -35,16 +35,21 @@ namespace common {
         cv::Mat& frameReference;
     };
 
-    class FirstFrameProcessor {
+    class ParametersProcessor {
       public:
-        FirstFrameProcessor(const cv::Mat& frame): frameReference(frame) {}
+        ParametersProcessor(const cv::Mat& frame, const std::string& fileName):
+          frameReference(frame),
+          movieName(fileName)
+        {}
 
         void operator() (FrameTransformer* transformer) {
           transformer->handleFirstFrame(frameReference);
+          transformer->handleMovieName(movieName);
         }
 
       private:
         cv::Mat frameReference;
+        std::string movieName;
     };
 
     // Protected implementation for class internals.
@@ -141,9 +146,9 @@ namespace common {
         throw new std::runtime_error("We can't open input video!");
       }
 
-      // Send first frame to all transformers.
-      FirstFrameProcessor sendFirstFrame(getFirstFrame());
-      std::for_each(_implementation->transformers.begin(), _implementation->transformers.end(), sendFirstFrame);
+      // Send first frame and movie name to all transformers.
+      ParametersProcessor sendParameters(getFirstFrame(), inputPath);
+      std::for_each(_implementation->transformers.begin(), _implementation->transformers.end(), sendParameters);
     }
 
     void VideoStream::transfer(const std::string& output) {
