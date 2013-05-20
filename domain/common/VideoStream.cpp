@@ -45,6 +45,7 @@ namespace common {
         void operator() (FrameTransformer* transformer) {
           transformer->handleFirstFrame(frameReference);
           transformer->handleMovieName(movieName);
+          transformer->afterInitialization();
         }
 
       private:
@@ -124,7 +125,7 @@ namespace common {
       _implementation->input_video.set(CV_CAP_PROP_POS_FRAMES, 0);
 
       if (frame.empty()) {
-        throw new std::logic_error("VideoStream cannot obtain first frame of animation!");
+        throw std::logic_error("VideoStream cannot obtain first frame of animation!");
       }
 
       return frame;
@@ -143,7 +144,7 @@ namespace common {
       _implementation->dimmensions = cv::Size(_implementation->width, _implementation->height);
 
       if (!_implementation->input_video.isOpened()) {
-        throw new std::runtime_error("We can't open input video!");
+        throw std::runtime_error("We can't open input video!");
       }
 
       // Send first frame and movie name to all transformers.
@@ -161,7 +162,7 @@ namespace common {
                                           true);
 
       if (!_implementation->output_video.isOpened()) {
-        throw new std::runtime_error("We can't open output video!");
+        throw std::runtime_error("We can't open output video!");
       }
 
       if (isValid()) {
@@ -170,7 +171,7 @@ namespace common {
         _implementation->input_video.release();
         _implementation->output_video.release();
       } else {
-        throw new std::logic_error("VideoStream parameters are incomplete to proceed with transfer!");
+        throw std::logic_error("VideoStream parameters are incomplete to proceed with transfer!");
       }
     }
 

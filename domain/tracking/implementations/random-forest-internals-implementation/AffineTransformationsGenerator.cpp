@@ -28,8 +28,8 @@ AffineTransformationsGenerator::AffineTransformationsGenerator(cv::Point centerP
 }
 
 // Public method.
-bool AffineTransformationsGenerator::getNextTransformation(AffineTransformation* next) {
-  next = new AffineTransformation(
+bool AffineTransformationsGenerator::getNextTransformation(AffineTransformation** next) {
+  *next = new AffineTransformation(
                 parameters[Angle],
                 center,
                 parameters[ScaleX],

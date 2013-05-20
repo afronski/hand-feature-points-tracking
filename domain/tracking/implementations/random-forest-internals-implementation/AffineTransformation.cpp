@@ -106,8 +106,8 @@ cv::Point AffineTransformation::transformPoint(const cv::Point& point) const {
 
 void AffineTransformation::transformImage(
                               const cv::Mat& inputImage,
-                              cv::Mat& transformedImage,
-                              cv::Mat& transformMatrix)
+                              cv::Mat* transformedImage,
+                              cv::Mat* transformMatrix)
 {
   cv::Point2d leftTop;
   leftTop.x = 0;
@@ -149,15 +149,17 @@ void AffineTransformation::transformImage(
   transformedImageSize.width = static_cast<int>(std::ceil(maxPoint.x - minPoint.x));
   transformedImageSize.height = static_cast<int>(std::ceil(maxPoint.y - minPoint.y));
 
-  transformMatrix = cv::Mat(2, 3, CV_64FC1);
-  transformMatrix.at<double>(0, 0) = transformationMatrix.at<double>(0, 0);
-  transformMatrix.at<double>(0, 1) = transformationMatrix.at<double>(0, 1);
-  transformMatrix.at<double>(0, 2) = transformationMatrix.at<double>(0, 2) - minPoint.x;
-  transformMatrix.at<double>(1, 0) = transformationMatrix.at<double>(1, 0);
-  transformMatrix.at<double>(1, 1) = transformationMatrix.at<double>(1, 1);
-  transformMatrix.at<double>(1, 2) = transformationMatrix.at<double>(1, 2) - minPoint.y;
+  transformMatrix = new cv::Mat(2, 3, CV_64FC1);
+  transformedImage = new cv::Mat(inputImage.size(), inputImage.depth(), inputImage.channels());
 
-  cv::warpAffine(inputImage, transformedImage, transformationMatrix, inputImage.size());
+  transformMatrix->at<double>(0, 0) = transformationMatrix.at<double>(0, 0);
+  transformMatrix->at<double>(0, 1) = transformationMatrix.at<double>(0, 1);
+  transformMatrix->at<double>(0, 2) = transformationMatrix.at<double>(0, 2) - minPoint.x;
+  transformMatrix->at<double>(1, 0) = transformationMatrix.at<double>(1, 0);
+  transformMatrix->at<double>(1, 1) = transformationMatrix.at<double>(1, 1);
+  transformMatrix->at<double>(1, 2) = transformationMatrix.at<double>(1, 2) - minPoint.y;
+
+  cv::warpAffine(inputImage, *transformedImage, *transformMatrix, inputImage.size());
 }
 
 void AffineTransformation::transformImage(

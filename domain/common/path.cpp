@@ -19,6 +19,16 @@ namespace common {
       return input;
     }
 
+    std::string extractBaseName(const std::string& input) {
+      size_t index = input.find_last_of("/");
+
+      if (index != std::string::npos) {
+        return input.substr(index + 1);
+      }
+
+      return input;
+    }
+
     bool fileExists(const std::string& input) {
       std::ifstream ifile(input.c_str());
 
@@ -35,11 +45,7 @@ namespace common {
         error = stat(input.c_str(), &status);
       #endif
 
-      if (error != 0) {
-        throw new std::runtime_error("Cannot perform stat on specified directory!");
-      }
-
-      return S_ISDIR(status.st_mode);
+      return error == 0;
     }
 
     void makeDir(const std::string& input) {
@@ -52,7 +58,7 @@ namespace common {
       #endif
 
       if (error != 0) {
-        throw new std::runtime_error("Cannot create specified directory!");
+        throw std::runtime_error("Cannot create specified directory!");
       }
     }
 

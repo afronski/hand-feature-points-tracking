@@ -17,6 +17,8 @@ class FrameTransformer {
 
     virtual void handleFirstFrame(const cv::Mat& frame) {};
     virtual void handleMovieName(const std::string& movieName) {};
+
+    virtual void afterInitialization() {};
 };
 
 class ArgumentsAwareFrameTransformer : public FrameTransformer {

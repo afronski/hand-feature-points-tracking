@@ -8,6 +8,8 @@ namespace common {
 
     std::string extractFileName(const std::string& input);
 
+    std::string extractBaseName(const std::string& input);
+
     bool fileExists(const std::string& input);
 
     bool directoryExists(const std::string& input);

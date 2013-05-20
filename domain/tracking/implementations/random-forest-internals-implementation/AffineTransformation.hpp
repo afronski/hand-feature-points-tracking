@@ -18,7 +18,7 @@ class AffineTransformation {
     cv::Point transformPoint(const cv::Point& point) const;
 
     void transformImage(const cv::Mat& inputImage, cv::Mat& transformedImage, cv::Size boundary) const;
-    void transformImage(const cv::Mat& inputImage, cv::Mat& transformedImage, cv::Mat& transformMatrix);
+    void transformImage(const cv::Mat& inputImage, cv::Mat* transformedImage, cv::Mat* transformMatrix);
 
   private:
     cv::Mat transformationMatrix;

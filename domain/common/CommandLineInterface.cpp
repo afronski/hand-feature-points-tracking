@@ -28,7 +28,7 @@ namespace common {
 
   std::string CommandLineInterface::extractArgument(unsigned int index) const {
     if (index >= arguments.size()) {
-      throw new std::out_of_range("Invalid argument index for command line interface!");
+      throw std::out_of_range("Invalid argument index for command line interface!");
     }
 
     return arguments[index];

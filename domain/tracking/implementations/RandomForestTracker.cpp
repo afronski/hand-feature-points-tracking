@@ -5,7 +5,6 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/core_c.h>
 #include <opencv2/video/tracking.hpp>
-
 #include <opencv2/highgui/highgui.hpp>
 
 #include "../../common/vision.hpp"
@@ -42,7 +41,7 @@ struct RandomForestTracker::PIMPL {
   FeaturesCollection* trainingBase;
 
   PIMPL() {
-    parameters.TrainingBaseFolder = "training-base-directory/";
+    parameters.TrainingBaseFolder = "bin/training-base-directory/";
 
     parameters.FeaturePointsCount = 200;
     parameters.HalfPatchSize = 10;
@@ -65,7 +64,7 @@ struct RandomForestTracker::PIMPL {
   }
 
   void setPath(const std::string& movieName) {
-    parameters.TrainingBaseFolder += common::path::extractFileName(movieName) + "/";
+    parameters.TrainingBaseFolder += common::path::extractBaseName(common::path::extractFileName(movieName)) + "/";
   }
 
 };
@@ -95,7 +94,7 @@ void RandomForestTracker::generateTrainingBase() {
 
 void RandomForestTracker::writeTrainingBaseToFolder() {
   if (!implementation->trainingBase || implementation->trainingBase->empty()) {
-    throw new std::logic_error("Can't write empty training base!");
+    throw std::logic_error("Can't write empty training base!");
   }
 
   const FeaturesCollection& featureCollection = *implementation->trainingBase;
@@ -104,7 +103,7 @@ void RandomForestTracker::writeTrainingBaseToFolder() {
   std::ofstream trainingBaseHeader((implementation->parameters.TrainingBaseFolder + "training-base.txt").c_str());
 
   if (!trainingBaseHeader.good()) {
-    throw new std::logic_error("Can't open training base file for write!");
+    throw std::logic_error("Can't open training base file for write!");
   }
 
   trainingBaseHeader << featureCollection.size() << " " << featureCollection[0].second.size();
@@ -120,7 +119,7 @@ void RandomForestTracker::writeTrainingBaseToFolder() {
       std::string imagePath = folderPath + toString(k) + ".bmp";
 
       if (!imwrite(imagePath, featureCollection[i].second[k])) {
-        throw new std::runtime_error("Couldn't save patch image.");
+        throw std::runtime_error("Couldn't save patch image.");
       }
     }
   }
@@ -156,20 +155,12 @@ void RandomForestTracker::process(cv::Mat& frame) {
   cv::GaussianBlur(actualGrayFrame, smoothedGrayFrame, GaussianKernelSize, 0.0, 0.0);
 
   classifyImage(initialImage, smoothedGrayFrame, frame);
-
-  cv::imshow("classification", frame);
-  cv::waitKey(0);
 }
 
 void RandomForestTracker::fill(const std::vector<std::string>& arguments) {
   if (!implementation->parameters.isValid()) {
-    throw new std::logic_error("Provided parameters for classificator are insufficient!");
+    throw std::logic_error("Provided parameters for classificator are insufficient!");
   }
-
-  // One-time classifier initialization.
-  classifierInitialization();
-
-  cv::namedWindow("classification", CV_WINDOW_AUTOSIZE);
 }
 
 void RandomForestTracker::handleFirstFrame(const cv::Mat& firstFrame) {
@@ -178,4 +169,9 @@ void RandomForestTracker::handleFirstFrame(const cv::Mat& firstFrame) {
 
 void RandomForestTracker::handleMovieName(const std::string& movieName) {
   implementation->setPath(movieName);
+}
+
+void RandomForestTracker::afterInitialization() {
+  // One-time classifier initialization.
+  classifierInitialization();
 }

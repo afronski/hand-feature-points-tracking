@@ -42,8 +42,8 @@ class FeaturePointsExtractor {
     void filterCorrectedOutImageFeaturePoints(const cv::Size& boundaries, FeaturesStore& features);
     void filterRareFeaturePoints(FeaturesStore& features);
 
-    void extractPatches(const ImageAndTransformationStore& intermediateData, FeaturesStore& features);
-
+    void extractPatches(ImageAndTransformationStore& intermediateData, FeaturesStore& features);
+    cv::Mat extractFeaturePointPatch(const Feature& featurePoint, const cv::Mat& image) const;
 };
 
 #endif

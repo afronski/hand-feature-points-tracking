@@ -9,7 +9,7 @@ class AffineTransformationsGenerator {
   public:
     AffineTransformationsGenerator(cv::Point center);
 
-    bool getNextTransformation(AffineTransformation* next);
+    bool getNextTransformation(AffineTransformation** next);
 
   private:
     bool adjustNextParamsValues();
