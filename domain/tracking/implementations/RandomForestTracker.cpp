@@ -47,13 +47,11 @@ struct RandomForestTracker::PIMPL {
     parameters.GeneratedRandomPointsCount = 30;
   }
 
-  void resetTrainingBase() {
+  void deleteTrainingBase() {
     if (trainingBase != 0) {
       delete trainingBase;
       trainingBase = 0;
     }
-
-    trainingBase = new FeaturesCollection();
   }
 
 };
@@ -77,8 +75,8 @@ void RandomForestTracker::generateTrainingBase() {
 
   featureExtractor.generateFeaturePoints(implementation->parameters.InitialImage);
 
-  implementation->resetTrainingBase();
-  featureExtractor.getFeatures(implementation->trainingBase);
+  implementation->deleteTrainingBase();
+  implementation->trainingBase = new FeaturesCollection(featureExtractor.getFeatures());
 }
 
 void RandomForestTracker::writeTrainingBaseToFolder() {
