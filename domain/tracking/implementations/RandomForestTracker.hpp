@@ -35,6 +35,8 @@ class RandomForestTracker : public ArgumentsAwareFrameTransformer {
 
     void trainClassifier();
     void classifyImage(const cv::Mat& initial, const cv::Mat& fram, cv::Mat& output);
+
+    bool isTrainingBaseAvailable() const;
 };
 
 #endif

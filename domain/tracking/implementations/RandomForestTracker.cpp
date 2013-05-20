@@ -91,13 +91,18 @@ void RandomForestTracker::trainClassifier() {
 void RandomForestTracker::classifyImage(const cv::Mat& initial, const cv::Mat& frame, cv::Mat& output) {
 }
 
+bool RandomForestTracker::isTrainingBaseAvailable() const {
+  return true;
+}
+
 // Protected methods.
 void RandomForestTracker::classifierInitialization() {
-  generateTrainingBase();
+  if (isTrainingBaseAvailable()) {
+    generateTrainingBase();
+    writeTrainingBaseToFolder();
+  }
 
-  writeTrainingBaseToFolder();
   loadTrainingBaseFromFolder();
-
   trainClassifier();
 }
 

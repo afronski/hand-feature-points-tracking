@@ -7,7 +7,6 @@ environment = Environment(ENV = {
                           },
                           CPPFLAGS = [ "-O3", "-Wall", "-Werror" ])
 
-
 openCV = [ "opencv_core", "opencv_highgui", "opencv_video", "opencv_imgproc" ]
 libraries = openCV + [ "common" ]
 

@@ -74,7 +74,7 @@ void FeaturePointsExtractor::extractFeaturesFromTransformedImages(
     cv::Mat* transformedImage = 0;
     cv::Mat* transformationMatrix = 0;
 
-    currentTransformation->transformImage(initialImage, transformedImage, transformationMatrix);
+    currentTransformation->transformImage(initialImage, *transformedImage, *transformationMatrix);
 
     cv::RNG rng = cv::RNG(0x12345);
     cv::Mat noise = transformedImage->clone();
@@ -82,11 +82,11 @@ void FeaturePointsExtractor::extractFeaturesFromTransformedImages(
     rng.fill(noise, cv::RNG::UNIFORM, 0, 50);
     cv::add(*transformedImage, noise, *transformedImage);
 
-    AffineTransformation forIntermediate(transformationMatrix, false);
+    AffineTransformation forIntermediate(*transformationMatrix, false);
     ImageAndTransformation intermediateDataItem = std::make_pair(transformedImage->clone(), forIntermediate);
     imagesWithTransformations.push_back(intermediateDataItem);
 
-    AffineTransformation* inverseTransformation = new AffineTransformation(transformationMatrix, true);
+    AffineTransformation* inverseTransformation = new AffineTransformation(*transformationMatrix, true);
     extractFeaturePointsFromImage(imagesWithTransformations.back().first, inverseTransformation, features);
 
     delete inverseTransformation;
