@@ -101,17 +101,18 @@ v.erase(std::remove(v.begin(), v.end(), 5), v.end());
 
     \subsection{Narzędzia pomocnicze}\label{Subsection_PomocniczeTechnologie}
 
-      \subsubsection{Język R}
-      \textit{GNU R} to język programowania i~środowisko do obliczeń statystycznych oraz wizualizacji wyników. \textit{R} jest podstawowym językiem programowania w bioinformatyce, ale znajduje zastosowanie w~każdej innej dziedzinie nauki wymagającej analizy statystycznej i~prezentacji wyników w~postaci różnego rodzaju wykresów.
+      \subsubsection{Biblioteka d3.js}
+      \textit{D3} to środowisko do obliczeń statystycznych oraz wizualizacji wyników (za pomocą przeglądarki internetowej, w~formacie wektorowym SVG) napisana w~języku JavaScript. Znajduje on zastosowanie w~każdej dziedzinie nauki wymagającej analizy statystycznej i~prezentacji wyników w~postaci różnego rodzaju wykresów. Została ona szczegółowo opisana w~książce \cite{D3Book}.
 
       W~pracy magisterskiej zostały wykorzystane skrypty opierające się o~pakiety analizy statystycznej oraz prezentacji wyników pomiarów poszczególnych implementacji i~algorytmów. Poniżej zaprezentowano przykładowy skrypt, pozostałe wykresy oraz analiza statystyczna znajdują się w~rozdziale \ref{Chapter_AnalizaRezultatow}.
 
       \begin{sample}[ht]
         \begin{verbatim}
-runningTime <- rnorm(3000)
-runningTimeHistogram <- hist(runningTime, breaks = 50, plot = FALSE)
+(function(d3) {
 
-plot(runningTimeHistogram, col = "red")
+  d3.selectAll("circle");
+
+} (window.d3));
         \end{verbatim}
         \caption{Skrypt przygotowujący wykres czasu wykonania każdego z~algorytmów}
         \label{ChartForRunningTimePerAlgorithm}
