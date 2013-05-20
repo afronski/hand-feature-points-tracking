@@ -10,6 +10,28 @@ class AffineTransformationsGenerator {
     AffineTransformationsGenerator(cv::Point center);
 
     bool getNextTransformation(AffineTransformation* next);
+
+  private:
+    bool adjustNextParamsValues();
+
+    enum AffineOperationType {
+      Angle = 0,
+      ScaleX,
+
+      SkewFactorX,
+      SkewFactorY,
+
+      AffineOperationTypeSize
+    };
+
+    cv::Point center;
+
+    double parameters[AffineOperationTypeSize];
+    double parametersStep[AffineOperationTypeSize];
+    double parametersMaxValue[AffineOperationTypeSize];
+    double parametersMinValue[AffineOperationTypeSize];
+
+    bool isValid;
 };
 
 #endif

@@ -92,12 +92,12 @@ void RandomForestTracker::classifyImage(const cv::Mat& initial, const cv::Mat& f
 }
 
 bool RandomForestTracker::isTrainingBaseAvailable() const {
-  return true;
+  return false;
 }
 
 // Protected methods.
 void RandomForestTracker::classifierInitialization() {
-  if (isTrainingBaseAvailable()) {
+  if (!isTrainingBaseAvailable()) {
     generateTrainingBase();
     writeTrainingBaseToFolder();
   }
