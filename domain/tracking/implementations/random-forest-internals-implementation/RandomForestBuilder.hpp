@@ -3,6 +3,9 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "Tree.hpp"
+#include "DecisionNode.hpp"
+
 #include "Feature.hpp"
 #include "RandomForest.hpp"
 #include "ClassificatorParameters.hpp"
@@ -10,6 +13,8 @@
 typedef std::vector<cv::Mat> ImagesList;
 typedef std::pair<Feature, ImagesList> FeatureWithFragments;
 typedef std::vector<FeatureWithFragments> FeaturesCollection;
+
+typedef Tree<const DecisionNode, DecisionNode::TestResultEnumSize> DecisionTree;
 
 class RandomForestBuilder {
   public:
