@@ -10,7 +10,7 @@ static int square(int a) {
 }
 
 // Constructors.
-Feature::Feature(cv::Point point):
+Feature::Feature(const cv::Point& point):
   featurePoint(point),
   color(cv::Scalar(0, 0, 255, 125)),
   squareOfDistance(25)
@@ -64,7 +64,7 @@ void Feature::draw(cv::Mat& frame) const {
   cv::circle(frame, featurePoint, 2.0, color, -1);
 }
 
-bool Feature::correctPointByBoundary(cv::Size boundary) {
+bool Feature::correctPointByBoundary(const cv::Size& boundary) {
   if (featurePoint.x <= boundary.width && featurePoint.x >= 0 &&
       featurePoint.y <= boundary.height && featurePoint.y >= 0) {
     return true;

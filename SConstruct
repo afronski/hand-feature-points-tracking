@@ -1,12 +1,25 @@
 import os;
 
-environment = Environment(ENV = {
-                            'PATH'    : os.environ['PATH'],
-                            'TERM'    : os.environ['TERM'],
-                            'HOME'    : os.environ['HOME']
-                          },
-                          CPPFLAGS = [ "-O3", "-Wall", "-Werror" ])
+variables = {
+  'PATH': os.environ['PATH'],
+  'TERM': os.environ['TERM'],
+  'HOME': os.environ['HOME']
+}
 
+commonFlags = [ "-Wall", "-Werror" ]
+
+release = Environment(ENV = variables, CPPFLAGS = commonFlags + [ "-O3" ])
+debug   = Environment(ENV = variables, CPPFLAGS = commonFlags + [ "-ggdb", "-DDEBUG" ])
+
+debugFlagEnabled = ARGUMENTS.get('debug', 0)
+
+# Selecting valid environment based on passed flag.
+environment = release
+
+if int(debugFlagEnabled):
+    environment = debug
+
+# Common build process and elements.
 openCV = [ "opencv_core", "opencv_highgui", "opencv_video", "opencv_imgproc" ]
 libraries = openCV + [ "common" ]
 
@@ -15,6 +28,7 @@ environment.Library("./bin/common", [
                       "./domain/common/VideoStream.cpp",
                       "./domain/common/path.cpp",
                       "./domain/common/vision.cpp",
+                      "./domain/common/debug.cpp",
                       "./domain/common/floating-point-numbers.cpp"
                     ],
                     LIBS = openCV)

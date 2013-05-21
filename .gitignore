@@ -11,6 +11,8 @@ doc/materials/useful/Random Forest/
 bin/*.a
 bin/tracking
 *.o
+bin/**/*.bmp
+bin/**/*.txt
 
 .sconsign.dblite
 *.sublime-workspace

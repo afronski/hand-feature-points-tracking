@@ -9,6 +9,7 @@
 
 #include "../../common/vision.hpp"
 #include "../../common/path.hpp"
+#include "../../common/debug.hpp"
 
 #include "RandomForestTracker.hpp"
 
@@ -41,10 +42,12 @@ struct RandomForestTracker::PIMPL {
   FeaturesCollection* trainingBase;
 
   PIMPL() {
+    trainingBase = 0;
+
     parameters.TrainingBaseFolder = "bin/training-base-directory/";
 
-    parameters.FeaturePointsCount = 200;
-    parameters.HalfPatchSize = 10;
+    parameters.FeaturePointsCount = 100;
+    parameters.HalfPatchSize = 50;
 
     parameters.MaximumTreeHeight = 30;
     parameters.MinimumElementPerNode = 100;
@@ -86,8 +89,10 @@ void RandomForestTracker::generateTrainingBase() {
                             implementation->parameters.FeaturePointsCount,
                             implementation->parameters.HalfPatchSize);
 
+  common::debug::log("Generating feature points\n");
   featureExtractor.generateFeaturePoints(implementation->parameters.InitialImage);
 
+  common::debug::log("Copying training base to internal structure\n");
   implementation->deleteTrainingBase();
   implementation->trainingBase = new FeaturesCollection(featureExtractor.getFeatures());
 }
@@ -98,8 +103,11 @@ void RandomForestTracker::writeTrainingBaseToFolder() {
   }
 
   const FeaturesCollection& featureCollection = *implementation->trainingBase;
+
+  common::debug::log("Creating directory for training base\n");
   common::path::makeDir(implementation->parameters.TrainingBaseFolder);
 
+  common::debug::log("Saving training base informations\n");
   std::ofstream trainingBaseHeader((implementation->parameters.TrainingBaseFolder + "training-base.txt").c_str());
 
   if (!trainingBaseHeader.good()) {
@@ -109,18 +117,36 @@ void RandomForestTracker::writeTrainingBaseToFolder() {
   trainingBaseHeader << featureCollection.size() << " " << featureCollection[0].second.size();
   trainingBaseHeader.close();
 
-  for (std::size_t i = 0; i < featureCollection.size(); ++i) {
-    std::string folderPath = implementation->parameters.TrainingBaseFolder + toString(i) + "/";
-    common::path::makeDir(folderPath);
+  const std::size_t featuresLength = featureCollection.size();
 
+  for (std::size_t i = 0; i < featuresLength; ++i) {
+    const std::size_t patchesLength = featureCollection[i].second.size();
+    std::string folderPath = implementation->parameters.TrainingBaseFolder + toString(i) + "/";
+
+    common::debug::log("Creating directory and saving feature %3d from %d (patches: %3d)\r",
+                       i + 1,
+                       featuresLength,
+                       patchesLength);
+
+    common::path::makeDir(folderPath);
     featureCollection[i].first.save(folderPath);
 
-    for (std::size_t k = 0; k < featureCollection[i].second.size(); ++k) {
+    for (std::size_t k = 0; k < patchesLength; ++k) {
+      if (k == 0) {
+        common::debug::log("\n");
+      }
+
       std::string imagePath = folderPath + toString(k) + ".bmp";
+
+      common::debug::log("Saving patch %3d from %d (%s)\r", k + 1, patchesLength, imagePath.c_str());
 
       if (!imwrite(imagePath, featureCollection[i].second[k])) {
         throw std::runtime_error("Couldn't save patch image.");
       }
+    }
+
+    if (patchesLength > 0) {
+      common::debug::log("\n");
     }
   }
 }
@@ -140,12 +166,20 @@ bool RandomForestTracker::isTrainingBaseAvailable() const {
 
 // Protected methods.
 void RandomForestTracker::classifierInitialization() {
+  common::debug::log("Initializating classifier\n");
+
   if (!isTrainingBaseAvailable()) {
+    common::debug::log("Creating training base\n");
     generateTrainingBase();
+
+    common::debug::log("Writting training base to separate directory\n");
     writeTrainingBaseToFolder();
   }
 
+  common::debug::log("Loading training base from directory\n");
   loadTrainingBaseFromFolder();
+
+  common::debug::log("Training classifier\n");
   trainClassifier();
 }
 

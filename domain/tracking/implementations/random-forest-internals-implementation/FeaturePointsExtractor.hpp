@@ -32,7 +32,7 @@ class FeaturePointsExtractor {
     void extractFeaturesFromTransformedImages(
                                 const cv::Mat& initialImage,
                                 FeaturesStore& features,
-                                ImageAndTransformationStore imagesWithTransformations);
+                                ImageAndTransformationStore& imagesWithTransformations);
 
     void extractFeaturePointsFromImage(
                                 const cv::Mat& image,

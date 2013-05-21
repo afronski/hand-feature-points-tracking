@@ -9,7 +9,7 @@
 
 class Feature {
   public:
-    Feature(cv::Point point);
+    Feature(const cv::Point& point);
     Feature(const std::string& path);
 
     Feature& operator=(const Feature& rhs);
@@ -22,7 +22,7 @@ class Feature {
     void draw(cv::Mat& frame) const;
     void draw(cv::Mat& frame, const AffineTransformation& transformation) const;
 
-    bool correctPointByBoundary(cv::Size boundary);
+    bool correctPointByBoundary(const cv::Size& boundary);
 
   private:
     cv::Point featurePoint;
