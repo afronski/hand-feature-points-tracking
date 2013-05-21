@@ -16,6 +16,8 @@
 #include "random-forest-internals-implementation/Feature.hpp"
 #include "random-forest-internals-implementation/FeaturePointsExtractor.hpp"
 #include "random-forest-internals-implementation/ClassificatorParameters.hpp"
+#include "random-forest-internals-implementation/RandomForest.hpp"
+#include "random-forest-internals-implementation/RandomForestBuilder.hpp"
 
 // Aliases.
 typedef std::vector<cv::Mat> ImagesList;
@@ -40,6 +42,7 @@ std::string toString(int value) {
 struct RandomForestTracker::PIMPL {
   ClassificatorParameters parameters;
   FeaturesCollection* trainingBase;
+  RandomForest randomForest;
 
   PIMPL() {
     trainingBase = 0;
@@ -152,9 +155,79 @@ void RandomForestTracker::writeTrainingBaseToFolder() {
 }
 
 void RandomForestTracker::loadTrainingBaseFromFolder() {
+  common::debug::log("Allocating new training base");
+  implementation->deleteTrainingBase();
+  implementation->trainingBase = new FeaturesCollection();
+
+  common::debug::log("Reading training base from directory\n");
+  std::ifstream trainingBaseHeader((implementation->parameters.TrainingBaseFolder + "training-base.txt").c_str());
+
+  if (!trainingBaseHeader.good()) {
+    throw std::logic_error("Can't open training base file for read!");
+  }
+
+  unsigned int featurePointsCount = 0;
+  trainingBaseHeader >> featurePointsCount;
+
+  if (featurePointsCount < 1) {
+    throw std::logic_error("Invalid feature points amount read from header file!");
+  }
+
+  unsigned int patchesPerFeaturePoint = 0;
+  trainingBaseHeader >> patchesPerFeaturePoint;
+
+  if (patchesPerFeaturePoint < 1) {
+    throw std::logic_error("Invalid patches per feature amount read from header file!");
+  }
+
+  trainingBaseHeader.close();
+
+  common::debug::log("Reading patches for feature points\n");
+
+  for (std::size_t i = 0; i < featurePointsCount; ++i) {
+    std::string folderPath = implementation->parameters.TrainingBaseFolder + toString(i) + "/";
+
+    if (!common::path::directoryExists(folderPath)) {
+      throw std::logic_error("Specified patch folder is not avalable!");
+    }
+
+    implementation->trainingBase->push_back(FeatureWithFragments(Feature(folderPath), ImagesList()));
+
+    common::debug::log("Loading feature %3d from %d (patches: %3d)\r",
+                       i + 1,
+                       featurePointsCount,
+                       patchesPerFeaturePoint);
+
+    for (std::size_t k = 0; k < patchesPerFeaturePoint; ++k) {
+      if (k == 0) {
+        common::debug::log("\n");
+      }
+
+      std::string imagePath = folderPath + toString(k) + ".bmp";
+
+      common::debug::log("Loading patch %3d from %d (%s)\r", k + 1, patchesPerFeaturePoint, imagePath.c_str());
+      implementation->trainingBase->back().second.push_back(cv::imread(imagePath, CV_LOAD_IMAGE_GRAYSCALE));
+
+      if (implementation->trainingBase->back().second.back().empty()) {
+        throw std::logic_error("Couldn't load patch image!");
+      }
+    }
+
+    if (patchesPerFeaturePoint > 0) {
+      common::debug::log("\n");
+    }
+  }
+
+  common::debug::log("Loaded feature points - amount: %d\n", implementation->trainingBase->size());
 }
 
 void RandomForestTracker::trainClassifier() {
+  RandomForestBuilder randomForestBuilder(*(implementation->trainingBase), implementation->parameters);
+
+  common::debug::log("Building random forest structure");
+
+  randomForestBuilder.build();
+  implementation->randomForest = randomForestBuilder.getRandomForest();
 }
 
 void RandomForestTracker::classifyImage(const cv::Mat& initial, const cv::Mat& frame, cv::Mat& output) {

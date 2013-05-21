@@ -45,6 +45,8 @@ tracking = [
   "./domain/tracking/implementations/random-forest-internals-implementation/AffineTransformationsGenerator.cpp",
   "./domain/tracking/implementations/random-forest-internals-implementation/Feature.cpp",
   "./domain/tracking/implementations/random-forest-internals-implementation/FeaturePointsExtractor.cpp",
+  "./domain/tracking/implementations/random-forest-internals-implementation/RandomForest.cpp",
+  "./domain/tracking/implementations/random-forest-internals-implementation/RandomForestBuilder.cpp",
 
   "./domain/tracking/factories/AlgorithmFactory.cpp",
   "./domain/tracking/main.cpp"
