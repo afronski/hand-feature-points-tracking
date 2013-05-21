@@ -183,6 +183,41 @@ void RandomForestTracker::classifierInitialization() {
   trainClassifier();
 }
 
+void RandomForestTracker::readPointsFromKeypointFile(const std::string& fileName, std::vector<cv::Point>& points) {
+  std::string keypointsFilename = common::path::extractFileName(fileName) + ".keypoints";
+
+  if (common::path::fileExists(keypointsFilename)) {
+    std::ifstream input(keypointsFilename.c_str());
+
+    unsigned int n = 0;
+    double x = 0.0, y = 0.0, radius = 0.0;
+
+    input >> radius;
+    input >> n;
+
+    while (n > 0) {
+      input >> x >> y;
+      points.push_back(cv::Point(x, y));
+
+      points.push_back(cv::Point(x + radius, y));
+      points.push_back(cv::Point(x - radius, y));
+
+      points.push_back(cv::Point(x, y + radius));
+      points.push_back(cv::Point(x, y - radius));
+
+      points.push_back(cv::Point(x + radius, y + radius));
+      points.push_back(cv::Point(x + radius, y - radius));
+
+      points.push_back(cv::Point(x - radius, y + radius));
+      points.push_back(cv::Point(x - radius, y - radius));
+
+      --n;
+    }
+
+    input.close();
+  }
+}
+
 // Public methods.
 void RandomForestTracker::process(cv::Mat& frame) {
   cv::cvtColor(frame, actualGrayFrame, CV_BGR2GRAY);
@@ -203,6 +238,15 @@ void RandomForestTracker::handleFirstFrame(const cv::Mat& firstFrame) {
 
 void RandomForestTracker::handleMovieName(const std::string& movieName) {
   implementation->setPath(movieName);
+
+  // Cropping first frame by keypoints file (if keypoint file exists).
+  std::vector<cv::Point> points;
+  readPointsFromKeypointFile(movieName, points);
+
+  if (points.size() > 0) {
+    cv::Rect boundingRect = cv::boundingRect(points);
+    implementation->parameters.InitialImage = implementation->parameters.InitialImage(boundingRect);
+  }
 }
 
 void RandomForestTracker::afterInitialization() {

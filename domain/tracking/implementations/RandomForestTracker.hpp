@@ -41,6 +41,8 @@ class RandomForestTracker : public ArgumentsAwareFrameTransformer {
     void classifyImage(const cv::Mat& initial, const cv::Mat& fram, cv::Mat& output);
 
     bool isTrainingBaseAvailable() const;
+
+    void readPointsFromKeypointFile(const std::string& fileName, std::vector<cv::Point>& points);
 };
 
 #endif
