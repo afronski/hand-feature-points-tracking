@@ -14,20 +14,25 @@ typedef std::vector<cv::Mat> ImagesList;
 typedef std::pair<Feature, ImagesList> FeatureWithFragments;
 typedef std::vector<FeatureWithFragments> FeaturesCollection;
 
-typedef Tree<const DecisionNode, DecisionNode::TestResultEnumSize> DecisionTree;
+typedef Tree<DecisionNode, DecisionNode::TestResultEnumSize> DecisionTree;
+typedef std::vector<DecisionTree> Trees;
 
 class RandomForestBuilder {
   public:
     RandomForestBuilder(const FeaturesCollection& features, const ClassificatorParameters& parameters);
+    ~RandomForestBuilder();
 
     void build();
-    RandomForest getRandomForest() const { return forest; }
+    void cleanUp();
+
+    RandomForest* getRandomForest() const { return forest; }
 
   private:
-    RandomForest forest;
+    void generateBootStrap(std::vector<int>& set, std::vector<int>& outOfBagSet) const;
 
     FeaturesCollection featuresCollection;
     ClassificatorParameters classificatorParameters;
+    RandomForest* forest;
 };
 
 #endif

@@ -42,10 +42,11 @@ std::string toString(int value) {
 struct RandomForestTracker::PIMPL {
   ClassificatorParameters parameters;
   FeaturesCollection* trainingBase;
-  RandomForest randomForest;
+  RandomForest* randomForest;
 
   PIMPL() {
     trainingBase = 0;
+    randomForest = 0;
 
     parameters.TrainingBaseFolder = "bin/training-base-directory/";
 
@@ -60,6 +61,15 @@ struct RandomForestTracker::PIMPL {
 
     parameters.ClassifierIntensityThreshold = 10;
     parameters.GeneratedRandomPointsCount = 30;
+  }
+
+  ~PIMPL() {
+    deleteTrainingBase();
+
+    if (randomForest != 0) {
+      delete randomForest;
+      randomForest = 0;
+    }
   }
 
   void deleteTrainingBase() {

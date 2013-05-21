@@ -48,6 +48,7 @@ tracking = [
   "./domain/tracking/implementations/random-forest-internals-implementation/DecisionNode.cpp",
   "./domain/tracking/implementations/random-forest-internals-implementation/RandomForest.cpp",
   "./domain/tracking/implementations/random-forest-internals-implementation/RandomForestBuilder.cpp",
+  "./domain/tracking/implementations/random-forest-internals-implementation/RandomTreeBuilder.cpp",
 
   "./domain/tracking/factories/AlgorithmFactory.cpp",
   "./domain/tracking/main.cpp"
