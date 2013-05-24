@@ -17,10 +17,10 @@ void RandomForest::classify(const cv::Mat& image, int& classNumber, double& conf
   histogramOfSums.insert(histogramOfSums.begin(), classCount, 0);
 
   for (std::size_t i = 0; i < randomTrees.size(); ++i) {
-    const DecisionTree& currentDecisionTree = randomTrees[i];
+    const DecisionTree* currentDecisionTree = randomTrees[i];
 
     TreeWalker<DecisionNode, DecisionNode::TestResultEnumSize> currentWalker(currentDecisionTree);
-    currentWalker.setCurrentNode(currentDecisionTree.getRoot());
+    currentWalker.setCurrentNode(currentDecisionTree->getRoot());
 
     while (!currentWalker.isLeafNode()) {
       const DecisionNode& node = currentWalker.getCurrentNode();

@@ -9,7 +9,7 @@
 #include "DecisionNode.hpp"
 
 typedef Tree<DecisionNode, DecisionNode::TestResultEnumSize> DecisionTree;
-typedef std::vector<DecisionTree> Trees;
+typedef std::vector<DecisionTree*> Trees;
 
 class RandomForest {
   public:

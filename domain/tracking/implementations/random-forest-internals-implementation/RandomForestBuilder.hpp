@@ -15,7 +15,7 @@ typedef std::pair<Feature, ImagesList> FeatureWithFragments;
 typedef std::vector<FeatureWithFragments> FeaturesCollection;
 
 typedef Tree<DecisionNode, DecisionNode::TestResultEnumSize> DecisionTree;
-typedef std::vector<DecisionTree> Trees;
+typedef std::vector<DecisionTree*> Trees;
 
 class RandomForestBuilder {
   public:

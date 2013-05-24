@@ -10,7 +10,10 @@ template<typename TNode, int MaximumChildNodesCount>
     NodeFamily<TNode, MaximumChildNodesCount>* children[MaximumChildNodesCount];
 
     NodeFamily() {
-      std::fill(children, children + MaximumChildNodesCount, 0);
+      for (int i = 0; i < MaximumChildNodesCount; ++i) {
+        children[i] = 0;
+      }
+
       parent = 0;
     }
   };
@@ -113,7 +116,7 @@ template<typename TNode, int MaximumChildNodesCount>
 template<typename TNode, int MaximumChildNodesCount>
   class TreeWalker {
     public:
-      TreeWalker(const Tree<TNode, MaximumChildNodesCount>& tree):
+      TreeWalker(const Tree<TNode, MaximumChildNodesCount>* tree):
         currentFamily(0),
         treeStructure(tree)
       {}
@@ -124,9 +127,9 @@ template<typename TNode, int MaximumChildNodesCount>
       {}
 
       void setCurrentNode(const TNode& node) {
-        for (std::size_t i = 0; i < treeStructure.nodes.size(); ++i) {
-          if (treeStructure.nodes[i] == &node) {
-            currentFamily = treeStructure.families[i];
+        for (std::size_t i = 0; i < treeStructure->nodes.size(); ++i) {
+          if (treeStructure->nodes[i] == &node) {
+            currentFamily = treeStructure->families[i];
             break;
           }
         }
@@ -158,7 +161,7 @@ template<typename TNode, int MaximumChildNodesCount>
 
     private:
       const NodeFamily<TNode, MaximumChildNodesCount>* currentFamily;
-      const Tree<TNode, MaximumChildNodesCount>& treeStructure;
+      const Tree<TNode, MaximumChildNodesCount>* treeStructure;
   };
 
 #endif
