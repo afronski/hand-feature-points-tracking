@@ -2,9 +2,9 @@
 #include <sstream>
 #include <stdexcept>
 
-#include <opencv2/core/core.hpp>
 #include <opencv2/core/core_c.h>
 #include <opencv2/video/tracking.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
 #include "../../common/vision.hpp"
@@ -13,16 +13,10 @@
 
 #include "RandomForestTracker.hpp"
 
-#include "random-forest-internals-implementation/Feature.hpp"
 #include "random-forest-internals-implementation/FeaturePointsExtractor.hpp"
 #include "random-forest-internals-implementation/ClassificatorParameters.hpp"
 #include "random-forest-internals-implementation/RandomForest.hpp"
 #include "random-forest-internals-implementation/RandomForestBuilder.hpp"
-
-// Aliases.
-typedef std::vector<cv::Mat> ImagesList;
-typedef std::pair<Feature, ImagesList> FeatureWithFragments;
-typedef std::vector<FeatureWithFragments> FeaturesCollection;
 
 // Constants.
 const std::string RandomForestTracker::Name = "Random Forest Tracker";
@@ -234,13 +228,190 @@ void RandomForestTracker::loadTrainingBaseFromFolder() {
 void RandomForestTracker::trainClassifier() {
   RandomForestBuilder randomForestBuilder(*(implementation->trainingBase), implementation->parameters);
 
-  common::debug::log("Building random forest structure");
+  common::debug::log("Building random forest structure\n");
 
   randomForestBuilder.build();
   implementation->randomForest = randomForestBuilder.getRandomForest();
 }
 
+void RandomForestTracker::createClassificationResultImage(
+                              const cv::Mat& initial,
+                              const cv::Mat& frame,
+                              cv::Mat& output) {
+  const cv::Size resultImageSize(initial.cols + frame.cols, std::max(initial.rows, frame.rows));
+  cv::Mat resultImage = cv::Mat(resultImageSize, CV_8UC(frame.channels()));
+
+  const cv::Rect wholeInputImageRect(0, 0, frame.cols - 1, frame.rows - 1);
+  cv::Mat frameROI = frame(wholeInputImageRect);
+
+  const cv::Rect wholeInputImageRectInResultImage = cvRect(initial.cols, 0, frame.cols - 1, frame.rows - 1);
+  cv::Mat resultImageROI = resultImage(wholeInputImageRectInResultImage);
+
+  resultImageROI = frameROI;
+
+  const cv::Rect wholeInitialImageRect(0, 0, initial.cols - 1, initial.rows - 1);
+  cv::Mat initialROI = initial(wholeInitialImageRect);
+
+  const cv::Rect wholeInitialImageRectInResultImage(0, 0, initial.cols - 1, initial.rows - 1);
+  resultImageROI = resultImage(wholeInitialImageRectInResultImage);
+
+  resultImageROI = initialROI;
+}
+
+void RandomForestTracker::classifyPatchesFromCollection(
+                              const FeaturesCollection& featuresStore,
+                              std::vector<PairsContainer>& results) {
+  results.insert(results.begin(), featuresStore.size(), PairsContainer());
+
+  for (std::size_t i = 0; i < featuresStore.size(); ++i) {
+    for (std::size_t k = 0; k < featuresStore[i].second.size(); ++k) {
+      ClassesAndPropabilities classificationResult;
+
+      classificationResult.first = -1;
+      classificationResult.second = 0;
+
+      implementation->randomForest->classify(
+                                      featuresStore[i].second[k],
+                                      classificationResult.first,
+                                      classificationResult.second);
+
+      results[i].push_back(classificationResult);
+    }
+  }
+}
+
+void RandomForestTracker::drawFeaturePointsCorrespondence(
+                              std::vector<Feature>& trainingBaseFeaturePoints,
+                              const FeaturesCorrespondence& correspondence,
+                              const cv::Mat& initial,
+                              cv::Mat& frame) const {
+  for (std::size_t i = 0; i < correspondence.size(); ++i) {
+    const cv::Point initialImageFeaturePoint = correspondence[i].first.getPoint();
+    const cv::Point rawInputImageFeaturePoint = correspondence[i].second.getPoint();
+
+    const cv::Point inputImageFeaturePoint(
+                        rawInputImageFeaturePoint.x + initial.rows - 1,
+                        rawInputImageFeaturePoint.y);
+
+    if (rawInputImageFeaturePoint.x > frame.rows - 1 || rawInputImageFeaturePoint.x < 0 ||
+        rawInputImageFeaturePoint.y > frame.cols - 1 || rawInputImageFeaturePoint.y < 0 ||
+        initialImageFeaturePoint.x > frame.rows - 1 || initialImageFeaturePoint.x < 0 ||
+        initialImageFeaturePoint.y > frame.cols - 1 || initialImageFeaturePoint.y < 0) {
+      throw std::logic_error("Feature correspondence is out of image!");
+    }
+
+    cv::line(frame, initialImageFeaturePoint, inputImageFeaturePoint, cv::Scalar(255, 255, 255));
+  }
+}
+
+void RandomForestTracker::makeFeaturePointCorrespondence(
+                            const std::vector<Feature>& initialFeaturePoints,
+                            const FeaturesCollection& inputImageFeatureCollection,
+                            const std::vector<PairsContainer>& classifiedPatches,
+                            FeaturesCorrespondence& correspondence) const {
+  std::vector<cv::Point2f> initialKeyPoints;
+  std::vector<cv::Point2f> inputKeyPoints;
+
+  for (std::size_t i = 0; i < classifiedPatches.size(); ++i) {
+    const ClassesAndPropabilities classificationResult = classifiedPatches[i].front();
+
+    if (classificationResult.first == - 1 ||
+        classificationResult.second < implementation->parameters.MinimumClassificationConfidence) {
+      continue;
+    }
+
+    const cv::Point inputRawKeyPoint = inputImageFeatureCollection[i].first.getPoint();
+    const cv::Point initialRawKeyPoint = initialFeaturePoints[classificationResult.first].getPoint();
+
+    const cv::Point2f inputKeyPoint(inputRawKeyPoint.x, inputRawKeyPoint.y);
+    const cv::Point2f initialKeyPoint(initialRawKeyPoint.x, initialRawKeyPoint.y);
+
+    initialKeyPoints.push_back(initialKeyPoint);
+    inputKeyPoints.push_back(inputKeyPoint);
+  }
+
+  if (initialKeyPoints.size() < 4) {
+    return;
+  }
+
+  std::vector<unsigned char> correspondenceMask(initialKeyPoints.size());
+  cv::Mat foundHomography = cv::findHomography(initialKeyPoints, inputKeyPoints, correspondenceMask, CV_RANSAC, 5);
+
+  for (std::size_t i = 0; i < correspondenceMask.size(); ++i) {
+    if (correspondenceMask[i] == 1) {
+      FeaturesPair currentCorrespondence(
+        Feature(cv::Point(initialKeyPoints[i].x, initialKeyPoints[i].y)),
+        Feature(cv::Point(inputKeyPoints[i].x, inputKeyPoints[i].y)));
+
+      correspondence.push_back(currentCorrespondence);
+    }
+  }
+}
+
+void RandomForestTracker::loadFeaturePointsFromTrainigBase(std::vector<Feature>& loadedFeaturePoints) const {
+  if (implementation->trainingBase != 0) {
+    common::debug::log("Loading feature points from memory...");
+
+    for (std::size_t i = 0; i < implementation->trainingBase->size(); ++i) {
+      loadedFeaturePoints.push_back(Feature((*implementation->trainingBase)[i].first.getPoint()));
+    }
+  } else {
+    common::debug::log("Loading feature points from disk...");
+
+    std::ifstream trainingBaseHeader((implementation->parameters.TrainingBaseFolder + "training-base.txt").c_str());
+
+    if (!trainingBaseHeader.good()) {
+      throw std::logic_error("Couldn't load training-base.txt!");
+    }
+
+    int featurePointsCount = 0;
+    trainingBaseHeader >> featurePointsCount;
+
+    if (featurePointsCount < 1) {
+      throw std::logic_error("Invalid feature points count loaded from training-base.txt!");
+    }
+
+    trainingBaseHeader.close();
+
+    for (int i = 0; i < featurePointsCount; ++i) {
+      std::string folderPath = implementation->parameters.TrainingBaseFolder + toString(i) + "/";
+
+      if (!common::path::directoryExists(folderPath)) {
+        throw std::logic_error("Patch folder doesn't exist!");
+      }
+
+      loadedFeaturePoints.push_back(Feature(folderPath));
+    }
+  }
+
+  common::debug::log("Feature points loaded (amount: %d)", loadedFeaturePoints.size());
+}
+
 void RandomForestTracker::classifyImage(const cv::Mat& initial, const cv::Mat& frame, cv::Mat& output) {
+  if (initial.channels() != frame.channels() || initial.channels() != 1) {
+    throw std::logic_error("Initial and input images are not alike (depth, channels count)!");
+  }
+
+  createClassificationResultImage(initial, frame, output);
+
+  FeaturePointsExtractor featurePointsExtractor(1000, implementation->parameters.HalfPatchSize);
+  featurePointsExtractor.generateFeaturePointsFromSingleImage(frame);
+
+  FeaturesCollection inputImageFeaturesCollection = featurePointsExtractor.getFeatures();
+
+  common::debug::log("Input image feature points count %d \n", inputImageFeaturesCollection.size());
+  common::debug::log("Input image patch per feature point %d \n", inputImageFeaturesCollection[0].second.size());
+
+  std::vector<PairsContainer> results;
+  classifyPatchesFromCollection(inputImageFeaturesCollection, results);
+
+  std::vector<Feature> loadedFeaturePoints;
+  loadFeaturePointsFromTrainigBase(loadedFeaturePoints);
+
+  FeaturesCorrespondence correspondence;
+  makeFeaturePointCorrespondence(loadedFeaturePoints, inputImageFeaturesCollection, results, correspondence);
+
+  drawFeaturePointsCorrespondence(loadedFeaturePoints, correspondence, initial, output);
 }
 
 bool RandomForestTracker::isTrainingBaseAvailable() const {
@@ -329,6 +500,8 @@ void RandomForestTracker::handleMovieName(const std::string& movieName) {
   if (points.size() > 0) {
     cv::Rect boundingRect = cv::boundingRect(points);
     implementation->parameters.InitialImage = implementation->parameters.InitialImage(boundingRect);
+
+    cv::cvtColor(implementation->parameters.InitialImage, initialImage, CV_BGR2GRAY);
   }
 }
 

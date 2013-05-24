@@ -24,7 +24,7 @@ void FeaturePointsExtractor::generateFeaturePoints(const cv::Mat& initialImage) 
   FeaturesStore featurePointsStorage;
   extractFeaturesFromTransformedImages(initialImage, featurePointsStorage, intermediateData);
 
-  cv::Size initialImageBoundary = cv::Size(initialImage.rows - 1, initialImage.cols - 1);
+  cv::Size initialImageBoundary = cv::Size(initialImage.cols - 1, initialImage.rows - 1);
 
   common::debug::log("Filtering prepared features - Correcting by boundaries (%d)\n", featurePointsStorage.size());
   filterCorrectedOutImageFeaturePoints(initialImageBoundary, featurePointsStorage);
@@ -34,6 +34,32 @@ void FeaturePointsExtractor::generateFeaturePoints(const cv::Mat& initialImage) 
 
   common::debug::log("Extracting patches from %d feature(s)\n", featurePointsStorage.size());
   extractPatches(intermediateData, featurePointsStorage);
+}
+
+void FeaturePointsExtractor::generateFeaturePointsFromSingleImage(const cv::Mat& image) {
+  intermediateData.clear();
+
+  FeaturesStore featurePointsStorage;
+  AffineTransformation noTransformation(0, cv::Point(0, 0), 1, 1, 0, 0);
+
+  extractFeaturePointsFromImage(image, &noTransformation, featurePointsStorage);
+
+  ImageAndTransformationStore temporaryStore;
+  cv::Mat initialImageCopy = image.clone();
+
+  ImageAndTransformation intermediateDataItem = std::make_pair(initialImageCopy, noTransformation);
+  temporaryStore.push_back(intermediateDataItem);
+
+  const cv::Size initialImageBoundary = cv::Size(image.cols - 1, image.rows - 1);
+
+  common::debug::log("Single image - Filtering corrected by boundaries (%d)\n", featurePointsStorage.size());
+  filterCorrectedOutImageFeaturePoints(initialImageBoundary, featurePointsStorage);
+
+  common::debug::log("Single image - Filtering rare features (%d)\n", featurePointsStorage.size());
+  filterRareFeaturePoints(featurePointsStorage);
+
+  common::debug::log("Single image - Extracting patches from %d feature(s)\n", featurePointsStorage.size());
+  extractPatches(temporaryStore, featurePointsStorage);
 }
 
 FeaturesCollection FeaturePointsExtractor::getFeatures() const {
@@ -104,7 +130,9 @@ void FeaturePointsExtractor::extractPatches(
     features.back().second.reserve(intermediateData.size());
   }
 
-  for(int i = intermediateData.size() - 1; i >= 0; --i) {
+  int cachedSize = intermediateData.size();
+
+  for(int i = cachedSize - 1; i >= 0; --i) {
     const cv::Mat& currentTransformedImage = intermediateData[i].first;
     const AffineTransformation& currentTransform = intermediateData[i].second;
 
@@ -118,7 +146,7 @@ void FeaturePointsExtractor::extractPatches(
     intermediateData.erase(intermediateData.begin() + i);
   }
 
-  if (intermediateData.size() > 0) {
+  if (cachedSize > 0) {
     common::debug::log("\n");
   }
 }
@@ -144,8 +172,8 @@ void FeaturePointsExtractor::extractFeaturesFromTransformedImages(
                                 ImageAndTransformationStore& imagesWithTransformations) {
   cv::Point initialImageCenter;
 
-  initialImageCenter.x = initialImage.rows / 2;
-  initialImageCenter.y = initialImage.cols / 2;
+  initialImageCenter.x = initialImage.cols / 2;
+  initialImageCenter.y = initialImage.rows / 2;
 
   AffineTransformationsGenerator affineTransformationsGenerator(initialImageCenter);
   AffineTransformation* currentTransformation = 0;
@@ -190,7 +218,7 @@ void FeaturePointsExtractor::extractFeaturesFromTransformedImages(
 
 cv::Mat FeaturePointsExtractor::extractFeaturePointPatch(const Feature& featurePoint, const cv::Mat& image) const {
   const cv::Size pathSize = cv::Size(2 * halfPatchSize + 1, 2 * halfPatchSize + 1);
-  cv::Mat patch(pathSize, image.depth(), image.channels());
+  cv::Mat patch(pathSize, CV_8UC(image.channels()));
 
   const cv::Point pathCenter = featurePoint.getPoint();
   const int channelCount = image.channels();
@@ -198,14 +226,14 @@ cv::Mat FeaturePointsExtractor::extractFeaturePointPatch(const Feature& featureP
   for (int y = pathCenter.y - halfPatchSize, pathY = 0; y <= pathCenter.y + halfPatchSize; ++y, ++pathY) {
     uchar* pointer = 0;
 
-    if (y >= 0 && y < image.cols) {
+    if (y >= 0 && y < image.rows) {
       pointer = (uchar*)(image.data + y * image.step);
     }
 
     uchar* patchPointer = (uchar*)(patch.data + pathY * patch.step);
 
     for(int x = pathCenter.x - halfPatchSize, patchX = 0; x <= pathCenter.x + halfPatchSize; ++x, ++patchX) {
-      if (x < 0 || x >= image.rows || y < 0 || y >= image.cols) {
+      if (x < 0 || x >= image.cols || y < 0 || y >= image.rows) {
         for (int i = 0; i < channelCount; ++i) {
           patchPointer[channelCount * patchX + i] = 0;
         }

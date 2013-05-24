@@ -47,8 +47,8 @@ void Feature::draw(cv::Mat& frame, const AffineTransformation& transformation) c
   cv::Point transformedPoint = transformation.transformPoint(featurePoint);
   cv::Size ellipseSize;
 
-  ellipseSize.height = frame.cols / 100;
-  ellipseSize.width = frame.cols / 100;
+  ellipseSize.height = frame.rows / 100;
+  ellipseSize.width = frame.rows / 100;
 
   cv::ellipse(frame, transformedPoint, ellipseSize, 0, 0, 360, color);
   cv::circle(frame, featurePoint, 2.0, color, -1);
@@ -57,8 +57,8 @@ void Feature::draw(cv::Mat& frame, const AffineTransformation& transformation) c
 void Feature::draw(cv::Mat& frame) const {
   cv::Size ellipseSize;
 
-  ellipseSize.height = frame.cols / 100;
-  ellipseSize.width = frame.cols / 100;
+  ellipseSize.height = frame.rows / 100;
+  ellipseSize.width = frame.rows / 100;
 
   cv::ellipse(frame, featurePoint, ellipseSize, 0, 0, 360, color);
   cv::circle(frame, featurePoint, 2.0, color, -1);

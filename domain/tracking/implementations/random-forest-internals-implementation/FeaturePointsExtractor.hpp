@@ -20,6 +20,8 @@ class FeaturePointsExtractor {
     FeaturePointsExtractor(int pointsCount, int patchSize);
 
     void generateFeaturePoints(const cv::Mat& initialImage);
+    void generateFeaturePointsFromSingleImage(const cv::Mat& image);
+
     FeaturesCollection getFeatures() const;
 
   private:

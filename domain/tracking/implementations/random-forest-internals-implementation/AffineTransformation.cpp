@@ -115,18 +115,18 @@ void AffineTransformation::transformImage(
   cv::Point2d leftTopImage = multiplyMatrixWithVector(leftTop);
 
   cv::Point2d rightTop;
-  rightTop.x = inputImage.rows - 1;
+  rightTop.x = inputImage.cols - 1;
   rightTop.y = 0;
   cv::Point2d rightTopImage = multiplyMatrixWithVector(rightTop);
 
   cv::Point2d leftBottom;
   leftBottom.x = 0;
-  leftBottom.y = inputImage.cols - 1;
+  leftBottom.y = inputImage.rows - 1;
   cv::Point2d leftBottomImage = multiplyMatrixWithVector(leftBottom);
 
   cv::Point2d rightBottom;
-  rightBottom.x = inputImage.rows - 1;
-  rightBottom.y = inputImage.cols - 1;
+  rightBottom.x = inputImage.cols - 1;
+  rightBottom.y = inputImage.rows - 1;
   cv::Point2d rightBottomImage = multiplyMatrixWithVector(rightBottom);
 
   cv::Point2d maxPoint;
@@ -150,7 +150,7 @@ void AffineTransformation::transformImage(
   transformedImageSize.height = static_cast<int>(std::ceil(maxPoint.y - minPoint.y));
 
   *transformMatrix = new cv::Mat(2, 3, CV_64FC1);
-  *transformedImage = new cv::Mat(inputImage.size(), inputImage.depth(), inputImage.channels());
+  *transformedImage = new cv::Mat(inputImage.size(), CV_8UC(inputImage.channels()));
 
   (*transformMatrix)->at<double>(0, 0) = transformationMatrix.at<double>(0, 0);
   (*transformMatrix)->at<double>(0, 1) = transformationMatrix.at<double>(0, 1);

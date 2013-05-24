@@ -20,7 +20,7 @@ if int(debugFlagEnabled):
     environment = debug
 
 # Common build process and elements.
-openCV = [ "opencv_core", "opencv_highgui", "opencv_video", "opencv_imgproc" ]
+openCV = [ "opencv_core", "opencv_highgui", "opencv_video", "opencv_imgproc", "opencv_calib3d" ]
 libraries = openCV + [ "common" ]
 
 environment.Library("./bin/common", [
