@@ -50,7 +50,7 @@ struct RandomForestTracker::PIMPL {
     parameters.MaximumTreeHeight = 30;
     parameters.MinimumElementPerNode = 100;
 
-    parameters.RandomTreesCount = 2;
+    parameters.RandomTreesCount = 1;
     parameters.MinimumClassificationConfidence = 0.1;
 
     parameters.ClassifierIntensityThreshold = 10;
@@ -254,6 +254,8 @@ void RandomForestTracker::classifyPatchesFromCollection(
       results[i].push_back(classificationResult);
     }
   }
+
+  common::debug::log("\n");
 }
 
 void RandomForestTracker::drawFeaturePointsCorrespondence(
@@ -467,9 +469,9 @@ void RandomForestTracker::handleMovieName(const std::string& movieName) {
   if (points.size() > 0) {
     cv::Rect boundingRect = cv::boundingRect(points);
     implementation->parameters.InitialImage = implementation->parameters.InitialImage(boundingRect);
-
-    cv::cvtColor(implementation->parameters.InitialImage, initialImage, CV_BGR2GRAY);
   }
+
+  cv::cvtColor(implementation->parameters.InitialImage, initialImage, CV_BGR2GRAY);
 }
 
 void RandomForestTracker::afterInitialization() {

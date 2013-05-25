@@ -17,6 +17,7 @@ void RandomForest::classify(const cv::Mat& image, int& classNumber, double& conf
   histogramOfSums.insert(histogramOfSums.begin(), classCount, 0);
 
   for (std::size_t i = 0; i < randomTrees.size(); ++i) {
+    common::debug::log("Classification with use %d tree...\r", i + 1);
     const DecisionTree* currentDecisionTree = randomTrees[i];
 
     TreeWalker<DecisionNode, DecisionNode::TestResultEnumSize> currentWalker(currentDecisionTree);
