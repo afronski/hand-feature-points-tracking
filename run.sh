@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Build all applications.
-scons
+scons $1
 
 # Download and configure dependencies.
 npm install
