@@ -4,8 +4,9 @@
 
 var PORT = 9292,
 
-    ResultMovieBeforeConversionPostFix = "_tracking_result.avi",
-    ResultMoviePostFix = "_tracking_result.webm",
+    ExcludedElementsWith = "_tracking_result",
+    ResultMovieBeforeConversionPostFix = "_tracking_result_for_%s.avi",
+    ResultMoviePostFix = "_tracking_result_for_%s.webm",
 
     XmlHeader = '<?xml version="1.0" encoding="utf-8"?>\n<FeaturePointList>\n    <hand>',
 
@@ -26,6 +27,10 @@ var PORT = 9292,
     algorithms = [],
 
     app = express(),
+
+    sanitize = function(name, algorithm) {
+      return util.format(name, algorithm.replace(/\s/gi, "_"));
+    },
 
     info = function(text) {
       console.log(text.green);
@@ -49,7 +54,7 @@ var PORT = 9292,
     },
 
     notTrackingResults = function(element) {
-      return element.indexOf(ResultMovieBeforeConversionPostFix) === -1;
+      return element.indexOf(ExcludedElementsWith) === -1;
     },
 
     movieMapper = function(element, index) {
@@ -153,14 +158,14 @@ var PORT = 9292,
                         .replace(path.extname(movieObject.path), "");
 
             conversionInvocation = util.format("./convert-one.sh %s",
-                                               filename + ResultMovieBeforeConversionPostFix);
+                                               filename + sanitize(ResultMovieBeforeConversionPostFix, algorithm));
 
             debug("Invoking: " + conversionInvocation);
 
             if (execSync.code(conversionInvocation) === 0) {
-              debug("Returning new video: " + filename + ResultMoviePostFix);
+              debug("Returning new video: " + filename + sanitize(ResultMoviePostFix, algorithm));
 
-              return util.format("%s", filename + ResultMoviePostFix);
+              return util.format("%s", filename + sanitize(ResultMoviePostFix, algorithm));
             }
         }
       }

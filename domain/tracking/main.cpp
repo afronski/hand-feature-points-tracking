@@ -56,7 +56,11 @@ class TrackerApplication : public common::CommandLineInterface {
 
     int saveMovie(const std::string& input, const std::string& method) {
       std::string baseFilename = common::path::extractFileName(input);
-      std::string output = baseFilename + "_tracking_result.avi";
+
+      std::string safeMethod(method);
+      std::replace(safeMethod.begin(), safeMethod.end(), ' ', '_');
+
+      std::string output = baseFilename + "_tracking_result_for_" + safeMethod + ".avi";
 
       if (AlgorithmFactory::isAlgorithmPresent(method)) {
         try {
