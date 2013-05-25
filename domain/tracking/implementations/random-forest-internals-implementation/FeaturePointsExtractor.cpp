@@ -81,7 +81,9 @@ void FeaturePointsExtractor::filterCorrectedOutImageFeaturePoints(
     }
   }
 
-  common::debug::log("\n");
+  if (count > 0) {
+    common::debug::log("\n");
+  }
 }
 
 void FeaturePointsExtractor::filterRareFeaturePoints(FeaturesStore& features) {
@@ -89,7 +91,8 @@ void FeaturePointsExtractor::filterRareFeaturePoints(FeaturesStore& features) {
   typedef std::vector<Bucket> Histogram;
 
   Histogram histogram;
-  int count = 0;
+  int count = 0,
+      oldSize = features.size();
 
   while (!features.empty()) {
     common::debug::log("Removing rare points - amount: %d\r", count);
@@ -107,7 +110,9 @@ void FeaturePointsExtractor::filterRareFeaturePoints(FeaturesStore& features) {
     }
   }
 
-  common::debug::log("\n");
+  if (oldSize > 0) {
+    common::debug::log("\n");
+  }
 
   SortBySecondElementInPairPredicate sortBySecondPartPredicate;
   std::sort(histogram.begin(), histogram.end(), sortBySecondPartPredicate);

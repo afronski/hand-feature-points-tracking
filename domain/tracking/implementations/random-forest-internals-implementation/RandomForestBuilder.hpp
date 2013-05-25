@@ -20,7 +20,6 @@ typedef std::vector<DecisionTree*> Trees;
 class RandomForestBuilder {
   public:
     RandomForestBuilder(const FeaturesCollection& features, const ClassificatorParameters& parameters);
-    ~RandomForestBuilder();
 
     void build();
     void cleanUp();

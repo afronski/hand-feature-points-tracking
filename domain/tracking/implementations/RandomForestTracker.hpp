@@ -58,7 +58,6 @@ class RandomForestTracker : public ArgumentsAwareFrameTransformer {
 
     void readPointsFromKeypointFile(const std::string& fileName, std::vector<cv::Point>& points);
 
-    void createClassificationResultImage(const cv::Mat& initial, const cv::Mat& frame, cv::Mat& output);
     void classifyPatchesFromCollection(const FeaturesCollection& featuresStore, std::vector<PairsContainer>& results);
     void loadFeaturePointsFromTrainigBase(std::vector<Feature>& loadedFeaturePoints) const;
 

@@ -50,7 +50,7 @@ struct RandomForestTracker::PIMPL {
     parameters.MaximumTreeHeight = 30;
     parameters.MinimumElementPerNode = 100;
 
-    parameters.RandomTreesCount = 30;
+    parameters.RandomTreesCount = 2;
     parameters.MinimumClassificationConfidence = 0.1;
 
     parameters.ClassifierIntensityThreshold = 10;
@@ -234,30 +234,6 @@ void RandomForestTracker::trainClassifier() {
   implementation->randomForest = randomForestBuilder.getRandomForest();
 }
 
-void RandomForestTracker::createClassificationResultImage(
-                              const cv::Mat& initial,
-                              const cv::Mat& frame,
-                              cv::Mat& output) {
-  const cv::Size resultImageSize(initial.cols + frame.cols, std::max(initial.rows, frame.rows));
-  cv::Mat resultImage = cv::Mat(resultImageSize, CV_8UC(frame.channels()));
-
-  const cv::Rect wholeInputImageRect(0, 0, frame.cols - 1, frame.rows - 1);
-  cv::Mat frameROI = frame(wholeInputImageRect);
-
-  const cv::Rect wholeInputImageRectInResultImage = cvRect(initial.cols, 0, frame.cols - 1, frame.rows - 1);
-  cv::Mat resultImageROI = resultImage(wholeInputImageRectInResultImage);
-
-  resultImageROI = frameROI;
-
-  const cv::Rect wholeInitialImageRect(0, 0, initial.cols - 1, initial.rows - 1);
-  cv::Mat initialROI = initial(wholeInitialImageRect);
-
-  const cv::Rect wholeInitialImageRectInResultImage(0, 0, initial.cols - 1, initial.rows - 1);
-  resultImageROI = resultImage(wholeInitialImageRectInResultImage);
-
-  resultImageROI = initialROI;
-}
-
 void RandomForestTracker::classifyPatchesFromCollection(
                               const FeaturesCollection& featuresStore,
                               std::vector<PairsContainer>& results) {
@@ -286,21 +262,14 @@ void RandomForestTracker::drawFeaturePointsCorrespondence(
                               const cv::Mat& initial,
                               cv::Mat& frame) const {
   for (std::size_t i = 0; i < correspondence.size(); ++i) {
-    const cv::Point initialImageFeaturePoint = correspondence[i].first.getPoint();
     const cv::Point rawInputImageFeaturePoint = correspondence[i].second.getPoint();
 
-    const cv::Point inputImageFeaturePoint(
-                        rawInputImageFeaturePoint.x + initial.rows - 1,
-                        rawInputImageFeaturePoint.y);
-
-    if (rawInputImageFeaturePoint.x > frame.rows - 1 || rawInputImageFeaturePoint.x < 0 ||
-        rawInputImageFeaturePoint.y > frame.cols - 1 || rawInputImageFeaturePoint.y < 0 ||
-        initialImageFeaturePoint.x > frame.rows - 1 || initialImageFeaturePoint.x < 0 ||
-        initialImageFeaturePoint.y > frame.cols - 1 || initialImageFeaturePoint.y < 0) {
+    if (rawInputImageFeaturePoint.x > frame.cols - 1 || rawInputImageFeaturePoint.x < 0 ||
+        rawInputImageFeaturePoint.y > frame.rows - 1 || rawInputImageFeaturePoint.y < 0) {
       throw std::logic_error("Feature correspondence is out of image!");
     }
 
-    cv::line(frame, initialImageFeaturePoint, inputImageFeaturePoint, cv::Scalar(255, 255, 255));
+    common::vision::draw_cross(frame, rawInputImageFeaturePoint, cv::Scalar(0, 255, 0), 3);
   }
 }
 
@@ -350,13 +319,13 @@ void RandomForestTracker::makeFeaturePointCorrespondence(
 
 void RandomForestTracker::loadFeaturePointsFromTrainigBase(std::vector<Feature>& loadedFeaturePoints) const {
   if (implementation->trainingBase != 0) {
-    common::debug::log("Loading feature points from memory...");
+    common::debug::log("Loading feature points from memory...\n");
 
     for (std::size_t i = 0; i < implementation->trainingBase->size(); ++i) {
       loadedFeaturePoints.push_back(Feature((*implementation->trainingBase)[i].first.getPoint()));
     }
   } else {
-    common::debug::log("Loading feature points from disk...");
+    common::debug::log("Loading feature points from disk...\n");
 
     std::ifstream trainingBaseHeader((implementation->parameters.TrainingBaseFolder + "training-base.txt").c_str());
 
@@ -384,15 +353,13 @@ void RandomForestTracker::loadFeaturePointsFromTrainigBase(std::vector<Feature>&
     }
   }
 
-  common::debug::log("Feature points loaded (amount: %d)", loadedFeaturePoints.size());
+  common::debug::log("Feature points loaded (amount: %d)\n", loadedFeaturePoints.size());
 }
 
 void RandomForestTracker::classifyImage(const cv::Mat& initial, const cv::Mat& frame, cv::Mat& output) {
   if (initial.channels() != frame.channels() || initial.channels() != 1) {
     throw std::logic_error("Initial and input images are not alike (depth, channels count)!");
   }
-
-  createClassificationResultImage(initial, frame, output);
 
   FeaturePointsExtractor featurePointsExtractor(1000, implementation->parameters.HalfPatchSize);
   featurePointsExtractor.generateFeaturePointsFromSingleImage(frame);

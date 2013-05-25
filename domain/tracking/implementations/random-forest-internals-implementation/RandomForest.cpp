@@ -23,15 +23,15 @@ void RandomForest::classify(const cv::Mat& image, int& classNumber, double& conf
     currentWalker.setCurrentNode(currentDecisionTree->getRoot());
 
     while (!currentWalker.isLeafNode()) {
-      const DecisionNode& node = currentWalker.getCurrentNode();
-      const DecisionNode::TestResult childNumber = node.test(image);
+      const DecisionNode* node = currentWalker.getCurrentNode();
+      const DecisionNode::TestResult childNumber = node->test(image);
 
       currentWalker.moveToChildNode(childNumber);
     }
 
-    const DecisionNode& leafNode = currentWalker.getCurrentNode();
-    const std::vector<int>& leafHistogram = leafNode.getHistogram();
-    const int currentHistogramElementsCount = leafNode.getHistogramElementsCount();
+    const DecisionNode* leafNode = currentWalker.getCurrentNode();
+    const std::vector<int>& leafHistogram = leafNode->getHistogram();
+    const int currentHistogramElementsCount = leafNode->getHistogramElementsCount();
 
     if (currentHistogramElementsCount == 0) {
       continue;

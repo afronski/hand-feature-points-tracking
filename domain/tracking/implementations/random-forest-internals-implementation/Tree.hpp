@@ -135,8 +135,8 @@ template<typename TNode, int MaximumChildNodesCount>
         }
       }
 
-      TNode& getCurrentNode() const {
-        return const_cast<TNode&>(*currentFamily->parent);
+      const TNode* getCurrentNode() const {
+        return currentFamily->parent;
       }
 
       bool isLeafNode() const {

@@ -44,7 +44,7 @@ void createFeatureIndicesHistogram(
   }
 }
 
-// Constructor.
+// Constructor and destructor.
 RandomTreeBuilder::RandomTreeBuilder(
                       const FeaturesCollection& featuresCollection,
                       const std::vector<int>& trainingIndices,
@@ -52,7 +52,7 @@ RandomTreeBuilder::RandomTreeBuilder(
   trainingSetSize(calculateTrainingSetSize(featuresCollection)),
   patchSize(2 * classificatorParameters.HalfPatchSize + 1),
   patchCountPerFeaturePoint(calculatePatchCountPerFeaturePoint(featuresCollection)),
-  resultTreeStructure(0),
+  resultTreeStructure(new DecisionTree()),
   featuresCollection(featuresCollection),
   trainingIndices(trainingIndices),
   classificatorParameters(classificatorParameters)
@@ -144,7 +144,7 @@ void RandomTreeBuilder::addNode(
       newNode->setHistogramData(calculateCorrespondingFeaturePointIndex(patchIndices[i]));
     }
 
-    common::debug::log("There are %d patches at a leaf node\n", patchIndices.size());
+    common::debug::log("There are %d patch(es) at a leaf node\n", patchIndices.size());
   } else {
     NodeParameters nodeParameters;
 
@@ -238,8 +238,8 @@ bool RandomTreeBuilder::findBestNodeTest(NodeParameters& result, const std::vect
     generatedParametersCount++;
   }
 
-  common::debug::log("Finished to found best node split:\n");
-  common::debug::log("\tcurrentMaxInformationGain = %f\n", currentMaxInformationGain);
+  common::debug::log("Finished because we found best node split:\n");
+  common::debug::log("  currentMaxInformationGain = %f\n", currentMaxInformationGain);
 
   if (common::isLessOrEqualThanZero(currentMaxInformationGain)) {
     return false;
