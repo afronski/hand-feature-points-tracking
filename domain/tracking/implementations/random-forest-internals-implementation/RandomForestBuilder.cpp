@@ -14,7 +14,7 @@ RandomForestBuilder::RandomForestBuilder(
 
 // Public methods.
 void RandomForestBuilder::build() {
-  common::debug::log("Creating %d random tree(s)\n", classificatorParameters.RandomTreesCount);
+  common::debug::print("Creating %d random tree(s)\n", classificatorParameters.RandomTreesCount);
 
   Trees trainedRandomTrees;
   trainedRandomTrees.reserve(classificatorParameters.RandomTreesCount);
@@ -29,7 +29,7 @@ void RandomForestBuilder::build() {
     treeBuilder.build();
 
     trainedRandomTrees.push_back(treeBuilder.getTreeStructure());
-    common::debug::log("[%d] Trained Random Tree...\n", i + 1);
+    common::debug::print("[%d] Trained Random Tree...\n", i + 1);
   }
 
   cleanUp();

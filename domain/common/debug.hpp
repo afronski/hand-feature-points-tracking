@@ -5,6 +5,7 @@ namespace common {
   namespace debug {
 
     void log(const char* format, ...);
+    void print(const char* format, ...);
 
   }
 }

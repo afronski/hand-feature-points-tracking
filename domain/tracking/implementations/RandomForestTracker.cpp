@@ -389,20 +389,20 @@ bool RandomForestTracker::isTrainingBaseAvailable() const {
 
 // Protected methods.
 void RandomForestTracker::classifierInitialization() {
-  common::debug::log("Initializating classifier\n");
+  common::debug::print("Initializating classifier\n");
 
   if (!isTrainingBaseAvailable()) {
-    common::debug::log("Creating training base\n");
+    common::debug::print("Creating training base\n");
     generateTrainingBase();
 
-    common::debug::log("Writting training base to separate directory\n");
+    common::debug::print("Writting training base to separate directory\n");
     writeTrainingBaseToFolder();
   }
 
-  common::debug::log("Loading training base from directory\n");
+  common::debug::print("Loading training base from directory\n");
   loadTrainingBaseFromFolder();
 
-  common::debug::log("Training classifier\n");
+  common::debug::print("Training classifier\n");
   trainClassifier();
 }
 

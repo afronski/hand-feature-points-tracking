@@ -4,7 +4,7 @@
 AffineTransformationsGenerator::AffineTransformationsGenerator(cv::Point centerPoint):
   center(centerPoint),
   isValid(true) {
-  parametersMinValue[Angle] = -30;
+  parametersMinValue[Angle] = -180;
   parametersMinValue[ScaleX] = 0.2;
 
   parametersMinValue[SkewFactorX] = 0.0;
@@ -16,7 +16,7 @@ AffineTransformationsGenerator::AffineTransformationsGenerator(cv::Point centerP
   parametersStep[SkewFactorX] = 0.1;
   parametersStep[SkewFactorY] = 0.1;
 
-  parametersMaxValue[Angle] = 31;
+  parametersMaxValue[Angle] = 181;
   parametersMaxValue[ScaleX] = 1.1;
 
   parametersMaxValue[SkewFactorX] = 0.41;

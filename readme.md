@@ -14,6 +14,7 @@ Thin middle-end and simple front-end:
   - execSync
   - glob
 - pure JavaScript (ES5), HTML5, CSS3 (front-end)
+- all visualizations and charts are based on d3.js
 
 Continuous integration:
 - SCons

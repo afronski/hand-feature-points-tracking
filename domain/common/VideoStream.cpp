@@ -6,6 +6,7 @@
 #include <opencv2/core/core_c.h>
 #include <opencv2/highgui/highgui.hpp>
 
+#include "debug.hpp"
 #include "VideoStream.hpp"
 
 namespace common {
@@ -170,6 +171,8 @@ namespace common {
 
         _implementation->input_video.release();
         _implementation->output_video.release();
+
+        common::debug::print("Video stream procedeed with success!");
       } else {
         throw std::logic_error("VideoStream parameters are incomplete to proceed with transfer!");
       }
