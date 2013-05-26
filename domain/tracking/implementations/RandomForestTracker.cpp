@@ -453,6 +453,26 @@ void RandomForestTracker::fill(const std::vector<std::string>& arguments) {
   if (!implementation->parameters.isValid()) {
     throw std::logic_error("Provided parameters for classificator are insufficient!");
   }
+
+  if (arguments.size() > 2) {
+    std::stringstream forConversion(arguments[2]);
+    forConversion >> implementation->parameters.RandomTreesCount;
+  }
+
+  if (arguments.size() > 3) {
+    std::stringstream forConversion(arguments[3]);
+    forConversion >> implementation->parameters.FeaturePointsCount;
+  }
+
+  if (arguments.size() > 4) {
+    std::stringstream forConversion(arguments[4]);
+    forConversion >> implementation->parameters.ClassifierIntensityThreshold;
+  }
+
+  if (arguments.size() > 5) {
+    std::stringstream forConversion(arguments[5]);
+    forConversion >> implementation->parameters.GeneratedRandomPointsCount;
+  }
 }
 
 void RandomForestTracker::handleFirstFrame(const cv::Mat& firstFrame) {

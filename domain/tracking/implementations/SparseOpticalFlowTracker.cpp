@@ -10,25 +10,22 @@
 const std::string SparseOpticalFlowTracker::Name = "Sparse Optical Flow";
 
 const double SparseOpticalFlowTracker::Quality = 0.01;
-const double SparseOpticalFlowTracker::MinimalDistanceBetweenPoints = 10.0;
 
 const cv::Scalar SparseOpticalFlowTracker::DrawingColor = cv::Scalar(255, 255, 255);
 const double SparseOpticalFlowTracker::CircleRadius = 3.0;
 
-const unsigned int SparseOpticalFlowTracker::MaximumFeaturesCount = 500;
-
 // Private implementation methods.
 bool SparseOpticalFlowTracker::newPointsShouldBeAdded() {
-  return salientPoints[0].size() <= MaximumFeaturesCount;
+  return salientPoints[0].size() <= maximumFeaturesCount;
 }
 
 void SparseOpticalFlowTracker::detectFeaturePoints() {
   cv::goodFeaturesToTrack(
     actualGrayFrame,
     features,
-    MaximumFeaturesCount,
+    maximumFeaturesCount,
     Quality,
-    MinimalDistanceBetweenPoints);
+    minimalDistanceBetweenPoints);
 }
 
 bool SparseOpticalFlowTracker::pointShouldBeAccepted(unsigned int number) {
@@ -80,4 +77,14 @@ void SparseOpticalFlowTracker::process(cv::Mat& frame) {
   cv::swap(previousGrayFrame, actualGrayFrame);
 }
 
-void SparseOpticalFlowTracker::fill(const std::vector<std::string>& arguments) {}
+void SparseOpticalFlowTracker::fill(const std::vector<std::string>& arguments) {
+  if (arguments.size() > 2) {
+    std::stringstream forConversion(arguments[2]);
+    forConversion >> minimalDistanceBetweenPoints;
+  }
+
+  if (arguments.size() > 3) {
+    std::stringstream forConversion(arguments[3]);
+    forConversion >> maximumFeaturesCount;
+  }
+}

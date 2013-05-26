@@ -25,7 +25,14 @@ window.Common = (function() {
   }
 
   function splat(element) {
-    return Array.isArray(element) ? element : [ element ];
+    var isNodeList = Object.prototype.toString.call(element).indexOf("NodeList") !== -1,
+        isArray = Array.isArray(element);
+
+    if (isNodeList) {
+      element = Array.prototype.slice.call(element);
+    }
+
+    return isNodeList || isArray ? element : [ element ];
   }
 
   // Hide elements

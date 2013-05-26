@@ -2,16 +2,33 @@
   "use strict";
 
   // Alias.
-  var $ = Common.$;
+  var $ = Common.$,
+      AlgorithmsParameterSelector = "[data-algorithm-id='%id']";
 
   // Additional arguments logic.
   function getAdditionalArgumentsFor(algorithmId) {
     var result = [];
 
     switch (algorithmId) {
-      // Dense Optical Flow - Grid resolution.
+      // Sparse Optical Flow.
+      case 0:
+        result.push(parseFloat($("#minimal-distance-between-points").value));
+        result.push(~~$("#maximum-features-count").value);
+        break;
+
+      // Dense Optical Flow.
       case 1:
         result.push(~~$("#grid-resolution").value);
+        result.push(~~$("#window-size").value);
+        result.push(~~$("#iterations").value);
+        break;
+
+      // Random Forest Tracker.
+      case 2:
+        result.push(~~$("#trees-amount").value);
+        result.push(~~$("#feature-points-amount").value);
+        result.push(~~$("#intensity-threshold").value);
+        result.push(~~$("#generated-random-points-count").value);
         break;
     }
 
@@ -60,13 +77,12 @@
 
   // Select controls change event handler.
   function onAlgorithmChanging() {
+    var id = getSelectedAlgorithmValue();
+
     Common.splat($(".parameters-container")).forEach(Common.hideElement);
 
-    switch (getSelectedAlgorithmValue()) {
-      // Dense Optical Flow - Grid resolution.
-      case 1:
-        $("#dense-optical-flow-parameter").classList.remove("hidden");
-        break;
+    if (id >= 0) {
+      $(AlgorithmsParameterSelector.replace("%id", id)).classList.remove("hidden");
     }
   }
 

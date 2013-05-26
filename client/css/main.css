@@ -20,6 +20,11 @@ label {
   border: 1px dashed lightgray;
 }
 
+.parameters-container label {
+  width: 280px;
+  display: inline-block;
+}
+
 .bordered {
   border: 1px dashed lightgray;
   width: 640px;

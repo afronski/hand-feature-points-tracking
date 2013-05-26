@@ -7,15 +7,18 @@ class SparseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
   public:
     static const std::string Name;
 
+    SparseOpticalFlowTracker(): minimalDistanceBetweenPoints(10.0), maximumFeaturesCount(500) {}
+
     virtual void process(cv::Mat& frame);
     virtual void fill(const std::vector<std::string>& arguments);
 
   private:
+    double minimalDistanceBetweenPoints;
+    unsigned int maximumFeaturesCount;
+
     static const double Quality;
-    static const double MinimalDistanceBetweenPoints;
     static const cv::Scalar DrawingColor;
     static const double CircleRadius;
-    static const unsigned int MaximumFeaturesCount;
 
     bool newPointsShouldBeAdded();
     void detectFeaturePoints();
@@ -30,8 +33,6 @@ class SparseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
 
     std::vector<float> errors;
     std::vector<unsigned char> status;
-
-    unsigned int maximumFeaturesCount;
 
     cv::Mat actualGrayFrame;
     cv::Mat previousGrayFrame;

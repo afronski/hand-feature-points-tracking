@@ -24,7 +24,7 @@ void FeaturePointsExtractor::generateFeaturePoints(const cv::Mat& initialImage) 
   FeaturesStore featurePointsStorage;
   extractFeaturesFromTransformedImages(initialImage, featurePointsStorage, intermediateData);
 
-  cv::Size initialImageBoundary = cv::Size(initialImage.cols - 1, initialImage.rows - 1);
+  cv::Size initialImageBoundary = cv::Size(initialImage.rows - 1, initialImage.cols - 1);
 
   common::debug::log("Filtering prepared features - Correcting by boundaries (%d)\n", featurePointsStorage.size());
   filterCorrectedOutImageFeaturePoints(initialImageBoundary, featurePointsStorage);
@@ -50,7 +50,7 @@ void FeaturePointsExtractor::generateFeaturePointsFromSingleImage(const cv::Mat&
   ImageAndTransformation intermediateDataItem = std::make_pair(initialImageCopy, noTransformation);
   temporaryStore.push_back(intermediateDataItem);
 
-  const cv::Size initialImageBoundary = cv::Size(image.cols - 1, image.rows - 1);
+  const cv::Size initialImageBoundary = cv::Size(image.rows - 1, image.cols - 1);
 
   common::debug::log("Single image - Filtering corrected by boundaries (%d)\n", featurePointsStorage.size());
   filterCorrectedOutImageFeaturePoints(initialImageBoundary, featurePointsStorage);

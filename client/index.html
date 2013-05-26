@@ -32,9 +32,55 @@
         </select>
       </section>
 
-      <section id="dense-optical-flow-parameter" class="parameters-container hidden">
-        <label for="grid-resolution">Grid resolution:</label>
-        <input type="number" id="grid-resolution" value="15" required />
+      <section data-algorithm-id="0" class="parameters-container hidden">
+        <div>
+          <label for="minimal-distance-between-points">Minimal distance between points:</label>
+          <input type="number" id="minimal-distance-between-points" value="10.0" step="any" required />
+        </div>
+
+        <div>
+          <label for="maximum-features-count">Maximum feature points amount:</label>
+          <input type="number" id="maximum-features-count" value="500" required />
+        </div>
+      </section>
+
+      <section data-algorithm-id="1" class="parameters-container hidden">
+        <div>
+          <label for="grid-resolution">Grid resolution:</label>
+          <input type="number" id="grid-resolution" value="15" required />
+        </div>
+
+        <div>
+          <label for="window-size">Window size:</label>
+          <input type="number" id="window-size" value="5" required />
+        </div>
+
+        <div>
+          <label for="iterations">Iterations:</label>
+          <input type="number" id="iterations" value="5" required />
+        </div>
+      </section>
+
+      <section data-algorithm-id="2" class="parameters-container hidden">
+        <div>
+          <label for="trees-amount">Trees amount:</label>
+          <input type="number" id="trees-amount" value="1" required />
+        </div>
+
+        <div>
+          <label for="feature-points-amount">Feature points amount:</label>
+          <input type="number" id="feature-points-amount" value="100" required />
+        </div>
+
+        <div>
+          <label for="intensity-threshold">Intensity threshold:</label>
+          <input type="number" id="intensity-threshold" value="10" required />
+        </div>
+
+        <div>
+          <label for="generated-random-points-count">Generated random points amount:</label>
+          <input type="number" id="generated-random-points-count" value="30" required />
+        </div>
       </section>
 
       <section>
