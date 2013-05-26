@@ -172,7 +172,7 @@ namespace common {
         _implementation->input_video.release();
         _implementation->output_video.release();
 
-        common::debug::print("Video stream procedeed with success!");
+        common::debug::print("[END] Video stream processed successfully!\n");
       } else {
         throw std::logic_error("VideoStream parameters are incomplete to proceed with transfer!");
       }
