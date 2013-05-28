@@ -171,12 +171,89 @@ done
         \label{UtilityScript}
       \end{sample}
 
-  \section{Szczegóły techniczne implementacji wybranych algorytmów}\label{Section_ImplementationDetails}
+  \section{Szczegóły techniczne implementacji}\label{Section_ImplementationDetails}
 
+  \subsection{Abstrakcja strumienia wideo}
+  Bardzo ważnym elementem przygotowanym na samym początku i~wykorzystywanym jako główny element pracy magisterskiej jest koncepcja \textit{strumienia wideo} zaimplementowana jako klasa \textit{VideoStream}.
+
+  Omawiana abstrakcja reprezentuje sekwencję ramek wczytanych z~określonego pliku wideo, przetwarzanych oraz zapisywanych do innego pliku wideo w~identycznym formacie. Z~koncepcją przetwarzania związana jest abstrakcja przekształcenia pojedynczej klatki obrazu zaimplementowana w~klasach pochodnych do klas abstrakcyjnych \textit{FrameTransformer} oraz \textit{ArgumentsAwareFrameTransformer}. Druga z~nich posiada informację o~modyfikowalnych parametrach, argumentach, przekazywanych z~zewnętrznego źródła.
+
+  Implementacja strumienia wideo zawiera następujące metody publiczne:
+  \begin{itemize}
+    \item Metoda \textit{add} - Służy ona do dodania nowego modyfikatora klatki animacji, będącego pochodną klasy \textit{FrameTransformer}. Pojedynczy strumień wideo może posiadać więcej niż jeden modyfikator aktualnej klatki animacji, dzięki czemu możliwe jest nałożenie efektów wykonania algorytmów na jednej sekwencji wideo.
+    \item Metoda \textit{open} - Po jej wywołaniu następuje otwarcie strumienia wejściowego i~przygotowanie do transferu danych.
+    \item Metoda \textit{transfer} - Po przygotowaniu pliku wyjściowego następuje przetworzenie strumienia wideo z~pliku wejściowego do wyjściowego, wraz z~nałożeniem modyfikatorów.
+  \end{itemize}
+
+  Warto wspomnieć o~metodach chronionych \textit{beforeVideo} oraz \textit{afterVideo}, które zajmują się obsługą pomiarów oraz analizą danych badań jakościowych oraz wydajnościowych.
+
+  Koncepcja strumienia wykorzystuje popularny w~języku \textit{C++} wzorzec \textit{RAII} (ang. \textit{Resource Acquisition Is Initalization}, inicjalizacja przy pozyskaniu zasobu). Dzięki wykorzystaniu konstruktora oraz destruktora możliwe jest poprawne przejęcie i~zwolnienie strumieni wideo, co gwarantuje poprawne wykorzystanie i~również zwolnienie zaalokowanej pamięci oraz zasobów wejścia/wyjścia.
+
+  \subsection{Wyznaczanie narożników}
   Funkcja $goodFeaturesToTrack()$ zajmuje się wyznaczaniem narożników zgodnie z~definicją \textit{Shi} - \textit{Tomasi} zaprezentowaną w~pracy \cite{GoodFeaturesToTrack94}. Oblicza ona potrzebne wartości drugich pochodnych (za pomocą operatorów \textit{Sobela}) i~z nich dalej obliczane są wartości własne.
 
   Jako parametr wejściowy przekazuje się obraz z~jednym kanałem opisującym intensywność (jako pojedynczy bajt lub liczba zmiennoprzecinkowa pojedynczej precyzji). Funkcja zwraca wartości własne dla każdego piksela obrazu oraz listę narożników, które spełniają definicję wartych obserwacji i~śledzenia.
 
   Możliwe jest obliczenie wartości z~klasycznej definicji \textit{Harrisa} za pomocą parametru \textit{use\_harris}. Do przekazania współczynnika niezbędnego do obliczenia różnicy wyznacznika macierzy $H(p)$ od tej samej macierzy służy następny argument o~nazwie \textit{k}.
 
+  Omawiana funkcja znajduje zastosowanie przy znajdowaniu punktów charakterystycznych dla przepływu optycznego rzadkiego, oraz przy znajdowaniu cech wykorzystywanych przy tworzeniu zbiorów treningowych oraz klasyfikacji klatek sekwencji wideo w~metodzie wykorzystującej las drzew losowych.
+
+  \subsection{Generacja zbiorów treningowych}
+  Zbiory treningowe dla metody wykorzystującej las drzew losowych generowane są na podstawie przekształceń afinicznych oraz szumów wprowadzonych do przygotowanej pierwszej klatki anmiacji (to przekształcenie zostało omówione w~sekcji \ref{Subsection_AdjustFirstFrame}).
+
+  Wyróżniamy następujące przekształcenia i~szumy wprowadzone do danych treningowych:
+
+  \begin{itemize}
+    \item Obrót względem środka obrazu o~kąt z~zakresu $<-30\degree, 30\degree>$ co 10\degree.
+    \item Pochylenie na osi X z~zakresu $<0, 0.41>$ co 0.1.
+    \item Pochylenie na osi Y z~zakresu $<0, 0.41>$ co 0.1.
+    \item Przeskalowanie na osi X z~zakresu $<0.2, 1.1>$ co 0.2.
+    \item Szum jednostajny (ang. \textit{uniform noise}).
+  \end{itemize}
+
+  \newpage
+
+  \begin{figure}[!ht]
+    \centering
+    \includegraphics[width=14cm]{GeneratedElements}
+    \caption[Fragment wygenerowanych danych treningowych dla sekwencji Person\_A\_Crush]{Fragment wygenerowanych danych treningowych dla sekwencji \textit{Person\_A\_Crush}}
+    \label{fig:GeneratedElements}
+  \end{figure}
+
+  Przykładowy zestaw danych treningowych dla sekwencji wideo o~nazwie \textit{Person\_A\_Crush} według powyższych zakresów przekształceń oraz selekcji 100 najlepszych cech zajmuje \textit{1.1 GB} przestrzeni na dysku twardym. Czas generacji wraz z~zapisem danych na dysk wynosi około \textit{21 sekund}.
+
+  \subsection{Dostosowanie obrazu wejściowego na podstawie punktów kluczowych}\label{Subsection_AdjustFirstFrame}
+  Ważnym szczegółem implementacyjnym dla generacji zbiorów treningowych algorytmu śledzenia za pomocą lasu drzew losowych jest przystosowanie obrazu wejściowego (pierwszej klatki animacji analizowanej sekwencji wideo).
+
+  W~pierwszym kroku zaraz po ekstrakcji pierwszej ramki, konwertowana jest ona do skali szarości. Następnie przycinany jest obszar roboczy. Każda sekwencja wideo posiada wyznaczony kształt za pomocą punktów kluczowych wraz z~okręgami otaczającymi dla każdego punktu. Po nałożeniu punktów wraz z~okręgami na pierwszą klatkę animacji, wyznaczany jest prostokąt otaczający dla całego kształtu i~według niego następuje przycięcie obszaru roboczego dla obrazu wejściowego.
+
+  \subsection{Implementacja wewnętrzna lasu drzew losowych}
+
 \chapter{Specyfikacja zewnętrzna}\label{Chapter_SpecyfikacjaZewnetrzna}
+
+  \section{Prezentacja i~wizualizacja wyników działania algorytmów}\label{Section_Front}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{Presentation}
+      \caption[Interfejs graficzny do prezentacji wyników działania algorytmów]{Interfejs graficzny do prezentacji wyników działania algorytmów}
+      \label{fig:ApertureProblem}
+    \end{figure}
+
+  \section{Zaznaczanie punktów kluczowych}\label{Section_Keypoints}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{Keypoints}
+      \caption[Interfejs graficzny do zaznaczania punktów kluczowych]{Interfejs graficzny do zaznaczania punktów kluczowych}
+      \label{fig:ApertureProblem}
+    \end{figure}
+
+  \section{Interfejs linii komend programu przetwarzającego sekwencje wideo}\label{Section_CLI}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{Cli}
+      \caption[Interfejs linii komend programu do przetwarzania sekwencji wideo]{Interfejs linii komend programu do przetwarzania sekwencji wideo}
+      \label{fig:ApertureProblem}
+    \end{figure}
