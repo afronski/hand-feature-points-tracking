@@ -118,7 +118,7 @@ v.erase(std::remove(v.begin(), v.end(), 5), v.end());
         \label{ChartForRunningTimePerAlgorithm}
       \end{sample}
 
-      \subsubsection{HTML5, CSS3 i~warstwa pośrednia oparta o~NodeJS}
+      \subsubsection{HTML5, CSS3 i~warstwa pośrednia oparta o~NodeJS}\label{Subsection_NodeJS}
       Ważnym elementem jest selekcja punktów charakterystycznych w~zarejestrowanych sekwencjach wideo. W~tym celu przygotowane zostało proste narzędzie oparte w~całości na technologiach internetowych. Interfejs użytkownika został zaprojektowany i~przygotowany za pomocą \textit{HTML5} oraz \textit{CSS3}.
 
       Za warstwę pośrednią (spajającą interfejs użytkownika oraz implementacje algorytmów przygotowane w~języku \textit{C++}) odpowiada środowisko uruchomieniowe \textit{NodeJS}. Jest to środowisko uruchomieniowe oprogramowywane za pomocą języka \textit{JavaScript}, które wraz z~biblioteką \textit{express} umożliwia udostępnienie statycznych zasobów (takich jak skrypty, kaskadowe arkusze stylów oraz pliki \textit{HTML}) oraz stworzenie i~również udostępnienie REST API (ang. \textit{REpresentational State Transfer Application Programming Interface}) za pomocą którego wybrane punkty, algorytm oraz wybrana sekwencja wideo przesyłane są do aplikacji napisanych w~języku \textit{C++}.
@@ -199,16 +199,16 @@ done
   Omawiana funkcja znajduje zastosowanie przy znajdowaniu punktów charakterystycznych dla przepływu optycznego rzadkiego, oraz przy znajdowaniu cech wykorzystywanych przy tworzeniu zbiorów treningowych oraz klasyfikacji klatek sekwencji wideo w~metodzie wykorzystującej las drzew losowych.
 
   \subsection{Generacja zbiorów treningowych}
-  Zbiory treningowe dla metody wykorzystującej las drzew losowych generowane są na podstawie przekształceń afinicznych oraz szumów wprowadzonych do przygotowanej pierwszej klatki anmiacji (to przekształcenie zostało omówione w~sekcji \ref{Subsection_AdjustFirstFrame}).
+  Zbiory treningowe dla metody wykorzystującej las drzew losowych generowane są na podstawie przekształceń afinicznych oraz szumów wprowadzonych do odpowiednio przygotowanej pierwszej klatki anmiacji (operacja ta została omówiona w~sekcji \ref{Subsection_AdjustFirstFrame}).
 
   Wyróżniamy następujące przekształcenia i~szumy wprowadzone do danych treningowych:
 
   \begin{itemize}
     \item Obrót względem środka obrazu o~kąt z~zakresu $<-30\degree, 30\degree>$ co 10\degree.
-    \item Pochylenie na osi X z~zakresu $<0, 0.41>$ co 0.1.
-    \item Pochylenie na osi Y z~zakresu $<0, 0.41>$ co 0.1.
-    \item Przeskalowanie na osi X z~zakresu $<0.2, 1.1>$ co 0.2.
-    \item Szum jednostajny (ang. \textit{uniform noise}).
+    \item Pochylenie względem osi X z~zakresu $<0, 0.41>$ co 0.1.
+    \item Pochylenie względem osi Y z~zakresu $<0, 0.41>$ co 0.1.
+    \item Przeskalowanie względem osi X z~zakresu $<0.2, 1.1>$ co 0.2.
+    \item Dodanie do obrazu szum jednostajnego (ang. \textit{uniform noise}).
   \end{itemize}
 
   \newpage
@@ -225,35 +225,123 @@ done
   \subsection{Dostosowanie obrazu wejściowego na podstawie punktów kluczowych}\label{Subsection_AdjustFirstFrame}
   Ważnym szczegółem implementacyjnym dla generacji zbiorów treningowych algorytmu śledzenia za pomocą lasu drzew losowych jest przystosowanie obrazu wejściowego (pierwszej klatki animacji analizowanej sekwencji wideo).
 
-  W~pierwszym kroku zaraz po ekstrakcji pierwszej ramki, konwertowana jest ona do skali szarości. Następnie przycinany jest obszar roboczy. Każda sekwencja wideo posiada wyznaczony kształt za pomocą punktów kluczowych wraz z~okręgami otaczającymi dla każdego punktu. Po nałożeniu punktów wraz z~okręgami na pierwszą klatkę animacji, wyznaczany jest prostokąt otaczający dla całego kształtu i~według niego następuje przycięcie obszaru roboczego dla obrazu wejściowego.
+  W~pierwszym kroku zaraz po ekstrakcji pierwszej ramki, konwertowana jest ona do skali szarości. Następnie przycinany jest obszar roboczy. Każda sekwencja wideo posiada wyznaczony kształt za pomocą punktów kluczowych wraz z~okręgami otaczającymi dla każdego punktu. Po nałożeniu punktów wraz z~okręgami na pierwszą klatkę animacji, wyznaczany jest prostokąt otaczający dla całego kształtu i~według niego następuje przycięcie obszaru roboczego dla obrazu wejściowego. W~następnych krokach już przycięty obraz zostaje wykorzystany jako wzór do generacji zbioru treningowego.
 
   \subsection{Implementacja wewnętrzna lasu drzew losowych}
+  \textbf{TODO}
 
 \chapter{Specyfikacja zewnętrzna}\label{Chapter_SpecyfikacjaZewnetrzna}
 
   \section{Prezentacja i~wizualizacja wyników działania algorytmów}\label{Section_Front}
+    Aby ułatwić eksperymentowanie z~dostępnymi parametrami oraz~wykorzystanie algorytmów śledzenia do analizy zebranych sekwencji wideo został stworzony prosty interfejs użytkownika (wykorzystana technologia została szczegołowo umówiona w~rozdziale \ref{Subsection_NodeJS}).
 
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=14cm]{Presentation}
       \caption[Interfejs graficzny do prezentacji wyników działania algorytmów]{Interfejs graficzny do prezentacji wyników działania algorytmów}
-      \label{fig:ApertureProblem}
+      \label{fig:AlgorithmsPresentation}
     \end{figure}
 
+    Na rysunku \ref{fig:AlgorithmsPresentation} zaprezentowano jak wygląda stworzony interfejs użytkownika. Z~dwóch pól wyboru zostają podane jako parametry wejściowe nazwa sekwencji wideo oraz nazwa zaimplementowanego algorytmu śledzenia. Poniżej, w~indywidualnym panelu, istnieje możliwość zmiany parametrów dla wybranego sposobu śledzenia punktów charakterystycznych. Istnieje możliwość podglądu wybranej sekwencji za pomocą odtwarzacza wideo.
+
+    Po zaakceptowaniu wyboru, parametry zostają przesłane do serwera pośredniczącego i~po zakończeniu przetworzenia danych otrzymamy nową sekwencję wideo będącą końcowym rezultatem, która może zostać przeglądnięta w~tym samym odtwarzaczu wideo.
+
   \section{Zaznaczanie punktów kluczowych}\label{Section_Keypoints}
+    Każda z~zebranych próbek zgodnie z~protokołem (zamieszczonym w~rozdziale \ref{Section_DefinicjeGestow}) reprezentuje określony kształt lub gest. W~celu wykonania badań jakościowych zaistniała potrzeba zaznaczenia punktów kluczowych połączonych ścieżkami wraz z~otoczeniem samych punktów. Do realizacja zadania został stworzony kolejny interfejs użytkownika.
 
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=14cm]{Keypoints}
       \caption[Interfejs graficzny do zaznaczania punktów kluczowych]{Interfejs graficzny do zaznaczania punktów kluczowych}
-      \label{fig:ApertureProblem}
+      \label{fig:Keypoints}
     \end{figure}
 
-  \section{Interfejs linii komend programu przetwarzającego sekwencje wideo}\label{Section_CLI}
+    Na rysunku \ref{fig:Keypoints} widzimy identyczne pole wyboru sekwencji wideo, odtwarzacz oraz pole robocze do zaznaczania punktów. Po wybraniu odpowiedniej próbki za pomocą odtwarzacza wideo lub strzałek na klawiaturze możemy analizować kolejne klatki wideo. Na obszarze roboczym za pomocą lewego klawisza myszki zostają zaznaczone kolejne punkty, które zostają kolejno połączone ścieżkami.
 
+    Za pomocą klawiatury (klawisze \textit{U} oraz \textit{R}) lub przycisków możemy usunąć lub przywrócić ostatnio dodany punkt. Pole liczbowe służy do manipulacji promieniem okręgów otaczających poszczególne punkty kluczowe.
+
+    Po uzyskaniu najlepszego kształtu, dane mogą zostać wysłane i~zapisane po stronie serwera pośredniczącego do formatu tekstowego (rozszerzenie \textit{keypoints}, format zaprezentowany w~przykładzie \ref{KeypointsTxt}) oraz formatu XML zaprezentowanego w~przykładzie \ref{KeypointsXml}. Pliki z~zapisanymi punktami kluczowymi posiadają taką samą nazwę jak sekwencja wideo.
+
+      \begin{sample}[ht]
+        \begin{verbatim}
+50
+18
+364 400
+324 394
+262 396
+228 408
+188 452
+150 506
+126 552
+110 596
+98 640
+110 684
+126 728
+172 756
+220 774
+304 794
+356 798
+400 790
+448 768
+486 738
+        \end{verbatim}
+        \caption{Punkty kluczowe w~formacie tekstowym (sekwencja \textit{Person\_A\_C})}
+        \label{KeypointsTxt}
+      \end{sample}
+
+    \newpage
+      \begin{sample}[ht]
+        \begin{verbatim}
+<?xml version="1.0" encoding="utf-8"?>
+<FeaturePointList>
+    <hand>
+        <FeaturePointRadius r="50" />
+        <FeaturePoint x="364" y="400" />
+        <FeaturePoint x="324" y="394" />
+        <FeaturePoint x="262" y="396" />
+        <FeaturePoint x="228" y="408" />
+        <FeaturePoint x="188" y="452" />
+        <FeaturePoint x="150" y="506" />
+        <FeaturePoint x="126" y="552" />
+        <FeaturePoint x="110" y="596" />
+        <FeaturePoint x="98" y="640" />
+        <FeaturePoint x="110" y="684" />
+        <FeaturePoint x="126" y="728" />
+        <FeaturePoint x="172" y="756" />
+        <FeaturePoint x="220" y="774" />
+        <FeaturePoint x="304" y="794" />
+        <FeaturePoint x="356" y="798" />
+        <FeaturePoint x="400" y="790" />
+        <FeaturePoint x="448" y="768" />
+        <FeaturePoint x="486" y="738" />
+    </hand>
+</FeaturePointList>
+        \end{verbatim}
+        \caption{Punkty kluczowe w~formacie XML (sekwencja \textit{Person\_A\_C})}
+        \label{KeypointsXml}
+      \end{sample}
+
+
+  \section{Interfejs linii komend programu przetwarzającego sekwencje wideo}\label{Section_CLI}
+    Omawiany program jest sercem implementacyjnym pracy magisterskiej. Do niego serwer pośredniczący przesyła parametry wejściowe i~po zakończeniu jego działania wysyła rezultaty z~powrotem do interfejsu graficznego. Również rezultaty badań jakościowych oraz wydajnościowych są prezentowane za jego pomocą (jak widać na obrazie \ref{fig:Cli} służy do tego opcjonalny przełącznik \textit{-{}-include-results}).
+
+    \newpage
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=14cm]{Cli}
       \caption[Interfejs linii komend programu do przetwarzania sekwencji wideo]{Interfejs linii komend programu do przetwarzania sekwencji wideo}
-      \label{fig:ApertureProblem}
+      \label{fig:Cli}
     \end{figure}
+
+    Poniżej, w~listingu \ref{SampleInvoke}, został zamieszczony przykład wywołania (wywołanie wykonane z~głównego katalogu źródłowego):
+      \begin{sample}[ht]
+        \begin{verbatim}
+./bin/tracking assets/Person_A_C.avi "Random Forest Tracker" 30 100
+        \end{verbatim}
+        \caption{Przykładowe wywołanie interfejsu konsolowego}
+        \label{SampleInvoke}
+      \end{sample}
+
+    Program dostarcza również listy zaimplementowanych algorytmów (prezentowanej w~interfejsie użytkownika, w~polu wyboru algorytmu śledzenia) uzyskiwanej za pomocą przełącznika \textit{-{}-list-algorithms}.
+
+    Wywołanie interfejsu linii komend bez parametrów (lub z~niewystarczającą liczbą argumentów) pokaże instrukcję użycia, widoczną również na rysunku \ref{fig:Cli}.
