@@ -93,7 +93,7 @@ v.erase(std::remove(v.begin(), v.end(), 5), v.end());
       \begin{itemize}
         \item Wczytywanie i~zapis różnorakich formatów sekwencji wideo.
         \item Podstawowe operacje i~filtry zdefiniowane jako pojęcia wizji komputerowej.
-        \item Metody pomocnicze wspomagajace implementację algorytmów śledzenia punktów charakterystycznych.
+        \item Metody pomocnicze wspomagające implementację algorytmów śledzenia punktów charakterystycznych.
         \item Struktury ułatwiające realizację algorytmów opartych o~uczenie maszynowe.
       \end{itemize}
 
@@ -199,7 +199,7 @@ done
   Omawiana funkcja znajduje zastosowanie przy znajdowaniu punktów charakterystycznych dla przepływu optycznego rzadkiego, oraz przy znajdowaniu cech wykorzystywanych przy tworzeniu zbiorów treningowych oraz klasyfikacji klatek sekwencji wideo w~metodzie wykorzystującej las drzew losowych.
 
   \subsection{Generacja zbiorów treningowych}
-  Zbiory treningowe dla metody wykorzystującej las drzew losowych generowane są na podstawie przekształceń afinicznych oraz szumów wprowadzonych do odpowiednio przygotowanej pierwszej klatki anmiacji (operacja ta została omówiona w~sekcji \ref{Subsection_AdjustFirstFrame}).
+  Zbiory treningowe dla metody wykorzystującej las drzew losowych generowane są na podstawie przekształceń afinicznych oraz szumów wprowadzonych do odpowiednio przygotowanej pierwszej klatki animacji (operacja ta została omówiona w~sekcji \ref{Subsection_AdjustFirstFrame}).
 
   Wyróżniamy następujące przekształcenia i~szumy wprowadzone do danych treningowych:
 
@@ -228,12 +228,12 @@ done
   W~pierwszym kroku zaraz po ekstrakcji pierwszej ramki, konwertowana jest ona do skali szarości. Następnie przycinany jest obszar roboczy. Każda sekwencja wideo posiada wyznaczony kształt za pomocą punktów kluczowych wraz z~okręgami otaczającymi dla każdego punktu. Po nałożeniu punktów wraz z~okręgami na pierwszą klatkę animacji, wyznaczany jest prostokąt otaczający dla całego kształtu i~według niego następuje przycięcie obszaru roboczego dla obrazu wejściowego. W~następnych krokach już przycięty obraz zostaje wykorzystany jako wzór do generacji zbioru treningowego.
 
   \subsection{Implementacja wewnętrzna lasu drzew losowych}
-  \textbf{TODO}
+
 
 \chapter{Specyfikacja zewnętrzna}\label{Chapter_SpecyfikacjaZewnetrzna}
 
   \section{Prezentacja i~wizualizacja wyników działania algorytmów}\label{Section_Front}
-    Aby ułatwić eksperymentowanie z~dostępnymi parametrami oraz~wykorzystanie algorytmów śledzenia do analizy zebranych sekwencji wideo został stworzony prosty interfejs użytkownika (wykorzystana technologia została szczegołowo umówiona w~rozdziale \ref{Subsection_NodeJS}).
+    Aby ułatwić eksperymentowanie z~dostępnymi parametrami oraz~wykorzystanie algorytmów śledzenia do analizy zebranych sekwencji wideo został stworzony prosty interfejs użytkownika (wykorzystana technologia została szczegółowo umówiona w~rozdziale \ref{Subsection_NodeJS}).
 
     \begin{figure}[!ht]
       \centering
