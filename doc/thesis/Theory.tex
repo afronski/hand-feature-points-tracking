@@ -299,7 +299,7 @@
 
     Metoda \textit{walidacji krzyżowej} polega na podziale zbioru danych na $K$ różnych podzbiorów. Następnie faza treningowa wykonywana jest na $K-1$ zbiorach, natomiast faza testowa wykonywana jest na ostatnim zbiorze. Po wykonaniu całego procesu dokładnie $K$ razy, gdzie każdy z~podzbiorów zostaje zbiorem testowym i~uśrednieniu wyników, otrzymamy rezultaty najwierniejsze operacjom na danych rzeczywistych.
 
-    Technika \textit{boostrap} jest podobna do walidacji krzyżowej, jednak zbiór zbiór testowy jest wybierany losowo ze zbioru danych treningowych. Po wykonaniu całego procesu $N$ razy i~uśrednieniu wyników otrzymamy rezultaty zbliżone do operowania na danych rzeczywistych. Warto zauważyć, że w~tym przypadku dane mogą zostać wykorzystane zarówno jako zbiór treningowy jak i~testowy, w~tej samej iteracji.
+    Technika \textit{bootstrap} jest podobna do walidacji krzyżowej, jednak zbiór zbiór testowy jest wybierany losowo ze zbioru danych treningowych. Po wykonaniu całego procesu $N$ razy i~uśrednieniu wyników otrzymamy rezultaty zbliżone do operowania na danych rzeczywistych. Warto zauważyć, że w~tym przypadku dane mogą zostać wykorzystane zarówno jako zbiór treningowy jak i~testowy, w~tej samej iteracji.
 
     Wybór algorytmu wspomagającego walidację zależy od charakteru danych rzeczywistych. Jeśli dane rzeczywiste powtarzają się bardzo często, technika \textit{boostrap} będzie odpowiedniejsza. Jeśli zbiór wejściowy posiada dużą wariancję \textit{walidacja krzyżowa} będzie dokładniej odzwierciedlać strukturę danych rzeczywistych.
 
