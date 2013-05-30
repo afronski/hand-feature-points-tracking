@@ -285,6 +285,8 @@
     W~celu zoptymalizowania algorytmu, Farnebäck zaproponował podobne rozwiązanie jak w~\textit{piramidalnym wariancie algorytmu Lucas-Kanade} polegające na wykorzystaniu iteracyjnego podejścia i~piramidy przeskalowanych obrazów. Tak jak w~powyższym przypadku, algorytm zaczyna od mniej szczegółowych ramek, przechodząc co iterację do coraz bardziej szczegółowych obrazów.
 
   \section{Algorytm oparty o~lasy drzew losowych}\label{Subsection_RandomizedTrees}
+
+    \subsection{Ogólny zarys algorytmów opartych o~drzewa decyzyjne}
     Kolejnym rozwiązaniem zaimplementowanym w~pracy magisterskiej jest algorytm śledzenia punktów charakterystycznych oparty o~lasy drzew losowych. W~porównaniu do problemu przepływu optycznego jest to zupełnie inna rodzina algorytmów, oparta o~uczenie maszynowe. Nie analizuje ona parami kolejnych ramek w~sekwencji wideo, a~klasyfikuje punkty charakterystyczne w~aktualnie przetwarzanej klatce animacji na podstawie określonej struktury, reprezentującej wiedzę zbudowaną wcześniej na podstawie określonego zbioru treningowego \cite{RandomizedTrees06}.
 
     Celem uczenia maszynowego jest przekształcenie zbioru danych w~informacje, poprzez wyodrębnienie z~niego wzorców lub reguł. Po nauczeniu maszyny za~pomocą wejściowego zbioru danych, powinna ona odpowiedzieć na określone pytanie na jego temat. Przykładowo, może to być pytanie o~stopień podobieństwa innego zestawu danych do zbudowanej bazy wiedzy.
@@ -309,9 +311,11 @@
 
     Tworzenie drzewa decyzyjnego polega na przyjęciu odpowiedniej metryki (najpopularniejszymi metrykami są suma różnic kwadratów wartości cech, entropia, \textit{gini index} i~współczynnik błędnej klasyfikacji) oraz pewnej wartości progu. Następnie dla każdego rekordu danych obliczana jest wartość według przyjętej reguły i~wszystkie cechy powyżej przyjętego progu zostają przeniesione do lewej gałęzi, reszta zostaje przydzielona do prawej gałęzi. Następnie algorytm zostaje rekurencyjnie zaaplikowany do obu gałęzi i~zostaje powtarzany do momentu osiągnięcia określonej dokładności lub gdy liczba cech przypisanych do danego węzła osiągnie wartość minimalną.
 
-    Lasem drzew losowych (lub zbiorem drzew losowych) nazywamy taki zbiór drzew decyzyjnych, który jest w~stanie nauczyć się więcej niż jednej klasy, poprzez głosowanie na określoną klasę w~każdym liściu jednego z~wielu drzew i~wybranie klasy z~największą ilością głosów.
+    Lasem drzew losowych (lub zbiorem drzew losowych) nazywamy taki zbiór drzew decyzyjnych, który jest w~stanie wybrać więcej niż jedną klasę, za pomocą głosowania w~każdym liściu, każdego z~wielu drzew. Wybór dominującej klasy następuje poprzez uśrednienie głosów wszystkich liści lasu oraz wybranie klasy z~największą średnią ilością głosów.
 
-    \subsection{Szczegóły uczenia oraz klasyfikacji dla algorytmu opartego na lesie drzew losowych}
+    Po wprowadzeniu i~uwspólnieniu odpowiednich pojęć, w~następnej sekcji zostanie szczegółowo omówiony wariant algorytmu zaimplementowany w pracy magisterskiej.
+
+    \subsection{Omówienie procesu uczenia oraz klasyfikacji dla algorytmu opartego na lesie drzew losowych}
     \cite{TwoStageRandomizedTrees11}
     \cite{RealTimeRandomizedTrees05}
     \cite{RecognizingFeaturePointsUsingClassificationTrees04}
