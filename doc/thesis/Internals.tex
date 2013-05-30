@@ -173,7 +173,7 @@ done
 
   \section{Szczegóły techniczne implementacji}\label{Section_ImplementationDetails}
 
-  \subsection{Abstrakcja strumienia wideo}
+  \subsection{Abstrakcja strumienia wideo}\label{Subsection_VideoStream}
   Bardzo ważnym elementem przygotowanym na samym początku i~wykorzystywanym jako główny element pracy magisterskiej jest koncepcja \textit{strumienia wideo} zaimplementowana jako klasa \textit{VideoStream}.
 
   Omawiana abstrakcja reprezentuje sekwencję ramek wczytanych z~określonego pliku wideo, przetwarzanych oraz zapisywanych do innego pliku wideo w~identycznym formacie. Z~koncepcją przetwarzania związana jest abstrakcja przekształcenia pojedynczej klatki obrazu zaimplementowana w~klasach pochodnych do klas abstrakcyjnych \textit{FrameTransformer} oraz \textit{ArgumentsAwareFrameTransformer}. Druga z~nich posiada informację o~modyfikowalnych parametrach, argumentach, przekazywanych z~zewnętrznego źródła.
@@ -228,7 +228,21 @@ done
   W~pierwszym kroku zaraz po ekstrakcji pierwszej ramki, konwertowana jest ona do skali szarości. Następnie przycinany jest obszar roboczy. Każda sekwencja wideo posiada wyznaczony kształt za pomocą punktów kluczowych wraz z~okręgami otaczającymi dla każdego punktu. Po nałożeniu punktów wraz z~okręgami na pierwszą klatkę animacji, wyznaczany jest prostokąt otaczający dla całego kształtu i~według niego następuje przycięcie obszaru roboczego dla obrazu wejściowego. W~następnych krokach już przycięty obraz zostaje wykorzystany jako wzór do generacji zbioru treningowego.
 
   \subsection{Implementacja wewnętrzna lasu drzew losowych}
+  Wewnętrzna implementacja lasu drzew losowych opiera się na trzech klasach klasycznych (\textit{RandomForest}, \textit{RandomTreeBuilder}, \textit{RandomForestBuilder}) oraz dwóch szablonach klas (\textit{Tree} oraz \textit{TreeWalker}).
 
+  Głównym elementem jest klasa szablonowa \textit{Tree}, która jest strukturą danych reprezentującą drzewo losowe. Szablon parametryzowany jest klasą reprezentującą węzeł drzewa oraz maksymalną liczbą dzieci podlegających pod~dany węzeł. W~pracy magisterskiej implementacja węzła znajduje się w~klasie \textit{DecisionNode}. Kolejna klasa szablonowa \textit{TreeWalker} enkapsuluje algorytm poruszania się po zbudowanym drzewie (algorytm wykorzystywany jest przy klasyfikacji, zaimplementowanej wewnątrz klasy \textit{RandomForest}).
+
+  Klasa \textit{RandomForest} reprezentuje zbudowaną i~wyuczoną strukturę lasu drzew losowych, dzięki której możliwe jest przeprowadzenie procesu klasyfikacji. Szczegóły algorytmu klasyfikacji zostały omówione w~rozdziale \ref{Subsection_RandomizedTrees}.
+
+  Obiekty omawianej klasy zwracane są jako wynik działania metody \textit{build} klasy \textit{RandomForestBuilder} (wykorzystano wzorzec \textit{budowniczy}, ang. \textit{builder}). Kolejna klasa \textit{RandomTreeBuilder} enkapsuluje algorytm budowy pojedynczego drzewa losowego, wykorzystywany przez wzorzec budowniczego lasu drzew losowych. Tak jak w~poprzednim przypadku tutaj również zastosowanie znazlazł wspomniany wzorzec.
+
+  \textit{Budowniczy} (dokładny opis zawarty w~pozycji \cite{PatternsGoF}) jest jednym z~kreacyjnych wzorców projektowych, którego celem jest rozdzielenie sposobu tworzenia obiektów od ich reprezentacji. Innymi słowy, proces tworzenia obiektu podzielony jest na kilka mniejszych etapów a~każdy z~tych etapów może być implementowany na wiele sposobów. Dzięki takiemu rozwiązaniu możliwe jest tworzenie różnych reprezentacji obiektów w~tym samym procesie konstrukcyjnym. Zazwyczaj stosowany jest do konstrukcji obiektów złożonych, których konfiguracja i~inicjalizacja jest procesem wieloetapowym.
+
+  Całą implementację spina klasa \textit{RandomForestTracker} która wykorzystuje omawiane klasy, enkapsuluje logikę budowy, zapisu i~odczytu bazy treningowej oraz obsługuje prezentację rezultatów.
+
+  Warto wspomnieć o~idiomie PIMPL (ang. \textit{pointer to implementation idiom}) wykorzystanym w~celu ukrycia szczegółów implementacji w~klasie reprezentującej algorytm śledzenia wykorzystujący lasy drzew losowych. Omawiany idiom zastosowany został ze względu na skomplikowane szczegóły implementacyjne, która dla użytkowników pliku nagłówkowego są nieistotne i~niepotrzebnie zwiększają złożoność (oraz wpływają negatywnie na czas kompilacji).
+
+  Omawiana klasa jest również implementacją abstrakcji modyfikatora ramki animacji (omówioną w~sekcji \ref{Subsection_VideoStream}), dzięki czemu wyniki klasyfikacji mogą zostać nałożone na wyjściowy strumień wideo oraz rezultaty badań jakościowych i~wydajnościowych udostępnione są do wyższych warstw.
 
 \chapter{Specyfikacja zewnętrzna}\label{Chapter_SpecyfikacjaZewnetrzna}
 
