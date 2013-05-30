@@ -137,7 +137,6 @@ void RandomTreeBuilder::addNode(
                 arePatchesDominatedBySingleFeaturePoint(patchIndices);
 
   if (hasToAddLeafNode) {
-
     newNode = new DecisionNode(featuresCollection.size());
 
     for (std::size_t i = 0; i < patchIndices.size(); ++i) {
