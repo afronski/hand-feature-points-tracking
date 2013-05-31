@@ -287,39 +287,87 @@
   \section{Algorytm oparty o~lasy drzew losowych}\label{Subsection_RandomizedTrees}
 
     \subsection{Ogólny zarys algorytmów opartych o~drzewa decyzyjne}
-    Kolejnym rozwiązaniem zaimplementowanym w~pracy magisterskiej jest algorytm śledzenia punktów charakterystycznych oparty o~lasy drzew losowych. W~porównaniu do problemu przepływu optycznego jest to zupełnie inna rodzina algorytmów, oparta o~uczenie maszynowe. Nie analizuje ona parami kolejnych ramek w~sekwencji wideo, a~klasyfikuje punkty charakterystyczne w~aktualnie przetwarzanej klatce animacji na podstawie określonej struktury, reprezentującej wiedzę zbudowaną wcześniej na podstawie określonego zbioru treningowego.
+    Kolejnym rozwiązaniem zaimplementowanym w~pracy magisterskiej jest algorytm śledzenia punktów charakterystycznych oparty o~lasy drzew losowych. W~porównaniu do problemu przepływu optycznego jest to zupełnie inna rodzina algorytmów, oparta o~uczenie maszynowe. Nie analizuje ona parami kolejnych ramek w~sekwencji wideo, a~klasyfikuje punkty charakterystyczne w~aktualnie przetwarzanej klatce animacji na podstawie określonej struktury reprezentującej wiedzę, która została zbudowana wcześniej, na podstawie określonego zbioru treningowego i~jej skuteczność została zweryfikowana za pomocą zbioru testowego.
 
-    Celem uczenia maszynowego jest przekształcenie zbioru danych w~informacje, poprzez wyodrębnienie z~niego wzorców lub reguł. Po nauczeniu maszyny za~pomocą wejściowego zbioru danych, powinna ona odpowiedzieć na określone pytanie na jego temat. Przykładowo, może to być pytanie o~stopień podobieństwa innego zestawu danych do zbudowanej bazy wiedzy.
+    Celem uczenia maszynowego jest przekształcenie zbioru danych w~informacje, poprzez wyodrębnienie z~niego wzorców lub reguł. Po zbudowaniu struktury reprezentującej wiedzę za~pomocą wejściowego zbioru danych, maszyna z~jej pomocą powinna odpowiedzieć na określone pytanie na temat danych. Przykładowo, może to być pytanie o~stopień podobieństwa innego zestawu danych do danych, na podstawie których zbudowano bazę wiedzy.
 
-    Bardzo rzadko algorytmy uczenia maszynowego działają na surowych, nieprzetworzonych danych. W~pierwszej kolejności następuje przetworzenie wejściowego zbioru i~tzw. selekcja cech. Po wyodrębnieniu wektora cech dla każdego rekordu danych wejściowych, następuje ich analiza i~dostosowanie wag lub progów za pomocą maksymalizacji dopasowania analizowanych danych. Bardzo ważnym elementem jest podział zestawu danych wejściowych na zbiór treningowy oraz testowy. Ważne jest aby dane zostały tak podzielone, żeby moc zbioru danych treningowych była dużo większa od mocy zbioru danych testowych. Za pomocą zestawu treningowego budowana jest struktury reprezentująca bazę wiedzy. Następnie po zakończeniu etapu uczenia, za pomocą zbioru danych testowych sprawdzana jest dokładność zbudowanego klasyfikatora.
+    Bardzo rzadko algorytmy uczenia maszynowego działają na surowych, nieprzetworzonych danych. W~pierwszej kolejności następuje przekształcenie wejściowego zbioru i~tzw. selekcja cech. Po wyodrębnieniu wektora cech dla każdego rekordu danych wejściowych, następuje ich analiza i~dostosowanie wag lub progów za pomocą maksymalizacji dopasowania w~stosunku do analizowanych danych. Bardzo ważnym elementem jest podział zestawu danych wejściowych na zbiór treningowy oraz testowy. Ważne jest aby dane zostały tak podzielone, żeby moc zbioru danych treningowych była dużo większa od mocy zbioru danych testowych. Za pomocą zestawu treningowego budowana jest struktura reprezentująca bazę wiedzy. Następnie po zakończeniu etapu uczenia, za pomocą danych testowych sprawdzana jest dokładność i~skuteczność zbudowanego klasyfikatora.
 
-    W~przypadku gdy dane posiadają etykietę (opisową lub liczbową) mamy do czynienia z~\textit{uczeniem nadzorowanym}. W przypadku \textit{uczenia nienadzorowanego}, rekord danych wejściowych nie niesie ze sobą żadnej dodatkowej informacji. W~przypadku, gdy rekord posiada etykietę możemy mówić o~kategoriach i~w takim przypadku przeprowadzana zostaje \textit{klasyfikacja}. W~przypadku typowo liczbowych danych mamy do czynienia z~\textit{regresją}. Dla uczenia nienadzorowanego, dane analizowane są na zasadzie przynależności do skupisk. Ten typ dopasowania nazywany jest \textit{analizą skupień}.
+    W~przypadku gdy dane wejściowe posiadają etykietę (opisową lub liczbową) mamy do czynienia z~\textit{uczeniem nadzorowanym}. W przypadku \textit{uczenia nienadzorowanego}, rekord danych wejściowych nie niesie ze sobą żadnej dodatkowej informacji. W~przypadku, gdy rekord posiada etykietę, którą możemy skategoryzować przeprowadzony proces nosi nazwę \textit{klasyfikacji}. W~przypadku typowo liczbowych danych mamy do czynienia z~\textit{regresją}. Dla uczenia nienadzorowanego, dane analizowane są na zasadzie przynależności do skupisk. Ten typ dopasowania nazywany jest \textit{analizą skupień}.
 
-    Oprócz wielkości zbioru danych treningowych, kolejnym wymaganiem jest jak największego zróżnicowanie analizowanych wektorów cech. Cechy powinny być od siebie niezależne, powinny również zmieniać swoje wartości w~jak najmniejszym zakresie w~zależności od różnych warunków. W~innym wypadku baza wiedzy będzie posiadała zbyt mocne założenia co do danych wejściowych (ang. \textit{bias}) i~zbudowany model nie będzie pasował do żadnego innego zestawu danych lub dane wejściowe będą posiadały zbyt dużą wariancję (ang. \textit{variance}) i~baza wiedzy będzie zawierała oprócz danych również szum informacyjny, co zaowocuje niemożnością uogólnienia modelu do przypadków testowych.
+    Oprócz wielkości zbioru danych treningowych, kolejnym wymaganiem jest jak największego zróżnicowanie analizowanych wektorów cech. Cechy powinny być od siebie niezależne, powinny również zmieniać swoje wartości w~jak najmniejszym zakresie, w~zależności od różnych warunków. W~innym wypadku baza wiedzy będzie posiadała zbyt mocne założenia co do danych wejściowych (ang. \textit{bias}) i~zbudowany model nie będzie pasował do żadnego innego zestawu danych lub dane wejściowe będą posiadały zbyt dużą wariancję (ang. \textit{variance}) i~baza wiedzy będzie zawierała oprócz danych również szum informacyjny, co zaowocuje niemożnością uogólnienia modelu do przypadków rzeczywistych.
 
-    Podstawowym problemem w~przypadku uczenia nadzorowanego jest pomiar skuteczności zbudowanego klasyfikatora. Aby uwzględnić szum, wahania i~błędy próbkowania, czyli innymi słowy: jak najbardziej przybliżyć zbiór testowy (walidacyjny) do danych rzeczywistych korzysta się z~jednej z~dwóch technik - \textit{walidacji krzyżowej} (ang. \textit{cross-validation}) lub \textit{bootstrapu} (ang. \textit{bootstrapping}).
+    Podstawowym problemem w~przypadku uczenia nadzorowanego jest pomiar skuteczności zbudowanego klasyfikatora. Aby uwzględnić szum, wahania i~błędy próbkowania, czyli innymi słowy jak najbardziej przybliżyć zbiór testowy (walidacyjny) do danych rzeczywistych korzysta się z~jednej z~dwóch technik - \textit{walidacji krzyżowej} (ang. \textit{cross-validation}) lub \textit{bootstrapu} (ang. \textit{bootstrapping}).
 
     Metoda \textit{walidacji krzyżowej} polega na podziale zbioru danych na $K$ różnych podzbiorów. Następnie faza treningowa wykonywana jest na $K-1$ zbiorach, natomiast faza testowa wykonywana jest na ostatnim zbiorze. Po wykonaniu całego procesu dokładnie $K$ razy, gdzie każdy z~podzbiorów zostaje zbiorem testowym i~uśrednieniu wyników, otrzymamy rezultaty najwierniejsze operacjom na danych rzeczywistych.
 
-    Technika \textit{bootstrap} jest podobna do walidacji krzyżowej, jednak zbiór zbiór testowy jest wybierany losowo ze zbioru danych treningowych. Po wykonaniu całego procesu $N$ razy i~uśrednieniu wyników otrzymamy rezultaty zbliżone do operowania na danych rzeczywistych. Warto zauważyć, że w~tym przypadku dane mogą zostać wykorzystane zarówno jako zbiór treningowy jak i~testowy, w~tej samej iteracji.
+    Technika \textit{bootstrap} jest podobna do walidacji krzyżowej, jednak zbiór zbiór testowy jest wybierany losowo ze zbioru danych treningowych. Po wykonaniu całego procesu $N$ razy i~uśrednieniu wyników otrzymamy rezultaty zbliżone do operowania na danych rzeczywistych. Warto zauważyć, że w~tym przypadku dane mogą zostać wykorzystane zarówno jako zbiór treningowy jak i~testowy w~tej samej iteracji.
 
-    Wybór algorytmu wspomagającego walidację zależy od charakteru danych rzeczywistych. Jeśli dane rzeczywiste powtarzają się bardzo często, technika \textit{boostrap} będzie odpowiedniejsza. Jeśli zbiór wejściowy posiada dużą wariancję \textit{walidacja krzyżowa} będzie dokładniej odzwierciedlać strukturę danych rzeczywistych.
+    Wybór algorytmu wspomagającego walidację zależy od charakteru danych rzeczywistych. Jeśli dane rzeczywiste powtarzają się bardzo często, zastosowanie techniki \textit{boostrap} będzie odpowiedniejsze. Jeśli zbiór wejściowy posiada dużą wariancję, \textit{walidacja krzyżowa} będzie dokładniej odzwierciedlać strukturę danych rzeczywistych.
 
-    W~przypadku omawianego algorytmu mamy do czynienia z~uczeniem maszynowym nadzorowanym (tzw. klasyfikacją), w~której w~fazie testowej wykorzystano \textit{bootstrap}. W~celu omówienia działania drzew losowych, należy wprowadzić definicję drzewa decyzyjnego.
+    W~przypadku omawianego algorytmu mamy do czynienia z~uczeniem maszynowym nadzorowanym (tzw. klasyfikacją). W~fazie testowej została wykorzystana technika \textit{bootstrap}. Aby omówić działanie lasu drzew losowych, należy wprowadzić definicję drzewa decyzyjnego.
 
-    W~teorii decyzji drzewo decyzyjne jest drzewem decyzji i~ich możliwych konsekwencji (np. stanów natury). Zadaniem drzew decyzyjnych może być zarówno stworzenie planu, jak i~rozwiązanie problemu decyzyjnego. Metoda drzew decyzyjnych jest szczególnie przydatna w~problemach decyzyjnych z~licznymi, rozgałęziającymi się wariantami oraz w~przypadku podejmowania decyzji w~warunkach ryzyka.
+    Omawiany typ drzewa, w~teorii decyzji, jest drzewem decyzji i~ich możliwych konsekwencji (np. stanów natury). Zadaniem drzew decyzyjnych może być zarówno stworzenie planu, jak i~rozwiązanie problemu decyzyjnego. Metoda drzew decyzyjnych jest szczególnie przydatna w~problemach decyzyjnych z~licznymi, rozgałęziającymi się wariantami oraz w~przypadku podejmowania decyzji w~warunkach ryzyka.
 
-    Tworzenie drzewa decyzyjnego polega na przyjęciu odpowiedniej metryki (najpopularniejszymi metrykami są suma różnic kwadratów wartości cech, entropia, \textit{gini index} i~współczynnik błędnej klasyfikacji) oraz pewnej wartości progu. Następnie dla każdego rekordu danych obliczana jest wartość według przyjętej reguły i~wszystkie cechy powyżej przyjętego progu zostają przeniesione do lewej gałęzi, reszta zostaje przydzielona do prawej gałęzi. Następnie algorytm zostaje rekurencyjnie zaaplikowany do obu gałęzi i~zostaje powtarzany do momentu osiągnięcia określonej dokładności lub gdy liczba cech przypisanych do danego węzła osiągnie wartość minimalną.
+    Tworzenie drzewa decyzyjnego polega na przyjęciu odpowiedniej metryki (najpopularniejszymi metrykami są suma odległości, w~metryce euklidesowej, wartości cech od siebie, entropia, \textit{gini index} i~współczynnik błędnej klasyfikacji) oraz pewnej wartości progu, wyznaczonego w~odniesieniu do wybranej miary. Następnie dla każdego rekordu danych obliczana jest wartość według przyjętej reguły i~wszystkie cechy powyżej przyjętego progu zostają przeniesione do lewej gałęzi, reszta zostaje przydzielona do gałęzi prawej. Następnie algorytm zostaje rekurencyjnie zaaplikowany do obu gałęzi i~zostaje powtarzany do momentu osiągnięcia określonej dokładności lub gdy liczba cech przypisanych do danego węzła osiągnie wartość minimalną.
 
     Lasem drzew losowych (lub zbiorem drzew losowych) nazywamy taki zbiór drzew decyzyjnych, który jest w~stanie wybrać więcej niż jedną klasę, za pomocą głosowania w~każdym liściu, każdego z~wielu drzew. Wybór dominującej klasy następuje poprzez uśrednienie głosów wszystkich liści lasu oraz wybranie klasy z~największą średnią ilością głosów.
 
     Po wprowadzeniu i~uwspólnieniu odpowiednich pojęć, w~następnej sekcji zostanie szczegółowo omówiony wariant algorytmu zaimplementowany w pracy magisterskiej.
 
     \subsection{Omówienie procesu uczenia oraz klasyfikacji dla algorytmu opartego na lesie drzew losowych}
-    \cite{RecognizingFeaturePointsUsingClassificationTrees04}
-    \cite{RealTimeRandomizedTrees05}
-    \cite{RandomizedTrees06}
-    \cite{TwoStageRandomizedTrees11}
+    Początki pracy nad omawianym algorytmem sięgają 2004 roku (pierwsza wzmianka zawarta w~pracy \cite{RecognizingFeaturePointsUsingClassificationTrees04}). W~ciągu kolejnych lat pojawiły się kolejne prace, opisujące konretne rozwiązania (prace źródłowe \cite{RealTimeRandomizedTrees05}, \cite{RandomizedTrees06} oraz rozszerzenie i~optymalizacja oryginalnej metody \cite{TwoStageRandomizedTrees11}). Implementacja zawarta w~pracy magisterskiej, poza drobnymi wyjątkami, jest zgodna z~rozwiązaniami opisanymi w~pierwotnych materiałach.
+
+    \subsubsection{Budowa zbioru treningowego}
+    Śledzony obiekt docelowy jest opisany jako zbiór punktów charakterystycznych $K = \{k_{i}\}$ leżących na powierzchni obiektu. Współrzędne są opisane za pomocą lokalnego układu odniesienia obiektu głównego. Przy założeniu, że obiekt posiada jednolity kształt, łaty (fragmenty obrazu) otaczające punkt $k_{i}$ mogą być traktowane jako lokalnie płaski fragment obiektu, którego zniekształcenia wynikające z~rzutowania perspektywicznego zostaną potraktowane jako homografie. Przy takim założeniu, wystarczy posiadanie tylko jednego, przedniego rzutu obiektu do wygenerowania nowych widoków. Zostaną one przybliżone za pomocą próbkowania sekwencji transformacji afinicznych. Transformacją afiniczną nazywamy taką kompozycję:
+
+    \[
+      \mathbf{A} = \mathbf{R_{\theta}}\mathbf{R_{\phi}^{-1}}\mathbf{S}\mathbf{R_{\phi}}
+    \]
+
+    W~powyższym równaniu, $\mathbf{R_{\theta}}$, $\mathbf{R_{\phi}}$ są macierzami rotacji parametryzowanymi za pomocą kątów $\theta$ oraz $\phi$ oraz $\mathbf{S}$ jest diagonalną macierzą skalowania parametryzowaną za pomocą współczynników $\lambda_{1}$ i $\lambda_{2}$. Wartości zakresu kątów nie powinien przekraczać $[-\pi;+\pi]$, natomiast wartości współczynników skalowania powinny być tak dobrane, aby obejmowały całą oktawę.
+
+    Kolejnym krokiem podczas generowania zbioru treningowego jest przygotowanie danych, aby reprezentowały położenie obiektu śledzonego w~różnych lokalizacjach. Cel został osiągnięty za pomocą wprowadzenia pochylenia rzutu wejściowego względem osi $X$ oraz $Y$ w~określonych zakresach. Również w~tym przypadku zakres powinien obejmować całą oktawę.
+
+    Jako ostatni krok, celem uodpornienia zbioru treningowego na szum zawarty w~sekwencji wideo, z~przygotowywanych fragmentów za pomocą filtru medianowego zostaje usunięty oryginalny szum (wprowadzony przez kamerę oraz kodeki wideo) i~następnie do poprawionego fragmentu dodawany jest szum jednostajny.
+
+    Warto zauważyć, że nie wykonywane są żadne zmiany mogące wpłynąć na kontrast i~zmianę warunków oświetlenia na obrazie oryginalnym, ze względu na wykorzystanie specyficznych testów wewnątrz węzła drzewa losowego, uwzględniającego jasność poszczególnych pikseli.
+
+    \subsubsection{Ekstrakcja punktów charakterystycznych}
+    W~oryginalnej implementacji zastosowano algorytm ekstrakcji cech zwany \textit{Fast Multiscale Keypoint Extraction}, który jest autorskim i~dość skomplikowanym rozwiązaniem zaproponowanym w~pracach \cite{RealTimeRandomizedTrees05}, \cite{RandomizedTrees06}.
+
+    Zamiast tego algorytmu, wykorzystana została definicja narożnika zgodna z~definicją \textit{Harrisa} wykorzystana również w~algorytmie przepływu optycznego rzadkiego omówionego powyżej. Oprócz wzlgędów implementacyjnych zastosowano właśnie tę definicję, aby ułatwić porównanie skuteczności obu metod. Wspomniana metoda jest wykorzystana zarówno w~procesie generacji bazy treningowej, jak również w~późniejszym etapie klasyfikacji ramek animacji.
+
+    Po wyselekcjonowaniu punktów charakterystycznych, następuje ich przefiltrowanie ze względu na dwa kryteria:
+
+    \begin{itemize}
+      \item Ze zbioru wyselekcjonowanych punktów odrzucane są te, które nie znajdują się wewnątrz aktualnie analizowanej łaty (fragmentu obrazu wejściowego).
+      \item Odrzucane są również odstające cechy, w~sensie oddalenia od siebie w~metryce euklidesowej. Algorytm promuje śledzenie skupisk cech występujących obok siebie. Odbywa się to za pomocą głosowania na określone grupy punktów, punkty będące najbliżej siebie traktowane są jako jedna grupa.
+    \end{itemize}
+
+    Następnie z~przetransformowanych obrazów wycinane są fragmenty reprezentujące otoczenia przefiltrowanych punktów. Omawiane łaty wraz z~informacjami o~współrzędnych punktu kluczowego zapisywane są w~docelowej bazie treningowej.
+
+    \subsubsection{Budowa lasu drzew losowych}
+
+    Metryki
+    Entropia
+
+    \subsubsection{Proces klasyfikacji}
+    Proces klasyfikacji wykorzystujący nauczone lasy drzew losowych przebiega w~trzech etapach:
+    \begin{itemize}
+      \item W~pierwszym kroku następuje ekstrakcja cech z~aktualnej klatki animacji. Do tego celu wykorzystywany jest algorytm wyodrębnienia narożników zgodnych z~definicją narożnika według \textit{Harrisa}. Punkty charakterystyczne zostają wyekstrahowane wraz z~otoczeniem (fragmenty, łaty).
+      \item Drugi krok polega na wyznaczeniu klasy do której zostanie zakwalifikowany dany fragment oraz prawdopodobieństwa z~jakim dana łata należy do wyznaczonej klasy. Obliczenie omawianych parametrów odbywa się poprzez przepuszczenie danej cechy przez las drzew losowych i~określeniu za pomocą uśrednionej liczby głosów zawartych w~liściach wszystkich drzew, jak prawdopodobne i~do której klasy należy dany punkt wraz z~otoczeniem. Elementy z~niewłaściwą klasą lub poniżej pewnego prawdopodobieństwa (w~implementacji przyjęto wartość $0.1$) zostają odrzucone w~procesie klasyfikacji.
+      \item Po przetworzeniu wszystkich fragmentów następuje faza prezentacji wyników. Trzeci krok, ze względu na stopień skomplikowania, został szczegółowo omówiony w~następnej podsekcji.
+    \end{itemize}
+
+    \subsubsection{Prezentacja wyników}
+    Ostateczne dopasowanie śledzonych punktów odbywa się za pomocą odnalezienia powiązania między sklasyfikowanym punktem charakterystycznym znajdującym się w~aktualnej klatce (innymi słowy, wynikiem klasyfikacji) a~obrazem wejściowym, który posłużył jako obraz wejściowy do klasyfikacji. Zanim zostanie dokładnie omówiony proces obliczania powiązania, należy omówić zasadę działania algorytmu \textit{RANSAC}.
+
+    \textit{RANSAC} jest skrótem od angielskiego \textit{RANdom SAmple Consensus}. Jest to iteracyjna metoda przewidywania parametrów modelu matematycznego na podstawie zbioru danych zawierającego punkty odstające. Jest to niedeterministyczny algorytm, w~sensie wytworzenia przydatnego rezultatu z~określonym prawdopodobieństwem, zwiększającym się wprost proporcjonalnie do liczby iteracji.
+
+    Podstawowym założeniem poczynionym co do wartości zawartych w~zbiorze wejściowym jest to, że zestaw posiada wartości skrajne. Oznacza to, że rozkład danych jest zależny od konkretnego parametru modelu, jednak zmiany i~wartości skrajne powstają na skutek szumu. Jednym z~przykładów powstawania takiego szumu może być określony sposób akwizycji danych lub błędna hipoteza na temat interpretowanych danych. Metoda \textit{RANSAC} zakłada również, że mimo istnienia wartości skrajnych, możliwe jest powiązanie pozostałej części zbioru danych z~konkretnym parametrem modelu matematycznego.
+
+    Powiązanie pomiędzy wynikami klasyfikacji a~punktami charakterystycznymi z~obrazu oryginalnego jest obliczane za pomocą poszukiwania transformacji perspektywy między dwoma płaszczyznami. Za pomocą algorytmu \textit{RANSAC} obliczana jest wyjściowa macierz homografii oraz maski odniesień między punktami. Z~pomocą wyznaczonej maski punkty są dopasowywane do siebie, dzięki temu posiadamy informację, za pomocą którego punktu z~obrazu wejściowego został sklasyfikowany punkt w~aktualnej klatce animacji oraz w~którym miejscu znajduje się sklasyfikowany punkt w~aktualnej klatce animacji.
 
 \chapter{Specyfikacja przeprowadzonych badań}\label{Chapter_SpecyfikacjaPrzeprowadzonychBadan}
 
