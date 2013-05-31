@@ -348,9 +348,37 @@
     Następnie z~przetransformowanych obrazów wycinane są fragmenty reprezentujące otoczenia przefiltrowanych punktów. Omawiane łaty wraz z~informacjami o~współrzędnych punktu kluczowego zapisywane są w~docelowej bazie treningowej.
 
     \subsubsection{Budowa lasu drzew losowych}
+    Następnym krokiem, tuż po zbudowaniu bazy treningowej, jest etap budowy struktury reprezentującej wiedzę. Nauczone drzewa losowe posiadają określoną strukturę. Każdy węzeł drzewa losowego zawiera w~sobie test, dzielący przestrzeń danych na dwie części. Każdy z~liści zawiera wyestymowane prawdopodobieństwo \textit{a~posteriori} przynależności do klasy, która posiada największą ilość głosów.
 
-    Metryki
-    Entropia
+    Przy budowie drzewa losowego najważniejszą rolę odgrywa dobór metryki, progu oraz testu zawartego w~węźle. Proces budowy odbywa się w~sposób klasyczny, od góry do dołu. Konstrukcja przebiega za pomocą algorytmu zachłannego, aby jak najskuteczniej rozdzielić dostarczone przykłady. Zysk informacyjny, wykorzystywany w~celu sprawdzenia skuteczności, wynikający z~podziału zbioru $S$ na kilka podzbiorów $S_i$ przy określonym teście, obliczany jest w~następujący sposób:
+
+    \[
+        \Delta E = - \sum\limits_{i} \frac{|S_{i}|}{|S|} E(S_{i}),
+    \]
+
+    gdzie $E(s)$ zostało zdefiniowane następująco:
+
+    \[
+        E(s) = - \sum\limits_{j=1}^{N} p_{j} \log_{2}(p_{j})
+    \]
+
+    gdzie $p_{j}$ jest porcją informacji w~podzbiorze $s$ należącą do klasy $j$. Widać wyraźnie, że $E(s)$ zdefiniowane w~takiej postaci jest entropią zgodną z~definicją \textit{Shanona}.
+
+    Proces powtarzany jest dla każdego węzła nie będącego liściem. Rekurencja zostanie przerwana po osiągnięciu maksymalnej wysokości drzewa lub gdy w~węźle zostanie zbyt mała liczba elementów. W~zaproponowanej implementacji minimalna liczba elementów w~węźle waha się od 50 do 100 elementów, natomiast maksymalna wysokość drzewa jest liczbą całkowitą z~przedziału $[10; 30]$.
+
+    \subsubsection{Test zaimplementowany wewnątrz węzła drzewa losowego}
+    W~zaproponowanym rozwiązaniu, zaimplementowany został test oparty na różnicy jasności dwóch pikseli $\mathbf{m_{1}}$ i~$\mathbf{m_{2}}$ wybranych w~sąsiedztwie punktu charakterystycznego. Formalnie test został zapisany jako:
+
+    \[
+      C_{2}(\mathbf{m_{1}}, \mathbf{m_{2}}) = \begin{cases}
+        \textit{Jeśli } I_{\sigma}(\mathbf{p}, \mathbf{m_{1}}) \leq I_{\sigma}(\mathbf{p}, \mathbf{m_{2}}) & \text{wybierz lewy węzeł} \\
+        \textit{w~przeciwnym przypadku} & \text{wybierz prawego węzła}.
+      \end{cases}
+    \]
+
+    gdzie $I_{\sigma}$ jest jasnością łaty $\mathbf{p}$ do której należy konkretny piksel $\mathbf{m_{i}}$ (należy pamiętać o~rozmyciu Gaussowskim, zaaplikowanym w~celu zmniejszenia wpływu szumu na jasność obrazu). W~przypadku fragmentów o~wielkości 32 na 32 piksele, liczba możliwych testów funkcji $C_{2}$ wynosi $2^{19}$. W~praktyce liczba testów jest znacznie ograniczona ponieważ rzeczywiste obrazy wykazują dużą spójność przestrzenną, więc tylko mały obszar podlega testowaniu.
+
+    Warto zauważyć, że struktura danych jaką są drzewa losowe nie ogranicza typu możliwych testów przeprowadzonych wewnątrz węzła, nawet pojedyncze drzewo może posiadać różnorakie testy na różnych poziomach zagnieżdżeń. Należy tylko pamiętać o~tym aby testy były wystarczająco szybkie, żeby nie spowalniały procesu klasyfikacji.
 
     \subsubsection{Proces klasyfikacji}
     Proces klasyfikacji wykorzystujący nauczone lasy drzew losowych przebiega w~trzech etapach:
