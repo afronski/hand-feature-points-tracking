@@ -7,6 +7,7 @@
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#include "../../common/converters.hpp"
 #include "../../common/vision.hpp"
 #include "../../common/path.hpp"
 #include "../../common/debug.hpp"
@@ -23,14 +24,6 @@ const std::string RandomForestTracker::Name = "Random Forest Tracker";
 
 const cv::Scalar RandomForestTracker::DrawingColor = cv::Scalar(0, 255, 0);
 const cv::Size RandomForestTracker::GaussianKernelSize = cv::Size(7, 7);
-
-// Internal functions.
-std::string toString(int value) {
-  std::ostringstream result;
-  result << value;
-
-  return result.str();
-}
 
 // PIMPL idiom implementation.
 struct RandomForestTracker::PIMPL {
@@ -128,7 +121,7 @@ void RandomForestTracker::writeTrainingBaseToFolder() {
 
   for (std::size_t i = 0; i < featuresLength; ++i) {
     const std::size_t patchesLength = featureCollection[i].second.size();
-    std::string folderPath = implementation->parameters.TrainingBaseFolder + toString(i) + "/";
+    std::string folderPath = implementation->parameters.TrainingBaseFolder + common::toString(i) + "/";
 
     common::debug::log("Creating directory and saving feature %3d from %d (patches: %3d)\r",
                        i + 1,
@@ -143,7 +136,7 @@ void RandomForestTracker::writeTrainingBaseToFolder() {
         common::debug::log("\n");
       }
 
-      std::string imagePath = folderPath + toString(k) + ".bmp";
+      std::string imagePath = folderPath + common::toString(k) + ".bmp";
 
       common::debug::log("Saving patch %3d from %d (%s)\r", k + 1, patchesLength, imagePath.c_str());
 
@@ -189,7 +182,7 @@ void RandomForestTracker::loadTrainingBaseFromFolder() {
   common::debug::log("Reading patches for feature points\n");
 
   for (std::size_t i = 0; i < featurePointsCount; ++i) {
-    std::string folderPath = implementation->parameters.TrainingBaseFolder + toString(i) + "/";
+    std::string folderPath = implementation->parameters.TrainingBaseFolder + common::toString(i) + "/";
 
     if (!common::path::directoryExists(folderPath)) {
       throw std::logic_error("Specified patch folder is not avalable!");
@@ -207,7 +200,7 @@ void RandomForestTracker::loadTrainingBaseFromFolder() {
         common::debug::log("\n");
       }
 
-      std::string imagePath = folderPath + toString(k) + ".bmp";
+      std::string imagePath = folderPath + common::toString(k) + ".bmp";
 
       common::debug::log("Loading patch %3d from %d (%s)\r", k + 1, patchesPerFeaturePoint, imagePath.c_str());
       implementation->trainingBase->back().second.push_back(cv::imread(imagePath, CV_LOAD_IMAGE_GRAYSCALE));
@@ -345,7 +338,7 @@ void RandomForestTracker::loadFeaturePointsFromTrainigBase(std::vector<Feature>&
     trainingBaseHeader.close();
 
     for (int i = 0; i < featurePointsCount; ++i) {
-      std::string folderPath = implementation->parameters.TrainingBaseFolder + toString(i) + "/";
+      std::string folderPath = implementation->parameters.TrainingBaseFolder + common::toString(i) + "/";
 
       if (!common::path::directoryExists(folderPath)) {
         throw std::logic_error("Patch folder doesn't exist!");

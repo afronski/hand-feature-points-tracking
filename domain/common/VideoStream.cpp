@@ -7,6 +7,7 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "debug.hpp"
+#include "converters.hpp"
 #include "VideoStream.hpp"
 
 namespace common {
@@ -74,6 +75,9 @@ namespace common {
 
       TransformersList transformers;
 
+      double duration;
+      int frameCounter;
+
       int codec;
       int fps;
 
@@ -100,15 +104,23 @@ namespace common {
     }
 
     Dictionary VideoStream::getResults() {
-      return Dictionary();
+      Dictionary results;
+      std::string processingTime(common::toString(processingVideoTimer.getElapsedTimeInMilliseconds()));
+
+      results.insert(std::make_pair("totalVideoProcessingTime", processingTime));
+      results.insert(std::make_pair("fps", common::toString(_implementation->fps)));
+      results.insert(std::make_pair("frameCounter", common::toString(_implementation->frameCounter)));
+      results.insert(std::make_pair("videoDuration", common::toString(_implementation->duration)));
+
+      return results;
     }
 
     void VideoStream::beforeVideo() {
-
+      processingVideoTimer.start();
     }
 
     void VideoStream::afterVideo() {
-
+      processingVideoTimer.stop();
     }
 
     void VideoStream::processFrames() {
@@ -153,6 +165,10 @@ namespace common {
       _implementation->fps = static_cast<int>(_implementation->input_video.get(CV_CAP_PROP_FPS));
       _implementation->width = static_cast<int>(_implementation->input_video.get(CV_CAP_PROP_FRAME_WIDTH));
       _implementation->height = static_cast<int>(_implementation->input_video.get(CV_CAP_PROP_FRAME_HEIGHT));
+      _implementation->frameCounter = static_cast<int>(_implementation->input_video.get(CV_CAP_PROP_FRAME_COUNT));
+
+      _implementation->duration = (static_cast<double>(_implementation->frameCounter) /
+                                   static_cast<double>(_implementation->fps)) * 1000.0;
 
       _implementation->dimmensions = cv::Size(_implementation->width, _implementation->height);
 
