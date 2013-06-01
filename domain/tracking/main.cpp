@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 
+#include "../common/debug.hpp"
+
 #include "../common/path.hpp"
 #include "../common/vision.hpp"
 
@@ -45,6 +47,8 @@ class TrackerApplication : public common::CommandLineInterface {
 
       if (extractArgument(0) == "--include-results") {
         arguments.erase(std::remove(arguments.begin(), arguments.end(), "--include-results"));
+
+        common::debug::printEnabled = false;
         printResultsToOutput = true;
       }
 

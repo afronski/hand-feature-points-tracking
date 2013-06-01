@@ -4,6 +4,8 @@
 namespace common {
   namespace debug {
 
+    extern bool printEnabled;
+
     void log(const char* format, ...);
     void print(const char* format, ...);
 
