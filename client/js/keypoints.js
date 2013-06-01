@@ -252,7 +252,7 @@
 
   // Initialization.
   function init() {
-    Common.getMovies(enableUI);
+    Common.getMovies(enableUI, "movies-without-keypoints");
   }
 
   function keyboardEventHandler(event) {

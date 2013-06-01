@@ -103,8 +103,10 @@ window.Common = (function() {
   }
 
   // Movies select helpers.
-  function getMovies(callback) {
-    xhrGet("/movies", buildMovieList.curry(callback));
+  function getMovies(callback, url) {
+    url = url || "/movies";
+
+    xhrGet(url, buildMovieList.curry(callback));
   }
 
   function getMovieName() {

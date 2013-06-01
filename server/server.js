@@ -65,6 +65,10 @@ var PORT = 9292,
       };
     },
 
+    onlyBaseName = function(element) {
+      return path.basename(element).replace(path.extname(element), "");
+    },
+
     getMovieList = function() {
       if (movies.length <= 0) {
         movies = glob.sync("./assets/*.avi").filter(notTrackingResults).map(movieMapper);
@@ -72,6 +76,18 @@ var PORT = 9292,
       }
 
       return movies;
+    },
+
+    getMovieListWithoutKeypoints = function() {
+      var moviesToFiltering = glob.sync("./assets/*.avi").filter(notTrackingResults).map(movieMapper),
+          keypoints = glob.sync("./assets/*.keypoints").map(onlyBaseName),
+          result = moviesToFiltering.filter(function(element) {
+            return keypoints.indexOf(onlyBaseName(element.name)) === -1;
+          });
+
+      debug("Listing movie files without keypoints from assets directory: " + prettyPrint(result));
+
+      return result;
     },
 
     toAlgorithm = function(element, index) {
@@ -153,9 +169,7 @@ var PORT = 9292,
         debug("Invoking: " + trackingInvocation);
 
         if (execSync.code(trackingInvocation) === 0) {
-            filename = path
-                        .basename(movieObject.path)
-                        .replace(path.extname(movieObject.path), "");
+            filename = onlyBaseName(movieObject.path);
 
             conversionInvocation = util.format("./convert-one.sh %s",
                                                filename + sanitize(ResultMovieBeforeConversionPostFix, algorithm));
@@ -184,6 +198,12 @@ app.get("/movies", function(request, response) {
   debug("Get movie list");
 
   sendJSON(response, getMovieList());
+});
+
+app.get("/movies-without-keypoints", function(request, response) {
+  debug("Get movie list");
+
+  sendJSON(response, getMovieListWithoutKeypoints());
 });
 
 app.get("/algorithms", function(request, response) {
