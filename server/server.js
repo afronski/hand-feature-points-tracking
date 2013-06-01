@@ -57,7 +57,7 @@ var PORT = 9292,
       return element.indexOf(ExcludedElementsWith) === -1;
     },
 
-    movieMapper = function(element, index) {
+    fileMapper = function(element, index) {
       return {
         value: index + 1,
         name: path.basename(element),
@@ -71,15 +71,23 @@ var PORT = 9292,
 
     getMovieList = function() {
       if (movies.length <= 0) {
-        movies = glob.sync("./assets/*.avi").filter(notTrackingResults).map(movieMapper);
+        movies = glob.sync("./assets/*.avi").filter(notTrackingResults).map(fileMapper);
         debug("Listing movie files from assets directory: " + prettyPrint(movies));
       }
 
       return movies;
     },
 
+    getResultsList = function() {
+      var results = glob.sync("./assets/*.json").filter(notTrackingResults).map(fileMapper);
+
+      debug("Listing JSON files from assets directory: " + prettyPrint(results));
+
+      return results;
+    },
+
     getMovieListWithoutKeypoints = function() {
-      var moviesToFiltering = glob.sync("./assets/*.avi").filter(notTrackingResults).map(movieMapper),
+      var moviesToFiltering = glob.sync("./assets/*.avi").filter(notTrackingResults).map(fileMapper),
           keypoints = glob.sync("./assets/*.keypoints").map(onlyBaseName),
           result = moviesToFiltering.filter(function(element) {
             return keypoints.indexOf(onlyBaseName(element.name)) === -1;
@@ -194,6 +202,12 @@ app.use(express.bodyParser());
 
 app.get("/videos-converted/:path", videoStreamer);
 
+app.get("/results", function(request, response) {
+  debug("Get results list");
+
+  sendJSON(response, getResultsList());
+});
+
 app.get("/movies", function(request, response) {
   debug("Get movie list");
 
@@ -201,7 +215,7 @@ app.get("/movies", function(request, response) {
 });
 
 app.get("/movies-without-keypoints", function(request, response) {
-  debug("Get movie list");
+  debug("Get movie list without associated keypoints file");
 
   sendJSON(response, getMovieListWithoutKeypoints());
 });

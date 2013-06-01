@@ -203,7 +203,7 @@
       videoContainer.classList.remove("hidden");
       canvasContainer.classList.remove("hidden");
 
-      movie = Common.getMovieName().replace("avi", "webm");
+      movie = Common.getOptionText().replace("avi", "webm");
       Common.changeVideo(movie);
 
       makeVideoMoved();
@@ -255,7 +255,7 @@
 
   // Initialization.
   function init() {
-    Common.getMovies(enableUI, "movies-without-keypoints");
+    Common.getCollection(enableUI, "movies-without-keypoints");
   }
 
   function keyboardEventHandler(event) {

@@ -99,7 +99,7 @@
       Common.toggleButton("#invoke", true);
       $("#video-container").classList.remove("hidden");
 
-      movie = Common.getMovieName().replace("avi", "webm");
+      movie = Common.getOptionText().replace("avi", "webm");
       Common.changeVideo(movie);
     }
   }
@@ -144,7 +144,7 @@
   }
 
   function init() {
-    Common.getMovies(getAlgorithms);
+    Common.getCollection(getAlgorithms);
   }
 
   document.addEventListener("DOMContentLoaded", init, true);

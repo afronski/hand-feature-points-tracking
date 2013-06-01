@@ -1,6 +1,9 @@
 window.Common = (function() {
   "use strict";
 
+  var DefaultResourceURI = "/movies",
+      DefaultCollectionHolderSelector = "#movies";
+
   // Non-standard currying arguments method.
   if (!Function.prototype.curry) {
     Function.prototype.curry = function() {
@@ -84,17 +87,17 @@ window.Common = (function() {
     }
   }
 
-  function buildMovieList(callback) {
+  function buildElementList(callback, destination) {
     var response = JSON.parse(this.responseText),
-        movies = $("#movies");
+        elements = $(destination);
 
-    response.forEach(function(movie) {
+    response.forEach(function(element) {
       var option = document.createElement("option");
 
-      option.setAttribute("value", movie.value);
-      option.innerText = movie.name;
+      option.setAttribute("value", element.value);
+      option.innerText = element.name;
 
-      movies.appendChild(option);
+      elements.appendChild(option);
     });
 
     if (typeof(callback) === "function") {
@@ -102,17 +105,21 @@ window.Common = (function() {
     }
   }
 
-  // Movies select helpers.
-  function getMovies(callback, url) {
-    url = url || "/movies";
+  // Ger element to select helpers.
+  function getCollection(callback, url, destination) {
+    url = url || DefaultResourceURI;
+    destination = destination || DefaultCollectionHolderSelector;
 
-    xhrGet(url, buildMovieList.curry(callback));
+    xhrGet(url, buildElementList.curry(callback, destination));
   }
 
-  function getMovieName() {
-    var movies = $("#movies");
+  function getOptionText(from) {
+    var select;
 
-    return movies.options[movies.selectedIndex].innerText;
+    from = from || DefaultCollectionHolderSelector;
+    select = $(from);
+
+    return select.options[select.selectedIndex].innerText;
   }
 
   function changeVideo(name) {
@@ -129,8 +136,9 @@ window.Common = (function() {
     xhrGet: xhrGet,
     xhrPost: xhrPost,
 
-    getMovies: getMovies,
-    getMovieName: getMovieName,
+    getCollection: getCollection,
+    getOptionText: getOptionText,
+
     changeVideo: changeVideo,
 
     toggleButton: toggleButton,
