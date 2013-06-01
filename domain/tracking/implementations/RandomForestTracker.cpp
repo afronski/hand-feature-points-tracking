@@ -415,6 +415,8 @@ void RandomForestTracker::readPointsFromKeypointFile(const std::string& fileName
     unsigned int n = 0;
     double x = 0.0, y = 0.0, radius = 0.0;
 
+    cv::Size boundary = implementation->parameters.InitialImage.size();
+
     input >> radius;
     input >> n;
 
@@ -422,17 +424,37 @@ void RandomForestTracker::readPointsFromKeypointFile(const std::string& fileName
       input >> x >> y;
       points.push_back(cv::Point(x, y));
 
-      points.push_back(cv::Point(x + radius, y));
-      points.push_back(cv::Point(x - radius, y));
+      if (x + radius >= boundary.width) {
+        points.push_back(cv::Point(x + radius, y));
+      }
 
-      points.push_back(cv::Point(x, y + radius));
-      points.push_back(cv::Point(x, y - radius));
+      if (x - radius >= 0.0) {
+        points.push_back(cv::Point(x - radius, y));
+      }
 
-      points.push_back(cv::Point(x + radius, y + radius));
-      points.push_back(cv::Point(x + radius, y - radius));
+      if (y + radius < boundary.height) {
+        points.push_back(cv::Point(x, y + radius));
+      }
 
-      points.push_back(cv::Point(x - radius, y + radius));
-      points.push_back(cv::Point(x - radius, y - radius));
+      if (y - radius >= 0.0) {
+        points.push_back(cv::Point(x, y - radius));
+      }
+
+      if (x + radius < boundary.width && y + radius < boundary.height) {
+        points.push_back(cv::Point(x + radius, y + radius));
+      }
+
+      if (x + radius < boundary.width && y - radius >= 0) {
+        points.push_back(cv::Point(x + radius, y - radius));
+      }
+
+      if (x - radius >= 0.0 && y + radius < boundary.height) {
+        points.push_back(cv::Point(x - radius, y + radius));
+      }
+
+      if (x - radius >= 0.0 && y + radius >= 0.0) {
+        points.push_back(cv::Point(x - radius, y - radius));
+      }
 
       --n;
     }
