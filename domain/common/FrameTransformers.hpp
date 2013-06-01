@@ -7,6 +7,9 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "converters.hpp"
+#include "Timer.hpp"
+
 typedef std::map<std::string, std::string> Dictionary;
 
 class FrameTransformer {
@@ -14,15 +17,19 @@ class FrameTransformer {
     virtual ~FrameTransformer() {}
     virtual void process(cv::Mat& frame) = 0;
 
-    virtual void beforeFrame(cv::Mat& frame) {};
-    virtual void afterFrame(cv::Mat& frame) {};
+    virtual void beforeFrame(cv::Mat& frame);
+    virtual void afterFrame(cv::Mat& frame);
 
-    virtual Dictionary getResults() const { return Dictionary(); };
+    virtual Dictionary getResults() const;
 
     virtual void handleFirstFrame(const cv::Mat& frame) {};
     virtual void handleMovieName(const std::string& movieName) {};
 
     virtual void afterInitialization() {};
+
+  protected:
+    common::Timer processingFrameTimer;
+    std::vector<double> processedFramesTiming;
 };
 
 class ArgumentsAwareFrameTransformer : public FrameTransformer {

@@ -84,11 +84,11 @@ class TrackerApplication : public common::CommandLineInterface {
           stream.open(input);
           stream.transfer(output);
 
-          reporter.merge(marker->getResults());
-          reporter.merge(transformer->getResults());
-          reporter.merge(stream.getResults());
-
           if (printResultsToOutput) {
+            reporter.merge(marker->getResults());
+            reporter.merge(transformer->getResults());
+            reporter.merge(stream.getResults());
+
             std::cout << reporter.str();
           }
         } catch(const std::exception& exception) {

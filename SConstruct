@@ -28,6 +28,7 @@ environment.Library("./bin/common", [
                       "./domain/common/VideoStream.cpp",
                       "./domain/common/Timer.cpp",
                       "./domain/common/JsonReporter.cpp",
+                      "./domain/common/FrameTransformers.cpp",
                       "./domain/common/path.cpp",
                       "./domain/common/vision.cpp",
                       "./domain/common/debug.cpp",

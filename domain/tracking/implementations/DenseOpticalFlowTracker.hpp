@@ -1,6 +1,8 @@
 #ifndef __DENSE_OPTICAL_FLOW_TRACKER_HPP__
 #define __DENSE_OPTICAL_FLOW_TRACKER_HPP__
 
+#include "../../common/Timer.hpp"
+
 #include "../../common/FrameTransformers.hpp"
 
 class DenseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
@@ -18,6 +20,9 @@ class DenseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
     virtual Dictionary getResults() const;
 
   private:
+    common::Timer timerForDrawing;
+    std::vector<double> drawingTimeOverhead;
+
     unsigned int mapOverlayStep;
     int windowSize;
     int iterations;

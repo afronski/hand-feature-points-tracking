@@ -4,6 +4,8 @@
 #include <opencv2/core/core_c.h>
 #include <opencv2/video/tracking.hpp>
 
+#include "../../common/converters.hpp"
+
 #include "SparseOpticalFlowTracker.hpp"
 
 // Transformer constants.
@@ -71,7 +73,13 @@ void SparseOpticalFlowTracker::process(cv::Mat& frame) {
   salientPoints[1].resize(k);
   points.resize(k);
 
+  timerForDrawing.start();
+
   drawTrackedPoints(frame);
+
+  timerForDrawing.stop();
+
+  drawingTimeOverhead.push_back(timerForDrawing.getElapsedTimeInMilliseconds());
 
   std::swap(salientPoints[1], salientPoints[0]);
   cv::swap(previousGrayFrame, actualGrayFrame);
@@ -90,13 +98,20 @@ void SparseOpticalFlowTracker::fill(const std::vector<std::string>& arguments) {
 }
 
 void SparseOpticalFlowTracker::beforeFrame(cv::Mat& frame) {
-
+  FrameTransformer::beforeFrame(frame);
 }
 
 void SparseOpticalFlowTracker::afterFrame(cv::Mat& frame) {
-
+  FrameTransformer::afterFrame(frame);
 }
 
 Dictionary SparseOpticalFlowTracker::getResults() const {
-  return Dictionary();
+  Dictionary results = FrameTransformer::getResults();
+
+  results.insert(std::make_pair("minimalDistanceBetweenPoints", common::toString(minimalDistanceBetweenPoints)));
+  results.insert(std::make_pair("maximumFeaturesCount", common::toString(maximumFeaturesCount)));
+
+  results.insert(std::make_pair("drawingTimeOverhead", common::toString(drawingTimeOverhead)));
+
+  return results;
 }

@@ -1,6 +1,8 @@
 #ifndef __SPARSE_OPTICAL_FLOW_TRACKER_HPP__
 #define __SPARSE_OPTICAL_FLOW_TRACKER_HPP__
 
+#include "../../common/Timer.hpp"
+
 #include "../../common/FrameTransformers.hpp"
 
 class SparseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
@@ -30,6 +32,9 @@ class SparseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
 
     bool pointShouldBeAccepted(unsigned int number);
     void drawTrackedPoints(cv::Mat& frame);
+
+    common::Timer timerForDrawing;
+    std::vector<double> drawingTimeOverhead;
 
     std::vector<cv::Point2f> points;
 

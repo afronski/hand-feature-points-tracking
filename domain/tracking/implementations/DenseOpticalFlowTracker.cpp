@@ -4,6 +4,8 @@
 #include <opencv2/core/core_c.h>
 #include <opencv2/video/tracking.hpp>
 
+#include "../../common/converters.hpp"
+
 #include "DenseOpticalFlowTracker.hpp"
 
 // Transformer constants.
@@ -54,7 +56,13 @@ void DenseOpticalFlowTracker::process(cv::Mat& frame) {
     StandardDeviationForGaussian,
     cv::OPTFLOW_FARNEBACK_GAUSSIAN);
 
+  timerForDrawing.start();
+
   drawOpticalFlowMap(frame);
+
+  timerForDrawing.stop();
+
+  drawingTimeOverhead.push_back(timerForDrawing.getElapsedTimeInMilliseconds());
 
   previousGrayFrame = actualGrayFrame.clone();
 }
@@ -77,13 +85,21 @@ void DenseOpticalFlowTracker::fill(const std::vector<std::string>& arguments) {
 }
 
 void DenseOpticalFlowTracker::beforeFrame(cv::Mat& frame) {
-
+  FrameTransformer::beforeFrame(frame);
 }
 
 void DenseOpticalFlowTracker::afterFrame(cv::Mat& frame) {
-
+  FrameTransformer::afterFrame(frame);
 }
 
 Dictionary DenseOpticalFlowTracker::getResults() const {
-  return Dictionary();
+  Dictionary results = FrameTransformer::getResults();
+
+  results.insert(std::make_pair("mapOverlayStep", common::toString(mapOverlayStep)));
+  results.insert(std::make_pair("windowSize", common::toString(windowSize)));
+  results.insert(std::make_pair("iterations", common::toString(iterations)));
+
+  results.insert(std::make_pair("drawingTimeOverhead", common::toString(drawingTimeOverhead)));
+
+  return results;
 }

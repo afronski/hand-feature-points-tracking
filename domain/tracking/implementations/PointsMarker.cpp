@@ -52,13 +52,20 @@ void PointsMarker::fill(const std::vector<std::string>& arguments) {
 }
 
 void PointsMarker::beforeFrame(cv::Mat& frame) {
-
+  FrameTransformer::beforeFrame(frame);
 }
 
 void PointsMarker::afterFrame(cv::Mat& frame) {
-
+  FrameTransformer::afterFrame(frame);
 }
 
 Dictionary PointsMarker::getResults() const {
-  return Dictionary();
+  Dictionary results;
+
+  results.insert(std::make_pair("pointsBoundaryRadius", common::toString(radius)));
+  results.insert(std::make_pair("pointsCounter", common::toString(points.size())));
+
+  results.insert(std::make_pair("pointsMarkerTimeOverhead", common::toString(processedFramesTiming)));
+
+  return results;
 }

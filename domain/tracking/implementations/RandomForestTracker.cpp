@@ -12,6 +12,8 @@
 #include "../../common/path.hpp"
 #include "../../common/debug.hpp"
 
+#include "../../common/Timer.hpp"
+
 #include "RandomForestTracker.hpp"
 
 #include "random-forest-internals-implementation/FeaturePointsExtractor.hpp"
@@ -31,7 +33,18 @@ struct RandomForestTracker::PIMPL {
   FeaturesCollection* trainingBase;
   RandomForest* randomForest;
 
+  common::Timer timer;
+
+  common::Timer timerForDrawing;
+  std::vector<double> drawingTimeOverhead;
+
+  double buildingTrainingBaseTimeOverhead;
+  double trainingTimeOverhead;
+
   PIMPL() {
+    buildingTrainingBaseTimeOverhead = 0.0;
+    trainingTimeOverhead = 0.0;
+
     trainingBase = 0;
     randomForest = 0;
 
@@ -367,6 +380,8 @@ void RandomForestTracker::classifyImage(const cv::Mat& initial, const cv::Mat& f
   std::vector<PairsContainer> results;
   classifyPatchesFromCollection(inputImageFeaturesCollection, results);
 
+  implementation->timerForDrawing.start();
+
   std::vector<Feature> loadedFeaturePoints;
   loadFeaturePointsFromTrainigBase(loadedFeaturePoints);
 
@@ -374,6 +389,9 @@ void RandomForestTracker::classifyImage(const cv::Mat& initial, const cv::Mat& f
   makeFeaturePointCorrespondence(loadedFeaturePoints, inputImageFeaturesCollection, results, correspondence);
 
   drawFeaturePointsCorrespondence(loadedFeaturePoints, correspondence, initial, output);
+
+  implementation->timerForDrawing.stop();
+  implementation->drawingTimeOverhead.push_back(implementation->timerForDrawing.getElapsedTimeInMilliseconds());
 }
 
 bool RandomForestTracker::isTrainingBaseAvailable() const {
@@ -384,6 +402,8 @@ bool RandomForestTracker::isTrainingBaseAvailable() const {
 void RandomForestTracker::classifierInitialization() {
   common::debug::print("Initializating classifier\n");
 
+  implementation->timer.start();
+
   if (!isTrainingBaseAvailable()) {
     common::debug::print("Creating training base\n");
     generateTrainingBase();
@@ -392,11 +412,21 @@ void RandomForestTracker::classifierInitialization() {
     writeTrainingBaseToFolder();
   }
 
+  implementation->timer.stop();
+
+  implementation->buildingTrainingBaseTimeOverhead = implementation->timer.getElapsedTimeInMilliseconds();
+
+  implementation->timer.start();
+
   common::debug::print("Loading training base from directory\n");
   loadTrainingBaseFromFolder();
 
   common::debug::print("Training classifier\n");
   trainClassifier();
+
+  implementation->timer.stop();
+
+  implementation->trainingTimeOverhead = implementation->timer.getElapsedTimeInMilliseconds();
 }
 
 void RandomForestTracker::readPointsFromKeypointFile(const std::string& fileName, std::vector<cv::Point>& points) {
@@ -515,13 +545,39 @@ void RandomForestTracker::afterInitialization() {
 }
 
 void RandomForestTracker::beforeFrame(cv::Mat& frame) {
-
+  FrameTransformer::beforeFrame(frame);
 }
 
 void RandomForestTracker::afterFrame(cv::Mat& frame) {
-
+  FrameTransformer::afterFrame(frame);
 }
 
 Dictionary RandomForestTracker::getResults() const {
-  return Dictionary();
+  Dictionary results = FrameTransformer::getResults();
+
+  results.insert(std::make_pair("randomTreesCount",
+                                common::toString(implementation->parameters.RandomTreesCount)));
+  results.insert(std::make_pair("featurePointsCount",
+                                common::toString(implementation->parameters.FeaturePointsCount)));
+  results.insert(std::make_pair("maximumTreeHeight",
+                                common::toString(implementation->parameters.MaximumTreeHeight)));
+  results.insert(std::make_pair("minimumElementAmountPerNode",
+                                common::toString(implementation->parameters.MinimumElementPerNode)));
+  results.insert(std::make_pair("halfPatchSize",
+                                common::toString(implementation->parameters.HalfPatchSize)));
+  results.insert(std::make_pair("minimumClassificationConfidence",
+                                common::toString(implementation->parameters.MinimumClassificationConfidence)));
+  results.insert(std::make_pair("classifierIntensityThreshold",
+                                common::toString(implementation->parameters.ClassifierIntensityThreshold)));
+  results.insert(std::make_pair("generatedRandomPointsCount",
+                                common::toString(implementation->parameters.GeneratedRandomPointsCount)));
+
+  results.insert(std::make_pair("trainingTimeOverhead",
+                                common::toString(implementation->trainingTimeOverhead)));
+  results.insert(std::make_pair("buildingTrainingBaseTimeOverhead",
+                                common::toString(implementation->buildingTrainingBaseTimeOverhead)));
+  results.insert(std::make_pair("drawingTimeOverhead",
+                                common::toString(implementation->drawingTimeOverhead)));
+
+  return results;
 }
