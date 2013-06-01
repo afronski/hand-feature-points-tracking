@@ -78,8 +78,8 @@ class TrackerApplication : public common::CommandLineInterface {
 
           common::vision::VideoStream stream;
 
-          stream.add(marker);
           stream.add(transformer);
+          stream.add(marker);
 
           stream.open(input);
           stream.transfer(output);
