@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FeaturePointList>
+    <hand>
+        <FeaturePointRadius r="100" />
+        <FeaturePoint x="414" y="466" />
+        <FeaturePoint x="478" y="552" />
+        <FeaturePoint x="410" y="640" />
+        <FeaturePoint x="458" y="704" />
+        <FeaturePoint x="588" y="688" />
+        <FeaturePoint x="632" y="600" />
+        <FeaturePoint x="626" y="466" />
+        <FeaturePoint x="558" y="384" />
+        <FeaturePoint x="470" y="376" />
+        <FeaturePoint x="410" y="450" />
+    </hand>
+</FeaturePointList>

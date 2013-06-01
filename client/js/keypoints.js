@@ -147,6 +147,7 @@
 
   function onClear() {
     points = [];
+    removed = [];
 
     drawKeypoints();
   }
@@ -189,6 +190,9 @@
 
         movie;
 
+    clearCanvas();
+    onClear();
+
     if (selectedValue !== -1) {
       Common.toggleButton("#save", true);
       Common.toggleButton("#undo", true);
@@ -205,7 +209,6 @@
       makeVideoMoved();
       attachMouseEventHandlers();
     } else {
-      clearCanvas();
       $("#player").removeAttribute("src");
 
       Common.toggleButton("#save", false);
