@@ -6,6 +6,7 @@
 #include "../common/path.hpp"
 #include "../common/vision.hpp"
 
+#include "../common/JsonReporter.hpp"
 #include "../common/VideoStream.hpp"
 #include "../common/CommandLineInterface.hpp"
 
@@ -56,6 +57,7 @@ class TrackerApplication : public common::CommandLineInterface {
     }
 
   private:
+    JsonReporter reporter;
     bool printResultsToOutput;
 
     int saveMovie(const std::string& input, const std::string& method) {
@@ -82,8 +84,12 @@ class TrackerApplication : public common::CommandLineInterface {
           stream.open(input);
           stream.transfer(output);
 
+          reporter.merge(marker->getResults());
+          reporter.merge(transformer->getResults());
+          reporter.merge(stream.getResults());
+
           if (printResultsToOutput) {
-            transformer->printResults();
+            std::cout << reporter.str();
           }
         } catch(const std::exception& exception) {
           std::cerr << exception.what() << std::endl;

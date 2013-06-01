@@ -12,6 +12,11 @@ class DenseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
     virtual void process(cv::Mat& frame);
     virtual void fill(const std::vector<cv::string>& arguments);
 
+    virtual void beforeFrame(cv::Mat& frame);
+    virtual void afterFrame(cv::Mat& frame);
+
+    virtual Dictionary getResults() const;
+
   private:
     unsigned int mapOverlayStep;
     int windowSize;

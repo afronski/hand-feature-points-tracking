@@ -50,3 +50,15 @@ void PointsMarker::fill(const std::vector<std::string>& arguments) {
     input.close();
   }
 }
+
+void PointsMarker::beforeFrame(cv::Mat& frame) {
+
+}
+
+void PointsMarker::afterFrame(cv::Mat& frame) {
+
+}
+
+Dictionary PointsMarker::getResults() const {
+  return Dictionary();
+}

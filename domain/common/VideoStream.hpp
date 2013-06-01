@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "Timer.hpp"
 #include "FrameTransformers.hpp"
 
 namespace common {
@@ -18,14 +19,17 @@ namespace common {
         void open(const std::string& input);
         void transfer(const std::string& output);
 
+        Dictionary getResults();
+
       protected:
-        virtual void beforeVideo() {};
-        virtual void afterVideo() {};
+        virtual void beforeVideo();
+        virtual void afterVideo();
 
       private:
         bool isValid() const;
         void processFrames();
 
+        common::Timer processingVideoTimer;
         cv::Mat getFirstFrame() const;
 
         std::string inputPath;

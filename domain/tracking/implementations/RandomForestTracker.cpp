@@ -520,3 +520,15 @@ void RandomForestTracker::afterInitialization() {
   // One-time classifier initialization.
   classifierInitialization();
 }
+
+void RandomForestTracker::beforeFrame(cv::Mat& frame) {
+
+}
+
+void RandomForestTracker::afterFrame(cv::Mat& frame) {
+
+}
+
+Dictionary RandomForestTracker::getResults() const {
+  return Dictionary();
+}

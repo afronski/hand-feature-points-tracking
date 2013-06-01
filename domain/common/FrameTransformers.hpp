@@ -1,9 +1,13 @@
 #ifndef __FRAME_TRANSFORMER_HPP__
 #define __FRAME_TRANSFORMER_HPP__
 
+#include <map>
 #include <vector>
+#include <string>
 
 #include <opencv2/core/core.hpp>
+
+typedef std::map<std::string, std::string> Dictionary;
 
 class FrameTransformer {
   public:
@@ -13,7 +17,7 @@ class FrameTransformer {
     virtual void beforeFrame(cv::Mat& frame) {};
     virtual void afterFrame(cv::Mat& frame) {};
 
-    virtual void printResults() {};
+    virtual Dictionary getResults() const { return Dictionary(); };
 
     virtual void handleFirstFrame(const cv::Mat& frame) {};
     virtual void handleMovieName(const std::string& movieName) {};

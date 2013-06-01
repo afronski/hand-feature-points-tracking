@@ -88,3 +88,15 @@ void SparseOpticalFlowTracker::fill(const std::vector<std::string>& arguments) {
     forConversion >> maximumFeaturesCount;
   }
 }
+
+void SparseOpticalFlowTracker::beforeFrame(cv::Mat& frame) {
+
+}
+
+void SparseOpticalFlowTracker::afterFrame(cv::Mat& frame) {
+
+}
+
+Dictionary SparseOpticalFlowTracker::getResults() const {
+  return Dictionary();
+}

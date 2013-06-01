@@ -75,3 +75,15 @@ void DenseOpticalFlowTracker::fill(const std::vector<std::string>& arguments) {
     forConversion >> iterations;
   }
 }
+
+void DenseOpticalFlowTracker::beforeFrame(cv::Mat& frame) {
+
+}
+
+void DenseOpticalFlowTracker::afterFrame(cv::Mat& frame) {
+
+}
+
+Dictionary DenseOpticalFlowTracker::getResults() const {
+  return Dictionary();
+}

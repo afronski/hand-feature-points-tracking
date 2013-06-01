@@ -11,6 +11,11 @@ class PointsMarker : public ArgumentsAwareFrameTransformer {
     virtual void process(cv::Mat& frame);
     virtual void fill(const std::vector<std::string>& arguments);
 
+    virtual void beforeFrame(cv::Mat& frame);
+    virtual void afterFrame(cv::Mat& frame);
+
+    virtual Dictionary getResults() const;
+
   private:
     std::vector<cv::Point> points;
     double radius;

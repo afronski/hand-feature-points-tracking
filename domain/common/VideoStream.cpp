@@ -99,6 +99,18 @@ namespace common {
       this->_implementation->transformers.push_back(transformer);
     }
 
+    Dictionary VideoStream::getResults() {
+      return Dictionary();
+    }
+
+    void VideoStream::beforeVideo() {
+
+    }
+
+    void VideoStream::afterVideo() {
+
+    }
+
     void VideoStream::processFrames() {
       cv::Mat frame;
 

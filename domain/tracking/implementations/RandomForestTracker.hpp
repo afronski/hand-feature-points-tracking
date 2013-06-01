@@ -35,6 +35,11 @@ class RandomForestTracker : public ArgumentsAwareFrameTransformer {
 
     virtual void afterInitialization();
 
+    virtual void beforeFrame(cv::Mat& frame);
+    virtual void afterFrame(cv::Mat& frame);
+
+    virtual Dictionary getResults() const;
+
   protected:
     virtual void classifierInitialization();
 
