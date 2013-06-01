@@ -32,6 +32,7 @@ environment.Library("./bin/common", [
                       "./domain/common/path.cpp",
                       "./domain/common/vision.cpp",
                       "./domain/common/debug.cpp",
+                      "./domain/common/memory-usage.cpp",
                       "./domain/common/floating-point-numbers.cpp"
                     ],
                     LIBS = openCV)

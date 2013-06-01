@@ -14,7 +14,9 @@ typedef std::map<std::string, std::string> Dictionary;
 
 class FrameTransformer {
   public:
-    virtual ~FrameTransformer() {}
+    FrameTransformer();
+    virtual ~FrameTransformer() {};
+
     virtual void process(cv::Mat& frame) = 0;
 
     virtual void beforeFrame(cv::Mat& frame);
@@ -28,8 +30,17 @@ class FrameTransformer {
     virtual void afterInitialization() {};
 
   protected:
+    common::Timer memoryMeasureOverheadTimer;
     common::Timer processingFrameTimer;
+
+    double virtualMemoryAtStart;
+    double residentSetAtStart;
+
+    std::vector<double> memoryMeasureOverhead;
     std::vector<double> processedFramesTiming;
+
+    std::vector<double> processedFramesVirtualMemoryUsage;
+    std::vector<double> processedFramesResidentMemoryUsage;
 };
 
 class ArgumentsAwareFrameTransformer : public FrameTransformer {
