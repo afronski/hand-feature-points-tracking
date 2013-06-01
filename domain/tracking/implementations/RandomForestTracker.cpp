@@ -41,8 +41,13 @@ struct RandomForestTracker::PIMPL {
   double buildingTrainingBaseTimeOverhead;
   double trainingTimeOverhead;
 
+  double loadingTrainingBaseOverhead;
+  double savingTrainingBaseOverhead;
+
   PIMPL() {
     buildingTrainingBaseTimeOverhead = 0.0;
+    loadingTrainingBaseOverhead = 0.0;
+    savingTrainingBaseOverhead = 0.0;
     trainingTimeOverhead = 0.0;
 
     trainingBase = 0;
@@ -405,21 +410,35 @@ void RandomForestTracker::classifierInitialization() {
   implementation->timer.start();
 
   if (!isTrainingBaseAvailable()) {
+    implementation->timer.start();
+
     common::debug::print("Creating training base\n");
     generateTrainingBase();
 
+    implementation->timer.stop();
+
+    implementation->buildingTrainingBaseTimeOverhead = implementation->timer.getElapsedTimeInMilliseconds();
+
+    implementation->timer.start();
+
     common::debug::print("Writting training base to separate directory\n");
     writeTrainingBaseToFolder();
+
+    implementation->timer.stop();
+
+    implementation->savingTrainingBaseOverhead = implementation->timer.getElapsedTimeInMilliseconds();
   }
-
-  implementation->timer.stop();
-
-  implementation->buildingTrainingBaseTimeOverhead = implementation->timer.getElapsedTimeInMilliseconds();
 
   implementation->timer.start();
 
   common::debug::print("Loading training base from directory\n");
   loadTrainingBaseFromFolder();
+
+  implementation->timer.stop();
+
+  implementation->loadingTrainingBaseOverhead = implementation->timer.getElapsedTimeInMilliseconds();
+
+  implementation->timer.start();
 
   common::debug::print("Training classifier\n");
   trainClassifier();
@@ -574,6 +593,10 @@ Dictionary RandomForestTracker::getResults() const {
 
   results.insert(std::make_pair("trainingTimeOverhead",
                                 common::toString(implementation->trainingTimeOverhead)));
+ results.insert(std::make_pair("loadingTrainingBaseOverhead",
+                                common::toString(implementation->loadingTrainingBaseOverhead)));
+  results.insert(std::make_pair("savingTrainingBaseOverhead",
+                                common::toString(implementation->savingTrainingBaseOverhead)));
   results.insert(std::make_pair("buildingTrainingBaseTimeOverhead",
                                 common::toString(implementation->buildingTrainingBaseTimeOverhead)));
   results.insert(std::make_pair("drawingTimeOverhead",
