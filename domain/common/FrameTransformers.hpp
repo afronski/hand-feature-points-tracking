@@ -29,9 +29,20 @@ class FrameTransformer {
 
     virtual void afterInitialization() {};
 
+    void collectAndDrawAverageTrack(
+           const std::vector<cv::Point2f>& points,
+           std::size_t meaningfulAmount,
+           cv::Mat& frame);
+
+    void collectAndDrawAverageTrack(
+           const std::vector<cv::Point2d>& points,
+           std::size_t meaningfulAmount,
+           cv::Mat& frame);
+
   protected:
     common::Timer memoryMeasureOverheadTimer;
     common::Timer processingFrameTimer;
+    common::Timer averagePointsCalculationTimer;
 
     double virtualMemoryAtStart;
     double residentSetAtStart;
@@ -41,6 +52,11 @@ class FrameTransformer {
 
     std::vector<double> processedFramesVirtualMemoryUsage;
     std::vector<double> processedFramesResidentMemoryUsage;
+
+    std::vector<double> averagePointsCalculationOverhead;
+
+    std::vector<cv::Point2f> averagePoints;
+    std::vector<cv::Point2d> doubleAveragePoints;
 };
 
 class ArgumentsAwareFrameTransformer : public FrameTransformer {

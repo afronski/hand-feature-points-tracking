@@ -7,7 +7,7 @@
 
 class DenseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
   public:
-    DenseOpticalFlowTracker(): mapOverlayStep(30), windowSize(5), iterations(5) {}
+    DenseOpticalFlowTracker(): mapOverlayStep(30), windowSize(5), iterations(5), meaningfulAmountOfPoints(3) {}
 
     static const std::string Name;
 
@@ -26,8 +26,11 @@ class DenseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
     unsigned int mapOverlayStep;
     int windowSize;
     int iterations;
+    std::size_t meaningfulAmountOfPoints;
 
     static const cv::Scalar MapOverlayColor;
+    static const cv::Scalar MapOverlayColorWhichIndicatesChange;
+
     static const double MapOverlayPixelSize;
 
     static const double PyramidScale;
@@ -37,12 +40,16 @@ class DenseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
 
     static const double StandardDeviationForGaussian;
 
+    static const float FloatThreshold;
+
     void drawOpticalFlowMap(cv::Mat& frame);
 
     cv::Mat flow;
 
     cv::Mat actualGrayFrame;
     cv::Mat previousGrayFrame;
+
+    std::vector<cv::Point2f> flowPoints;
 };
 
 #endif

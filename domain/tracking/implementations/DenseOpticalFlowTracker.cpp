@@ -5,6 +5,7 @@
 #include <opencv2/video/tracking.hpp>
 
 #include "../../common/converters.hpp"
+#include "../../common/floating-point-numbers.hpp"
 
 #include "DenseOpticalFlowTracker.hpp"
 
@@ -12,6 +13,8 @@
 const std::string DenseOpticalFlowTracker::Name = "Dense Optical Flow";
 
 const cv::Scalar DenseOpticalFlowTracker::MapOverlayColor = cv::Scalar(255, 0, 0);
+const cv::Scalar DenseOpticalFlowTracker::MapOverlayColorWhichIndicatesChange = cv::Scalar(0, 255, 255);
+
 const double DenseOpticalFlowTracker::MapOverlayPixelSize = 2.0;
 
 const double DenseOpticalFlowTracker::PyramidScale = 0.5;
@@ -21,15 +24,28 @@ const int DenseOpticalFlowTracker::Neighbourhood = 7;
 
 const double DenseOpticalFlowTracker::StandardDeviationForGaussian = 1.1;
 
+const float DenseOpticalFlowTracker::FloatThreshold = 10.0f;
+
 // Private methods implementation.
 void DenseOpticalFlowTracker::drawOpticalFlowMap(cv::Mat& frame) {
+  flowPoints.clear();
+
   for(int y = 0; y < frame.rows; y += mapOverlayStep) {
     for(int x = 0; x < frame.cols; x += mapOverlayStep) {
       const cv::Point2f& flowAtXY = flow.at<cv::Point2f>(y, x);
       const cv::Point2f& point = cv::Point(x, y);
 
-      cv::line(frame, point, cv::Point(cvRound(x + flowAtXY.x), cvRound(y + flowAtXY.y)), MapOverlayColor);
-      cv::circle(frame, point, MapOverlayPixelSize, MapOverlayColor, -1);
+      const cv::Point2f& pointWithFlow = cv::Point(cvRound(x + flowAtXY.x), cvRound(y + flowAtXY.y));
+
+      cv::Scalar actualColor(MapOverlayColor);
+
+      if (cv::norm(pointWithFlow - point) >= FloatThreshold) {
+        flowPoints.push_back(point);
+        actualColor = MapOverlayColorWhichIndicatesChange;
+      }
+
+      cv::line(frame, point, pointWithFlow, actualColor);
+      cv::circle(frame, point, MapOverlayPixelSize, actualColor, -1);
     }
   }
 }
@@ -59,6 +75,7 @@ void DenseOpticalFlowTracker::process(cv::Mat& frame) {
   timerForDrawing.start();
 
   drawOpticalFlowMap(frame);
+  FrameTransformer::collectAndDrawAverageTrack(flowPoints, meaningfulAmountOfPoints, frame);
 
   timerForDrawing.stop();
 
@@ -82,6 +99,11 @@ void DenseOpticalFlowTracker::fill(const std::vector<std::string>& arguments) {
     std::stringstream forConversion(arguments[4]);
     forConversion >> iterations;
   }
+
+  if (arguments.size() > 5) {
+    std::stringstream forConversion(arguments[5]);
+    forConversion >> meaningfulAmountOfPoints;
+  }
 }
 
 void DenseOpticalFlowTracker::beforeFrame(cv::Mat& frame) {
@@ -98,6 +120,7 @@ Dictionary DenseOpticalFlowTracker::getResults() const {
   results.insert(std::make_pair("mapOverlayStep", common::toString(mapOverlayStep)));
   results.insert(std::make_pair("windowSize", common::toString(windowSize)));
   results.insert(std::make_pair("iterations", common::toString(iterations)));
+  results.insert(std::make_pair("meaningfulAmountOfPoints", common::toString(meaningfulAmountOfPoints)));
 
   results.insert(std::make_pair("drawingTimeOverhead", common::toString(drawingTimeOverhead)));
 

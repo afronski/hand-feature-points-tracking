@@ -25,6 +25,10 @@ class RandomForestTracker : public ArgumentsAwareFrameTransformer {
     static const std::string Name;
 
     static const cv::Scalar DrawingColor;
+    static const cv::Scalar ColorForPointOutsideBoundRectangle;
+
+    static const double DrawingSize;
+
     static const cv::Size GaussianKernelSize;
 
     virtual void process(cv::Mat& frame);

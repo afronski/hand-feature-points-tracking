@@ -25,6 +25,10 @@
 const std::string RandomForestTracker::Name = "Random Forest Tracker";
 
 const cv::Scalar RandomForestTracker::DrawingColor = cv::Scalar(0, 255, 0);
+const cv::Scalar RandomForestTracker::ColorForPointOutsideBoundRectangle = cv::Scalar(127, 127, 127);
+
+const double RandomForestTracker::DrawingSize = 3.0;
+
 const cv::Size RandomForestTracker::GaussianKernelSize = cv::Size(7, 7);
 
 // PIMPL idiom implementation.
@@ -34,9 +38,14 @@ struct RandomForestTracker::PIMPL {
   RandomForest* randomForest;
 
   common::Timer timer;
-
   common::Timer timerForDrawing;
+
+  cv::Rect boundingRect;
+
   std::vector<double> drawingTimeOverhead;
+  std::vector<cv::Point2d> pointsForAverage;
+
+  std::size_t meaningfulAmountOfPoints;
 
   double buildingTrainingBaseTimeOverhead;
   double trainingTimeOverhead;
@@ -45,6 +54,8 @@ struct RandomForestTracker::PIMPL {
   double savingTrainingBaseOverhead;
 
   PIMPL() {
+    meaningfulAmountOfPoints = 1;
+
     buildingTrainingBaseTimeOverhead = 0.0;
     loadingTrainingBaseOverhead = 0.0;
     savingTrainingBaseOverhead = 0.0;
@@ -276,13 +287,21 @@ void RandomForestTracker::drawFeaturePointsCorrespondence(
                               cv::Mat& frame) const {
   for (std::size_t i = 0; i < correspondence.size(); ++i) {
     const cv::Point rawInputImageFeaturePoint = correspondence[i].second.getPoint();
+    cv::Scalar actualColor = ColorForPointOutsideBoundRectangle;
 
     if (rawInputImageFeaturePoint.x > frame.cols - 1 || rawInputImageFeaturePoint.x < 0 ||
         rawInputImageFeaturePoint.y > frame.rows - 1 || rawInputImageFeaturePoint.y < 0) {
       throw std::logic_error("Feature correspondence is out of image!");
     }
 
-    common::vision::draw_cross(frame, rawInputImageFeaturePoint, cv::Scalar(0, 255, 0), 3);
+    if (implementation->boundingRect.contains(rawInputImageFeaturePoint)) {
+      actualColor = DrawingColor;
+      implementation->pointsForAverage.push_back(cv::Point2d(
+                                                  static_cast<double>(rawInputImageFeaturePoint.x),
+                                                  static_cast<double>(rawInputImageFeaturePoint.y)));
+    }
+
+    common::vision::draw_cross(frame, rawInputImageFeaturePoint, actualColor, DrawingSize);
   }
 }
 
@@ -379,8 +398,10 @@ void RandomForestTracker::classifyImage(const cv::Mat& initial, const cv::Mat& f
 
   FeaturesCollection inputImageFeaturesCollection = featurePointsExtractor.getFeatures();
 
-  common::debug::log("Input image feature points count %d \n", inputImageFeaturesCollection.size());
-  common::debug::log("Input image patch per feature point %d \n", inputImageFeaturesCollection[0].second.size());
+  if (inputImageFeaturesCollection.size() > 0) {
+    common::debug::log("Input image feature points count %d \n", inputImageFeaturesCollection.size());
+    common::debug::log("Input image patch per feature point %d \n", inputImageFeaturesCollection[0].second.size());
+  }
 
   std::vector<PairsContainer> results;
   classifyPatchesFromCollection(inputImageFeaturesCollection, results);
@@ -393,7 +414,14 @@ void RandomForestTracker::classifyImage(const cv::Mat& initial, const cv::Mat& f
   FeaturesCorrespondence correspondence;
   makeFeaturePointCorrespondence(loadedFeaturePoints, inputImageFeaturesCollection, results, correspondence);
 
+  implementation->pointsForAverage.clear();
+
   drawFeaturePointsCorrespondence(loadedFeaturePoints, correspondence, initial, output);
+
+  FrameTransformer::collectAndDrawAverageTrack(
+                      implementation->pointsForAverage,
+                      implementation->meaningfulAmountOfPoints,
+                      output);
 
   implementation->timerForDrawing.stop();
   implementation->drawingTimeOverhead.push_back(implementation->timerForDrawing.getElapsedTimeInMilliseconds());
@@ -457,7 +485,9 @@ void RandomForestTracker::readPointsFromKeypointFile(const std::string& fileName
     unsigned int n = 0;
     double x = 0.0, y = 0.0, radius = 0.0;
 
-    cv::Size boundary = implementation->parameters.InitialImage.size();
+    cv::Size boundary = cv::Size(
+                          implementation->parameters.InitialImage.cols,
+                          implementation->parameters.InitialImage.rows);
 
     input >> radius;
     input >> n;
@@ -466,7 +496,7 @@ void RandomForestTracker::readPointsFromKeypointFile(const std::string& fileName
       input >> x >> y;
       points.push_back(cv::Point(x, y));
 
-      if (x + radius >= boundary.width) {
+      if (x + radius < boundary.width) {
         points.push_back(cv::Point(x + radius, y));
       }
 
@@ -494,7 +524,7 @@ void RandomForestTracker::readPointsFromKeypointFile(const std::string& fileName
         points.push_back(cv::Point(x - radius, y + radius));
       }
 
-      if (x - radius >= 0.0 && y + radius >= 0.0) {
+      if (x - radius >= 0.0 && y - radius >= 0.0) {
         points.push_back(cv::Point(x - radius, y - radius));
       }
 
@@ -537,6 +567,11 @@ void RandomForestTracker::fill(const std::vector<std::string>& arguments) {
     std::stringstream forConversion(arguments[5]);
     forConversion >> implementation->parameters.GeneratedRandomPointsCount;
   }
+
+  if (arguments.size() > 6) {
+    std::stringstream forConversion(arguments[5]);
+    forConversion >> implementation->meaningfulAmountOfPoints;
+  }
 }
 
 void RandomForestTracker::handleFirstFrame(const cv::Mat& firstFrame) {
@@ -551,8 +586,8 @@ void RandomForestTracker::handleMovieName(const std::string& movieName) {
   readPointsFromKeypointFile(movieName, points);
 
   if (points.size() > 0) {
-    cv::Rect boundingRect = cv::boundingRect(points);
-    implementation->parameters.InitialImage = implementation->parameters.InitialImage(boundingRect);
+    implementation->boundingRect = cv::boundingRect(points);
+    implementation->parameters.InitialImage = implementation->parameters.InitialImage(implementation->boundingRect);
   }
 
   cv::cvtColor(implementation->parameters.InitialImage, initialImage, CV_BGR2GRAY);
@@ -591,9 +626,12 @@ Dictionary RandomForestTracker::getResults() const {
   results.insert(std::make_pair("generatedRandomPointsCount",
                                 common::toString(implementation->parameters.GeneratedRandomPointsCount)));
 
+  results.insert(std::make_pair("meaningfulAmountOfPoints",
+                                common::toString(implementation->meaningfulAmountOfPoints)));
+
   results.insert(std::make_pair("trainingTimeOverhead",
                                 common::toString(implementation->trainingTimeOverhead)));
- results.insert(std::make_pair("loadingTrainingBaseOverhead",
+  results.insert(std::make_pair("loadingTrainingBaseOverhead",
                                 common::toString(implementation->loadingTrainingBaseOverhead)));
   results.insert(std::make_pair("savingTrainingBaseOverhead",
                                 common::toString(implementation->savingTrainingBaseOverhead)));

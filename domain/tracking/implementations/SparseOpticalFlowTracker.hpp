@@ -37,7 +37,6 @@ class SparseOpticalFlowTracker : public ArgumentsAwareFrameTransformer {
     std::vector<double> drawingTimeOverhead;
 
     std::vector<cv::Point2f> points;
-
     std::vector<cv::Point2f> features;
     std::vector<cv::Point2f> salientPoints[2];
 

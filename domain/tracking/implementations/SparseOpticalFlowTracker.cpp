@@ -13,7 +13,7 @@ const std::string SparseOpticalFlowTracker::Name = "Sparse Optical Flow";
 
 const double SparseOpticalFlowTracker::Quality = 0.01;
 
-const cv::Scalar SparseOpticalFlowTracker::DrawingColor = cv::Scalar(255, 255, 255);
+const cv::Scalar SparseOpticalFlowTracker::DrawingColor = cv::Scalar(255, 255, 0);
 const double SparseOpticalFlowTracker::CircleRadius = 3.0;
 
 // Private implementation methods.
@@ -38,8 +38,9 @@ bool SparseOpticalFlowTracker::pointShouldBeAccepted(unsigned int number) {
 }
 
 void SparseOpticalFlowTracker::drawTrackedPoints(cv::Mat& frame) {
+  FrameTransformer::collectAndDrawAverageTrack(salientPoints[1], maximumFeaturesCount * 0.1, frame);
+
   for (unsigned int i = 0; i < salientPoints[1].size(); ++i) {
-    cv::line(frame, points[i], salientPoints[1][i], DrawingColor);
     cv::circle(frame, salientPoints[1][i], CircleRadius, DrawingColor, -1);
   }
 }
