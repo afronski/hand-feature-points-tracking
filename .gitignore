@@ -8,8 +8,6 @@ assets/*.json
 
 node_modules/
 
-doc/materials/useful/Random Forest/
-
 bin/*.a
 bin/tracking
 *.o
