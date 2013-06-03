@@ -1,3 +1,6 @@
+#include <cstdlib>
+#include <ctime>
+
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
@@ -433,6 +436,8 @@ bool RandomForestTracker::isTrainingBaseAvailable() const {
 
 // Protected methods.
 void RandomForestTracker::classifierInitialization() {
+  std::srand(std::time(0));
+
   common::debug::print("Initializating classifier\n");
 
   implementation->timer.start();

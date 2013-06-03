@@ -45,8 +45,6 @@ void RandomForestBuilder::cleanUp() {
 
 // Private methods.
 void RandomForestBuilder::generateBootStrap(std::vector<int>& set, std::vector<int>& outOfBagSet) const {
-  srand(time(0));
-
   const std::size_t trainingSetSize = featuresCollection.size() * featuresCollection.front().second.size();
 
   std::vector<bool> usedTrainingElements;

@@ -1,5 +1,4 @@
 #include <cstdlib>
-#include <ctime>
 #include <cmath>
 
 #include "../../../common/debug.hpp"
@@ -205,8 +204,6 @@ double RandomTreeBuilder::calculateInformationGain(
 
 
 bool RandomTreeBuilder::findBestNodeTest(NodeParameters& result, const std::vector<int>& patchIndices) const {
-  std::srand(std::time(0));
-
   double currentMaxInformationGain = -1;
   NodeParameters currentBestNodeParameters;
 

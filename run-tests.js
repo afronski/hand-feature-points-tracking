@@ -11,8 +11,8 @@ var path = require("path"),
     command = './bin/tracking --include-results %s "%s" > %s'
 
     algorithms = [
-      "Sparse Optical Flow",
-      "Dense Optical Flow",
+      // "Sparse Optical Flow",
+      // "Dense Optical Flow",
       "Random Forest Tracker"
     ],
 
@@ -40,6 +40,7 @@ if (execSync.code("scons") === 0) {
           console.log("Results saved to file '%s'".green, resultFileName)
         } else {
           console.log("[EE] Command for file name '%s' and algorithm '%s' failed!".red, fileName, algorithm);
+          process.exit(-123);
         }
       }
     });
