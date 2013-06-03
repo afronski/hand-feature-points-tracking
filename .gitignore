@@ -2,7 +2,9 @@
 *.webm
 *.MOV
 *.mov
+
 assets/*.png
+assets/*.json
 
 node_modules/
 

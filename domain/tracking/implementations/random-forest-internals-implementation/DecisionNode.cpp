@@ -26,8 +26,8 @@ DecisionNode::DecisionNode(int classCount):
 
 // Public methods.
 DecisionNode::TestResult DecisionNode::test(const cv::Mat& image) const {
-  double firstPointIntensity = image.at<double>(firstPoint.x, firstPoint.y);
-  double secondPointIntensity = image.at<double>(secondPoint.x, secondPoint.y);
+  unsigned char firstPointIntensity = image.at<unsigned char>(firstPoint.y, firstPoint.x);
+  unsigned char secondPointIntensity = image.at<unsigned char>(secondPoint.y, secondPoint.x);
 
   const int intensityDifference = static_cast<int>(firstPointIntensity - secondPointIntensity);
 
