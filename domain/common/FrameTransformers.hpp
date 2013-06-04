@@ -15,7 +15,7 @@ typedef std::map<std::string, std::string> Dictionary;
 class FrameTransformer {
   public:
     FrameTransformer();
-    virtual ~FrameTransformer() {};
+    virtual ~FrameTransformer();
 
     virtual void process(cv::Mat& frame) = 0;
 
@@ -24,8 +24,8 @@ class FrameTransformer {
 
     virtual Dictionary getResults() const;
 
-    virtual void handleFirstFrame(const cv::Mat& frame) {};
-    virtual void handleMovieName(const std::string& movieName) {};
+    virtual void handleFirstFrame(const cv::Mat& frame);
+    virtual void handleMovieName(const std::string& movieName);
 
     virtual void afterInitialization() {};
 
@@ -57,6 +57,13 @@ class FrameTransformer {
 
     std::vector<cv::Point2f> averagePoints;
     std::vector<cv::Point2d> doubleAveragePoints;
+
+    cv::Size boundary;
+    cv::Rect* boundingRectangle;
+
+  private:
+    void calculateBoundingRectangle(const std::string& movieName);
+    void readKeypointsFromFile(const std::string& fileName, std::vector<cv::Point>& points);
 };
 
 class ArgumentsAwareFrameTransformer : public FrameTransformer {

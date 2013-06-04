@@ -6,6 +6,8 @@
 assets/*.png
 assets/*.json
 
+assets/**
+
 node_modules/
 
 bin/*.a

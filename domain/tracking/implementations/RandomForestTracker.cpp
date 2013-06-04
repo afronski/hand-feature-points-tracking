@@ -43,8 +43,6 @@ struct RandomForestTracker::PIMPL {
   common::Timer timer;
   common::Timer timerForDrawing;
 
-  cv::Rect boundingRect;
-
   std::vector<double> drawingTimeOverhead;
   std::vector<cv::Point2d> pointsForAverage;
 
@@ -297,7 +295,7 @@ void RandomForestTracker::drawFeaturePointsCorrespondence(
       throw std::logic_error("Feature correspondence is out of image!");
     }
 
-    if (implementation->boundingRect.contains(rawInputImageFeaturePoint)) {
+    if (boundingRectangle->contains(rawInputImageFeaturePoint)) {
       actualColor = DrawingColor;
       implementation->pointsForAverage.push_back(cv::Point2d(
                                                   static_cast<double>(rawInputImageFeaturePoint.x),
@@ -481,65 +479,6 @@ void RandomForestTracker::classifierInitialization() {
   implementation->trainingTimeOverhead = implementation->timer.getElapsedTimeInMilliseconds();
 }
 
-void RandomForestTracker::readPointsFromKeypointFile(const std::string& fileName, std::vector<cv::Point>& points) {
-  std::string keypointsFilename = common::path::extractFileName(fileName) + ".keypoints";
-
-  if (common::path::fileExists(keypointsFilename)) {
-    std::ifstream input(keypointsFilename.c_str());
-
-    unsigned int n = 0;
-    double x = 0.0, y = 0.0, radius = 0.0;
-
-    cv::Size boundary = cv::Size(
-                          implementation->parameters.InitialImage.cols,
-                          implementation->parameters.InitialImage.rows);
-
-    input >> radius;
-    input >> n;
-
-    while (n > 0) {
-      input >> x >> y;
-      points.push_back(cv::Point(x, y));
-
-      if (x + radius < boundary.width) {
-        points.push_back(cv::Point(x + radius, y));
-      }
-
-      if (x - radius >= 0.0) {
-        points.push_back(cv::Point(x - radius, y));
-      }
-
-      if (y + radius < boundary.height) {
-        points.push_back(cv::Point(x, y + radius));
-      }
-
-      if (y - radius >= 0.0) {
-        points.push_back(cv::Point(x, y - radius));
-      }
-
-      if (x + radius < boundary.width && y + radius < boundary.height) {
-        points.push_back(cv::Point(x + radius, y + radius));
-      }
-
-      if (x + radius < boundary.width && y - radius >= 0) {
-        points.push_back(cv::Point(x + radius, y - radius));
-      }
-
-      if (x - radius >= 0.0 && y + radius < boundary.height) {
-        points.push_back(cv::Point(x - radius, y + radius));
-      }
-
-      if (x - radius >= 0.0 && y - radius >= 0.0) {
-        points.push_back(cv::Point(x - radius, y - radius));
-      }
-
-      --n;
-    }
-
-    input.close();
-  }
-}
-
 // Public methods.
 void RandomForestTracker::process(cv::Mat& frame) {
   cv::cvtColor(frame, actualGrayFrame, CV_BGR2GRAY);
@@ -580,19 +519,18 @@ void RandomForestTracker::fill(const std::vector<std::string>& arguments) {
 }
 
 void RandomForestTracker::handleFirstFrame(const cv::Mat& firstFrame) {
+  FrameTransformer::handleFirstFrame(firstFrame);
+
   implementation->parameters.InitialImage = firstFrame.clone();
 }
 
 void RandomForestTracker::handleMovieName(const std::string& movieName) {
+  FrameTransformer::handleMovieName(movieName);
+
   implementation->setPath(movieName);
 
-  // Cropping first frame by keypoints file (if keypoint file exists).
-  std::vector<cv::Point> points;
-  readPointsFromKeypointFile(movieName, points);
-
-  if (points.size() > 0) {
-    implementation->boundingRect = cv::boundingRect(points);
-    implementation->parameters.InitialImage = implementation->parameters.InitialImage(implementation->boundingRect);
+  if (boundingRectangle != 0) {
+    implementation->parameters.InitialImage = implementation->parameters.InitialImage(*boundingRectangle);
   }
 
   cv::cvtColor(implementation->parameters.InitialImage, initialImage, CV_BGR2GRAY);

@@ -24,7 +24,7 @@ const int DenseOpticalFlowTracker::Neighbourhood = 7;
 
 const double DenseOpticalFlowTracker::StandardDeviationForGaussian = 1.1;
 
-const float DenseOpticalFlowTracker::FloatThreshold = 10.0f;
+const float DenseOpticalFlowTracker::FloatThreshold = 5.0f;
 
 // Private methods implementation.
 void DenseOpticalFlowTracker::drawOpticalFlowMap(cv::Mat& frame) {
@@ -39,7 +39,7 @@ void DenseOpticalFlowTracker::drawOpticalFlowMap(cv::Mat& frame) {
 
       cv::Scalar actualColor(MapOverlayColor);
 
-      if (cv::norm(pointWithFlow - point) >= FloatThreshold) {
+      if (boundingRectangle->contains(point) && cv::norm(pointWithFlow - point) >= FloatThreshold) {
         flowPoints.push_back(point);
         actualColor = MapOverlayColorWhichIndicatesChange;
       }

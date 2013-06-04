@@ -34,11 +34,13 @@ bool SparseOpticalFlowTracker::pointShouldBeAccepted(unsigned int number) {
   double xDifference = std::abs(salientPoints[0][number].x - salientPoints[1][number].x),
          yDifference = std::abs(salientPoints[0][number].y - salientPoints[1][number].y);
 
-  return status[number] && (xDifference + yDifference > 2.0);
+  return status[number] &&
+         (xDifference + yDifference > 2.0) &&
+         boundingRectangle->contains(salientPoints[1][number]);
 }
 
 void SparseOpticalFlowTracker::drawTrackedPoints(cv::Mat& frame) {
-  FrameTransformer::collectAndDrawAverageTrack(salientPoints[1], maximumFeaturesCount * 0.1, frame);
+  FrameTransformer::collectAndDrawAverageTrack(salientPoints[1], meaningfulAmountOfPoints, frame);
 
   for (unsigned int i = 0; i < salientPoints[1].size(); ++i) {
     cv::circle(frame, salientPoints[1][i], CircleRadius, DrawingColor, -1);
@@ -96,6 +98,11 @@ void SparseOpticalFlowTracker::fill(const std::vector<std::string>& arguments) {
     std::stringstream forConversion(arguments[3]);
     forConversion >> maximumFeaturesCount;
   }
+
+  if (arguments.size() > 4) {
+    std::stringstream forConversion(arguments[4]);
+    forConversion >> meaningfulAmountOfPoints;
+  }
 }
 
 void SparseOpticalFlowTracker::beforeFrame(cv::Mat& frame) {
@@ -111,6 +118,8 @@ Dictionary SparseOpticalFlowTracker::getResults() const {
 
   results.insert(std::make_pair("minimalDistanceBetweenPoints", common::toString(minimalDistanceBetweenPoints)));
   results.insert(std::make_pair("maximumFeaturesCount", common::toString(maximumFeaturesCount)));
+
+  results.insert(std::make_pair("meaningfulAmountOfPoints", common::toString(meaningfulAmountOfPoints)));
 
   results.insert(std::make_pair("drawingTimeOverhead", common::toString(drawingTimeOverhead)));
 
