@@ -1,7 +1,7 @@
 {
-  "name": "tracking-salient-points",
+  "name": "hand-feature-points-tracking",
 
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Wojciech Gawroński <afronski@gmail.com>",
 
   "main": "./server/server.js",
