@@ -5,6 +5,7 @@
   "author": "Wojciech Gawroński <afronski@gmail.com>",
 
   "main": "./server/server.js",
+  "test": "./run-tests.js",
 
   "dependencies" : {
     "colors":  "*",
