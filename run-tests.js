@@ -4,6 +4,7 @@ var path = require("path"),
     glob = require("glob"),
     execSync = require("execSync"),
     util = require("util"),
+    fs = require("fs"),
 
     resultFileNamePostFix = "_results_for_%s.json",
     parametrizedResultFileNamePostFix = "_results_for_%s_parameters(%s).json",
@@ -18,9 +19,7 @@ var path = require("path"),
       "Random Forest Tracker"
     ],
 
-    parametrized = [
-      { fileName: "./assets/Person_G_C.avi", algorithm: "Sparse Optical Flow", params: "10 100 30" }
-    ],
+    parametrized = JSON.parse(fs.readFileSync("parametrized.json")).builds || [],
 
     pathWithoutExtension = function(element) {
       return element.replace(path.extname(element), "");
@@ -64,29 +63,30 @@ console.log("Compiling ./bin/tracking in release mode...".rainbow);
 
 if (execSync.code("scons debug=1") === 0) {
 
-  // algorithms.forEach(function(algorithm) {
-  //   glob.sync("./assets/*.avi").forEach(function(fileName) {
-  //     var resultFileName = pathWithoutExtension(fileName) + util.format(resultFileNamePostFix, sanitize(algorithm)),
-  //         builtCommand = util.format(command, fileName, algorithm, resultFileName);
+  algorithms.forEach(function(algorithm) {
+    glob.sync("./assets/*.avi").forEach(function(fileName) {
+      var resultFileName = pathWithoutExtension(fileName) +
+                           util.format(resultFileNamePostFix, sanitize(algorithm)),
+          builtCommand = util.format(command, fileName, algorithm, resultFileName);
 
-  //     if (fileName.indexOf(deprecatedFragment) === -1) {
-  //       console.log("Processing '%s' file with algorithm '%s'".yellow, fileName, algorithm);
+      if (fileName.indexOf(deprecatedFragment) === -1) {
+        console.log("Processing '%s' file with algorithm '%s'".yellow, fileName, algorithm);
 
-  //       if (execSync.code(builtCommand) === 0) {
-  //         console.log("Results saved to file '%s'".green, resultFileName)
-  //       } else {
-  //         console.log("[EE] Command for file name '%s' and algorithm '%s' failed!".red, fileName, algorithm);
-  //       }
-  //     }
-  //   });
-  // });
+        if (execSync.code(builtCommand) === 0) {
+          console.log("Results saved to file '%s'".green, resultFileName)
+        } else {
+          console.log("[EE] Command for file name '%s' and algorithm '%s' failed!".red,
+                      fileName, algorithm);
+        }
+      }
+    });
+  });
 
-  // backup();
+  backup();
 
   parametrized.forEach(function(object) {
     var resultFileName = pathWithoutExtension(object.fileName) +
-                         util.format(parametrizedResultFileNamePostFix,
-                                     sanitize(object.algorithm), object.params),
+                         util.format(parametrizedResultFileNamePostFix, sanitize(object.algorithm), object.params),
         builtCommand = util.format(paramterizedCommand,
                                    object.fileName, object.algorithm, object.params, resultFileName);
 
