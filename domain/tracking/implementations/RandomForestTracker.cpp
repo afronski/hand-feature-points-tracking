@@ -67,8 +67,8 @@ struct RandomForestTracker::PIMPL {
 
     parameters.TrainingBaseFolder = "bin/training-base-directory/";
 
-    parameters.FeaturePointsCount = 100;
-    parameters.HalfPatchSize = 50;
+    parameters.FeaturePointsCount = 200;
+    parameters.HalfPatchSize = 10;
 
     parameters.MaximumTreeHeight = 30;
     parameters.MinimumElementPerNode = 100;
