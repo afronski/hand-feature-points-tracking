@@ -1,3 +1,4 @@
+#include <cmath>
 #include <fstream>
 
 #include <opencv2/core/core.hpp>
@@ -39,7 +40,7 @@ template<typename T, typename R>
   }
 
 template<typename T, typename R>
-  void collectErrorsForAverageTrack(
+  void collectErrorsForAveragePoints(
         const std::vector<cv::Point>& keypoints,
         const std::vector<T>& track,
         std::vector<PointNumberAndError>& results) {
@@ -63,6 +64,53 @@ template<typename T, typename R>
       }
 
       results.push_back(std::make_pair(pointNumber, static_cast<double>(minimalError)));
+    }
+  }
+
+template<typename T>
+  double distancePointToLine(const T& start, const T& end, const T& point) {
+    double normalLength = hypot(end.x - start.x, end.y - start.y);
+
+    double distance = static_cast<double>((point.x - start.x) *
+                                          (end.y - start.y) - (point.y - start.y) *
+                                          (end.x - start.x)) / normalLength;
+    return std::abs(distance);
+  }
+
+template<typename T, typename R>
+  void collectErrorsForAveragePaths(
+        const std::vector<cv::Point>& keypoints,
+        const std::vector<T>& track,
+        std::vector<PathNumberAndError>& results) {
+    const std::size_t keypointsSize = keypoints.size();
+
+    results.clear();
+    results.reserve(keypointsSize);
+
+    for (std::size_t k = 1; k < keypointsSize; ++k) {
+      const T convertedPreviousPoint = T(static_cast<R>(keypoints[k - 1].x), static_cast<R>(keypoints[k - 1].y));
+      const T convertedPoint = T(static_cast<R>(keypoints[k].x), static_cast<R>(keypoints[k].y));
+
+      R minimalError = static_cast<R>(5000);
+
+      std::size_t previousPathNumber = keypointsSize + 1;
+      std::size_t actualPathNumber = keypointsSize + 1;
+
+      for(std::size_t i = 0; i < track.size(); ++i) {
+        R actualError = distancePointToLine(convertedPreviousPoint, convertedPoint, track[i]);
+
+        if (common::isLessOrEqualThanZero(actualError - minimalError)) {
+          minimalError = actualError;
+
+          previousPathNumber = k - 1;
+          actualPathNumber = k;
+        }
+      }
+
+      results.push_back(
+                std::make_pair(
+                  std::make_pair(previousPathNumber, actualPathNumber),
+                  static_cast<double>(minimalError)));
     }
   }
 
@@ -158,12 +206,14 @@ Dictionary FrameTransformer::getResults() const {
   results.insert(std::make_pair("baseKeypoints", common::toString(baseKeypoints)));
 
   if (averagePoints.size() > 0) {
-    collectErrorsForAverageTrack<cv::Point2f, float>(baseKeypoints, averagePoints, collectedErrors);
+    collectErrorsForAveragePoints<cv::Point2f, float>(baseKeypoints, averagePoints, collectedErrors);
+    collectErrorsForAveragePaths<cv::Point2f, float>(baseKeypoints, averagePoints, collectedPathErrors);
 
     results.insert(std::make_pair("averagePoints", common::toString(averagePoints)));
     results.insert(std::make_pair("averagePointsAmount", common::toString(averagePoints.size())));
   } else if (doubleAveragePoints.size() > 0) {
-    collectErrorsForAverageTrack<cv::Point2d, double>(baseKeypoints, doubleAveragePoints, collectedErrors);
+    collectErrorsForAveragePoints<cv::Point2d, double>(baseKeypoints, doubleAveragePoints, collectedErrors);
+    collectErrorsForAveragePaths<cv::Point2d, double>(baseKeypoints, doubleAveragePoints, collectedPathErrors);
 
     results.insert(std::make_pair("averagePoints", common::toString(doubleAveragePoints)));
     results.insert(std::make_pair("averagePointsAmount", common::toString(doubleAveragePoints.size())));
@@ -171,6 +221,9 @@ Dictionary FrameTransformer::getResults() const {
 
   results.insert(std::make_pair("collectedErrors", common::toString(collectedErrors)));
   results.insert(std::make_pair("collectedErrorsAmount", common::toString(collectedErrors.size())));
+
+  results.insert(std::make_pair("collectedPathErrors", common::toString(collectedPathErrors)));
+  results.insert(std::make_pair("collectedPathErrorsAmount", common::toString(collectedPathErrors.size())));
 
   return results;
 }

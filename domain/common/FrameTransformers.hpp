@@ -11,6 +11,10 @@
 #include "Timer.hpp"
 
 typedef std::pair<std::size_t, double> PointNumberAndError;
+
+typedef std::pair<std::size_t, std::size_t> Path;
+typedef std::pair<Path, double> PathNumberAndError;
+
 typedef std::map<std::string, std::string> Dictionary;
 
 class FrameTransformer {
@@ -67,6 +71,7 @@ class FrameTransformer {
     std::vector<cv::Point> baseKeypoints;
 
     mutable std::vector<PointNumberAndError> collectedErrors;
+    mutable std::vector<PathNumberAndError> collectedPathErrors;
 
   private:
     void calculateBoundingRectangle(const std::string& movieName);
