@@ -4,6 +4,7 @@
 #include <opencv2/core/core_c.h>
 #include <opencv2/video/tracking.hpp>
 
+#include "floating-point-numbers.hpp"
 #include "path.hpp"
 
 #include "memory-usage.hpp"
@@ -34,6 +35,34 @@ template<typename T, typename R>
         T mean(reducedMean.at<R>(0,0), reducedMean.at<R>(0,1));
         output.push_back(mean);
       }
+    }
+  }
+
+template<typename T, typename R>
+  void collectErrorsForAverageTrack(
+        const std::vector<cv::Point>& keypoints,
+        const std::vector<T>& track,
+        std::vector<PointNumberAndError>& results) {
+    const std::size_t keypointsSize = keypoints.size();
+
+    results.clear();
+    results.reserve(keypointsSize);
+
+    for (std::size_t k = 0; k < keypointsSize; ++k) {
+      R minimalError = static_cast<R>(5000);
+      std::size_t pointNumber = keypointsSize + 1;
+
+      for(std::size_t i = 0; i < track.size(); ++i) {
+        const T convertedPoint = T(static_cast<R>(keypoints[k].x), static_cast<R>(keypoints[k].y));
+        R actualError = cv::norm(convertedPoint - track[i]);
+
+        if (common::isLessOrEqualThanZero(actualError - minimalError)) {
+          minimalError = actualError;
+          pointNumber = i;
+        }
+      }
+
+      results.push_back(std::make_pair(pointNumber, static_cast<double>(minimalError)));
     }
   }
 
@@ -85,71 +114,6 @@ void FrameTransformer::handleMovieName(const std::string& movieName) {
   calculateBoundingRectangle(movieName);
 }
 
-void FrameTransformer::calculateBoundingRectangle(const std::string& movieName) {
-  std::vector<cv::Point> keypoints;
-  readKeypointsFromFile(movieName, keypoints);
-
-  if (keypoints.size() > 0) {
-    boundingRectangle = new cv::Rect();
-    *boundingRectangle = cv::boundingRect(keypoints);
-  }
-}
-
-void FrameTransformer::readKeypointsFromFile(const std::string& fileName, std::vector<cv::Point>& points) {
-  std::string keypointsFilename = common::path::extractFileName(fileName) + ".keypoints";
-
-  if (common::path::fileExists(keypointsFilename)) {
-    std::ifstream input(keypointsFilename.c_str());
-
-    unsigned int n = 0;
-    double x = 0.0, y = 0.0, radius = 0.0;
-
-    input >> radius;
-    input >> n;
-
-    while (n > 0) {
-      input >> x >> y;
-      points.push_back(cv::Point(x, y));
-
-      if (x + radius < boundary.width) {
-        points.push_back(cv::Point(x + radius, y));
-      }
-
-      if (x - radius >= 0.0) {
-        points.push_back(cv::Point(x - radius, y));
-      }
-
-      if (y + radius < boundary.height) {
-        points.push_back(cv::Point(x, y + radius));
-      }
-
-      if (y - radius >= 0.0) {
-        points.push_back(cv::Point(x, y - radius));
-      }
-
-      if (x + radius < boundary.width && y + radius < boundary.height) {
-        points.push_back(cv::Point(x + radius, y + radius));
-      }
-
-      if (x + radius < boundary.width && y - radius >= 0) {
-        points.push_back(cv::Point(x + radius, y - radius));
-      }
-
-      if (x - radius >= 0.0 && y + radius < boundary.height) {
-        points.push_back(cv::Point(x - radius, y + radius));
-      }
-
-      if (x - radius >= 0.0 && y - radius >= 0.0) {
-        points.push_back(cv::Point(x - radius, y - radius));
-      }
-
-      --n;
-    }
-
-    input.close();
-  }
-}
-
 void FrameTransformer::beforeFrame(cv::Mat& frame) {
   processingFrameTimer.start();
 }
@@ -191,11 +155,91 @@ Dictionary FrameTransformer::getResults() const {
   results.insert(std::make_pair("boundingRectangleX", common::toString(boundingRectangle->x)));
   results.insert(std::make_pair("boundingRectangleY", common::toString(boundingRectangle->y)));
 
+  results.insert(std::make_pair("baseKeypoints", common::toString(baseKeypoints)));
+
   if (averagePoints.size() > 0) {
+    collectErrorsForAverageTrack<cv::Point2f, float>(baseKeypoints, averagePoints, collectedErrors);
+
     results.insert(std::make_pair("averagePoints", common::toString(averagePoints)));
+    results.insert(std::make_pair("averagePointsAmount", common::toString(averagePoints.size())));
   } else if (doubleAveragePoints.size() > 0) {
+    collectErrorsForAverageTrack<cv::Point2d, double>(baseKeypoints, doubleAveragePoints, collectedErrors);
+
     results.insert(std::make_pair("averagePoints", common::toString(doubleAveragePoints)));
+    results.insert(std::make_pair("averagePointsAmount", common::toString(doubleAveragePoints.size())));
   }
 
+  results.insert(std::make_pair("collectedErrors", common::toString(collectedErrors)));
+  results.insert(std::make_pair("collectedErrorsAmount", common::toString(collectedErrors.size())));
+
   return results;
+}
+
+// Private methods.
+void FrameTransformer::calculateBoundingRectangle(const std::string& movieName) {
+  readKeypointsFromFile(movieName, keypoints, baseKeypoints);
+
+  if (keypoints.size() > 0) {
+    boundingRectangle = new cv::Rect();
+    *boundingRectangle = cv::boundingRect(keypoints);
+  }
+}
+
+void FrameTransformer::readKeypointsFromFile(
+                          const std::string& fileName,
+                          std::vector<cv::Point>& points,
+                          std::vector<cv::Point>& baseKeypoints) {
+  std::string keypointsFilename = common::path::extractFileName(fileName) + ".keypoints";
+
+  if (common::path::fileExists(keypointsFilename)) {
+    std::ifstream input(keypointsFilename.c_str());
+
+    unsigned int n = 0;
+    double x = 0.0, y = 0.0;
+
+    input >> keypointRadius;
+    input >> n;
+
+    while (n > 0) {
+      input >> x >> y;
+      points.push_back(cv::Point(x, y));
+      baseKeypoints.push_back(cv::Point(x, y));
+
+      if (x + keypointRadius < boundary.width) {
+        points.push_back(cv::Point(x + keypointRadius, y));
+      }
+
+      if (x - keypointRadius >= 0.0) {
+        points.push_back(cv::Point(x - keypointRadius, y));
+      }
+
+      if (y + keypointRadius < boundary.height) {
+        points.push_back(cv::Point(x, y + keypointRadius));
+      }
+
+      if (y - keypointRadius >= 0.0) {
+        points.push_back(cv::Point(x, y - keypointRadius));
+      }
+
+      if (x + keypointRadius < boundary.width && y + keypointRadius < boundary.height) {
+        points.push_back(cv::Point(x + keypointRadius, y + keypointRadius));
+      }
+
+      if (x + keypointRadius < boundary.width && y - keypointRadius >= 0) {
+        points.push_back(cv::Point(x + keypointRadius, y - keypointRadius));
+      }
+
+      if (x - keypointRadius >= 0.0 && y + keypointRadius < boundary.height) {
+        points.push_back(cv::Point(x - keypointRadius, y + keypointRadius));
+      }
+
+      if (x - keypointRadius >= 0.0 && y - keypointRadius >= 0.0) {
+        points.push_back(cv::Point(x - keypointRadius, y - keypointRadius));
+      }
+
+      --n;
+    }
+
+    input.close();
+  }
 }

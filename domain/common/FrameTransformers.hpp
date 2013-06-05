@@ -10,6 +10,7 @@
 #include "converters.hpp"
 #include "Timer.hpp"
 
+typedef std::pair<std::size_t, double> PointNumberAndError;
 typedef std::map<std::string, std::string> Dictionary;
 
 class FrameTransformer {
@@ -61,9 +62,18 @@ class FrameTransformer {
     cv::Size boundary;
     cv::Rect* boundingRectangle;
 
+    double keypointRadius;
+    std::vector<cv::Point> keypoints;
+    std::vector<cv::Point> baseKeypoints;
+
+    mutable std::vector<PointNumberAndError> collectedErrors;
+
   private:
     void calculateBoundingRectangle(const std::string& movieName);
-    void readKeypointsFromFile(const std::string& fileName, std::vector<cv::Point>& points);
+    void readKeypointsFromFile(
+          const std::string& fileName,
+          std::vector<cv::Point>& points,
+          std::vector<cv::Point>& baseKeypoints);
 };
 
 class ArgumentsAwareFrameTransformer : public FrameTransformer {

@@ -38,6 +38,30 @@ namespace common {
       return result.str();
     }
 
+  template<typename K, typename V>
+    std::string toString(const std::vector< std::pair<K, V> >& values) {
+      typedef typename std::vector< std::pair<K, V> >::const_iterator ValueIterator;
+
+      std::ostringstream result;
+
+      result << "[ ";
+
+      ValueIterator iterator = values.begin();
+      while (iterator != values.end()) {
+        result << "{ \"key\": " << iterator->first << ", \"value\": " << iterator->second << "}";
+
+        ValueIterator isJustBeforeLast = (++iterator);
+
+        if (isJustBeforeLast != values.end()) {
+          result << ", ";
+        }
+      }
+
+      result << " ]";
+
+      return result.str();
+    }
+
 }
 
 #endif
