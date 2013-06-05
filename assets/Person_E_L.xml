@@ -2,10 +2,10 @@
 <FeaturePointList>
     <hand>
         <FeaturePointRadius r="100" />
-        <FeaturePoint x="428" y="434" />
-        <FeaturePoint x="430" y="530" />
-        <FeaturePoint x="432" y="550" />
-        <FeaturePoint x="350" y="548" />
-        <FeaturePoint x="298" y="540" />
+        <FeaturePoint x="434" y="422" />
+        <FeaturePoint x="430" y="488" />
+        <FeaturePoint x="428" y="550" />
+        <FeaturePoint x="334" y="546" />
+        <FeaturePoint x="238" y="542" />
     </hand>
 </FeaturePointList>

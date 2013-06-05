@@ -2,31 +2,25 @@
 <FeaturePointList>
     <hand>
         <FeaturePointRadius r="100" />
-        <FeaturePoint x="362" y="444" />
-        <FeaturePoint x="372" y="498" />
-        <FeaturePoint x="446" y="366" />
-        <FeaturePoint x="516" y="432" />
-        <FeaturePoint x="532" y="518" />
-        <FeaturePoint x="582" y="572" />
-        <FeaturePoint x="586" y="592" />
-        <FeaturePoint x="610" y="648" />
-        <FeaturePoint x="610" y="678" />
-        <FeaturePoint x="602" y="764" />
-        <FeaturePoint x="558" y="790" />
-        <FeaturePoint x="480" y="812" />
-        <FeaturePoint x="402" y="836" />
-        <FeaturePoint x="320" y="836" />
-        <FeaturePoint x="254" y="794" />
-        <FeaturePoint x="280" y="806" />
-        <FeaturePoint x="352" y="822" />
-        <FeaturePoint x="464" y="806" />
-        <FeaturePoint x="514" y="750" />
-        <FeaturePoint x="558" y="682" />
-        <FeaturePoint x="536" y="638" />
-        <FeaturePoint x="482" y="548" />
-        <FeaturePoint x="430" y="430" />
-        <FeaturePoint x="350" y="382" />
-        <FeaturePoint x="294" y="344" />
-        <FeaturePoint x="268" y="438" />
+        <FeaturePoint x="384" y="490" />
+        <FeaturePoint x="358" y="438" />
+        <FeaturePoint x="456" y="472" />
+        <FeaturePoint x="486" y="528" />
+        <FeaturePoint x="538" y="610" />
+        <FeaturePoint x="536" y="688" />
+        <FeaturePoint x="526" y="808" />
+        <FeaturePoint x="440" y="860" />
+        <FeaturePoint x="394" y="856" />
+        <FeaturePoint x="290" y="846" />
+        <FeaturePoint x="242" y="808" />
+        <FeaturePoint x="210" y="766" />
+        <FeaturePoint x="300" y="856" />
+        <FeaturePoint x="428" y="862" />
+        <FeaturePoint x="520" y="806" />
+        <FeaturePoint x="546" y="614" />
+        <FeaturePoint x="492" y="530" />
+        <FeaturePoint x="456" y="470" />
+        <FeaturePoint x="368" y="448" />
+        <FeaturePoint x="242" y="430" />
     </hand>
 </FeaturePointList>
