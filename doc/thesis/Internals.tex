@@ -14,7 +14,7 @@
 
       Ostatnia wersja, wciąż oczekująca na publikację, wprowadza wiele nowości zdecydowanie ułatwiających tworzenie oprogramowania. Ujednolicono wiele koncepcji i~co najważniejsze znacznie poszerzono bibliotekę standardową co ułatwi pracę programistów i~zredukuje ilość zewnętrznych zależności niezbędnych do kompilacji. Duży udział w~rozszerzeniu biblioteki standardowej miała społeczność i~autorzy poszczególnych modułów biblioteki \textit{boost}, która jest najważniejszą i~najpopularniejszą biblioteką (wyłączając bibliotekę standardową) w~środowisku programistów \textit{C++}.
 
-      W pracy wykorzystano stabilną i~dojrzałą wersję standardu z~roku 2003. Istnieje wiele publikacji (najpopularniejszymi są \cite{EffectiveCpp}, \cite{MoreEffectiveCpp}, \cite{EffectiveStl} oraz \cite{Alexandrescu}) oraz materiałów na temat (biblioteka \textit{MSDN} oraz dokumentacja biblioteki \textit{STL}), jak efektywnie korzystać z~dostępnej funkcjonalności i~przede wszystkim jak unikać \textit{pułapek} oraz w~jaki sposób efektywnie korzystać z~mnogości dostępnych paradygmatów i~rozwiązań udostępnionych w~specyfikacji języka.
+      W~pracy wykorzystano stabilną i~dojrzałą wersję standardu z~roku 2003. Istnieje wiele publikacji (najpopularniejszymi są \cite{EffectiveCpp}, \cite{MoreEffectiveCpp}, \cite{EffectiveStl} oraz \cite{Alexandrescu}) oraz materiałów na temat (biblioteka \textit{MSDN} oraz dokumentacja biblioteki \textit{STL}), jak efektywnie korzystać z~dostępnej funkcjonalności i~przede wszystkim jak unikać \textit{pułapek} oraz w~jaki sposób efektywnie korzystać z~mnogości dostępnych paradygmatów i~rozwiązań udostępnionych w~specyfikacji języka.
 
       \subsubsection{Programowanie Obiektowe}
       Język \textit{C++} jest językiem wieloparadygmatowym, jednak dominującym paradygmatem tworzenia oprogramowania w~języku \textit{C++} jest tzw. \textit{programowanie obiektowe} (ang. \textit{Object Oriented Programming} w~skrócie \textit{OOP}). Wspomniany wyżej standard z~2003~roku posiada największe wsparcie właśnie dla tego paradygmatu, dodatkowo w~czasach największej popularności tego języka to właśnie programowanie obiektowe było najpopularniejsze.
@@ -35,7 +35,7 @@
       \subsubsection{Zastosowanie programowania obiektowego w~wizji komputerowej}
       \textit{Jakość} jest subiektywnym i~niemierzalnym współczynnikiem podstawowego budulca aplikacji, jakim jest kod źródłowy. Niezmiernie ważnym jest, aby podczas procesu tworzenia oprogramowania, korzystać ze~zbioru sprawdzonych praktyk i~rozwiązań oraz pilnować spójności tworzonego produktu końcowego. Równie ważnym elementem jest dobór paradygmatu, w~jakim tworzona jest implementacja, do możliwości głównego narzędzia jakim jest język programowania i~wykorzystane biblioteki.
 
-      Implementacja zaprezentowana w~pracy magisterskiej oparta jest na języku \textit{C++} oraz bibliotece \textit{OpenCV}, dlatego zastosowanym paradygmatem jest opisywane \textit{programowanie obiektowe}. Zgodnie z~pierwszym z~podstawowych filarów programowania obiektowego - \textit{Abstrakcją} - każda implementacja określonego algorytmu śledzenia punktów charakterystycznych jest wyabstrahowanym wykonawcą. Wszystkie implementacje korzystają z~wspólnej abstrakcyjnej klasy bazowej, natomiast detale i~sposób interakcji z~biblioteką oraz sekwencją obrazów został ukryty wewnątrz konkretnych przypadków.
+      Implementacja zaprezentowana w~pracy oparta jest na języku \textit{C++} oraz bibliotece \textit{OpenCV}, dlatego zastosowanym paradygmatem jest opisywane \textit{programowanie obiektowe}. Zgodnie z~pierwszym z~podstawowych filarów programowania obiektowego - \textit{Abstrakcją} - każda implementacja określonego algorytmu śledzenia punktów charakterystycznych jest wyabstrahowanym wykonawcą. Wszystkie implementacje korzystają z~wspólnej abstrakcyjnej klasy bazowej, natomiast detale i~sposób interakcji z~biblioteką oraz sekwencją obrazów został ukryty wewnątrz konkretnych przypadków.
 
       W~tym przypadku wykorzystanie abstrakcyjnej klasy bazowej to użycie \textit{Strategii}, jednego z~\textit{czynnościowych wzorców projektowych}. Zgodnie z~definicją zamieszczoną w~\cite{PatternsGoF} ten wzorzec projektowy definiuje rodzinę wymiennych algorytmów i~kapsułkuje je w postaci klas. Dzięki temu możliwe jest wymienne stosowanie każdego z~nich w~trakcie działania aplikacji niezależnie od korzystających z~nich klientów.
 
@@ -64,7 +64,7 @@
       Najpopularniejszą koncepcją związaną z~\textit{funktorami} jest \textit{Predykat}. Jest to koncept zaczerpnięty z~matematyki. Jest to definicja pewnej funkcji logicznej (\textit{boolowskiej}) o~dowolnej dziedzinie i~przeciwdziedzinie będącej zbiorem wartości logicznych (\textit{prawda}, \textit{fałsz}). W~przypadku \textit{STL} wewnętrzna implementacja funktora na podstawie parametrów wejściowych podejmuje decyzje o~przypisaniu określonej wartości logicznej związanej z~przekazanymi argumentami.
 
       \subsubsection{Idiomy}\label{Idioms}
-      Bardzo ważnym elementem podczas wykorzystywania \textit{standardowej biblioteki szablonów} jest trzymanie się określonych warunków wymaganych od typów zdefiniowanych przez użytkownika, ale także zbioru wypracowanych technik zwanych \textit{idiomami}. Pomocnym źródłem jest pozycja \cite{EffectiveStl} ilustrująca wiele przykładów wspomnianych idiomów oraz prezentująca potencjalne pułapki i~sytuacje których jako użytkownicy biblioteki powinniśmy unikać. Poniżej zamieszczony został przykład jednego z~idiomów zwanego \textit{erase-remove}, służącego do zwolnienia miejsca w~pojemniku zajmowanego przez elementy oznaczone jako usunięte (ponieważ algorytm \textit{remove} sam w~sobie nie usuwa elementów zgromadzonych w~kontenerze, jedynie przenosi je na koniec i~oznacza jako usunięte, faktyczne usunięcie może wykonać dopiero metoda \textit{erase} zaimplementowana w~określonym pojemniku).
+      Bardzo ważnym elementem podczas wykorzystywania \textit{standardowej biblioteki szablonów} jest trzymanie się określonych warunków wymaganych od typów zdefiniowanych przez użytkownika, ale także zbioru wypracowanych technik zwanych \textit{idiomami}. Pomocnym źródłem jest pozycja \cite{EffectiveStl} ilustrująca wiele przykładów wspomnianych idiomów oraz prezentująca potencjalne pułapki i~sytuacje, których użytkownicy biblioteki powinni unikać. Poniżej zamieszczony został przykład jednego z~idiomów zwanego \textit{erase-remove}, służącego do zwolnienia miejsca w~pojemniku zajmowanego przez elementy oznaczone jako usunięte (ponieważ algorytm \textit{remove} sam w~sobie nie usuwa elementów zgromadzonych w~kontenerze, jedynie przenosi je na koniec i~oznacza jako usunięte, faktyczne usunięcie może wykonać dopiero metoda \textit{erase} zaimplementowana w~określonym pojemniku).
 
       \begin{sample}[ht]
         \begin{verbatim}
@@ -84,12 +84,12 @@ v.erase(std::remove(v.begin(), v.end(), 5), v.end());
 
       Oparta jest na otwartej licencji \textit{BSD} i~jej rozwój został zapoczątkowany została przez firmę \textit{Intel} w~1999 roku. Jest ona napisana w~języku \textit{C++} i~głównym interfejs programistyczny jest dostosowany właśnie do tego języka, niemniej starsze implementacje przygotowane w~języku \textit{C} są ciągle dostępne i~istnieje możliwość ich wykorzystania.
 
-      \textit{OpenCV} jest wieloplatformową biblioteką, w~pełni współpracującą z~systemami operacyjnymi \textit{Mac OS X}, \textit{Microsoft Windows} i~\textit{Linux}. W~momencie tworzenia pracy magisterskiej wykorzystywana była aktualnie dostępna wersja o~numerze \textit{2.4.3}. Popularność tej biblioteki przyniosła, z~pomocą społeczności, interfejsy programistyczne do praktycznie każdego popularnego języka programowania. Warto nadmienić, że obecnie wszelkiego rodzaju nowe funkcjonalności implementowane są w~języku \textit{C++}, włączając w~to wsparcie dla platform \textit{CUDA} i~podobnych.
+      \textit{OpenCV} jest wieloplatformową biblioteką, w~pełni współpracującą z~systemami operacyjnymi \textit{Mac OS X}, \textit{Microsoft Windows} i~\textit{Linux}. W~momencie tworzenia pracy wykorzystywana była aktualnie dostępna wersja o~numerze \textit{2.4.3}. Popularność tej biblioteki przyniosła, z~pomocą społeczności, interfejsy programistyczne do praktycznie każdego popularnego języka programowania. Warto nadmienić, że obecnie wszelkiego rodzaju nowe funkcjonalności implementowane są w~języku \textit{C++}, włączając w~to wsparcie dla platform \textit{CUDA} i~podobnych.
 
       Dokumentacja dostępna na oficjalnej stronie internetowej jest obszerna i~wraz z~zamieszczonymi przykładami tworzy kompletny poradnik. Dodatkowo istnieje kilka pozycji bibliograficznych na rynkach zagranicznych, które zostały wykorzystane przy tworzeniu pracy \cite{LearningOpenCV}, \cite{OpenCVCookbook}.
 
       \subsubsection{Podstawowe koncepcje wykorzystywane przy pracy z~OpenCV}
-      W~kontekście pracy magisterskiej biblioteka \textit{OpenCV} udostępnia wiele konceptów, które ułatwiają pracę i~pozwalają skupić się na faktycznej implementacji algorytmów. Intensywnie wykorzystywane są następujące elementy:
+      W~kontekście omawianej pracy biblioteka \textit{OpenCV} udostępnia wiele konceptów, które ułatwiają pracę i~pozwalają skupić się na faktycznej implementacji algorytmów. Intensywnie wykorzystywane są następujące elementy:
       \begin{itemize}
         \item Wczytywanie i~zapis różnorakich formatów sekwencji wideo.
         \item Podstawowe operacje i~filtry zdefiniowane jako pojęcia wizji komputerowej.
@@ -104,7 +104,7 @@ v.erase(std::remove(v.begin(), v.end(), 5), v.end());
       \subsubsection{Biblioteka d3.js}
       \textit{D3} to środowisko do obliczeń statystycznych oraz wizualizacji wyników (za pomocą przeglądarki internetowej, w~formacie wektorowym SVG) napisana w~języku JavaScript. Znajduje on zastosowanie w~każdej dziedzinie nauki wymagającej analizy statystycznej i~prezentacji wyników w~postaci różnego rodzaju wykresów. Została ona szczegółowo opisana w~książce \cite{D3Book}.
 
-      W~pracy magisterskiej zostały wykorzystane skrypty opierające się o~pakiety analizy statystycznej oraz prezentacji wyników pomiarów poszczególnych implementacji i~algorytmów. Poniżej zaprezentowano przykładowy skrypt, pozostałe wykresy oraz analiza statystyczna znajdują się w~rozdziale \ref{Chapter_AnalizaRezultatow}.
+      W~pracy zostały wykorzystane skrypty opierające się o~pakiety analizy statystycznej oraz prezentacji wyników pomiarów poszczególnych implementacji i~algorytmów. Poniżej zaprezentowano przykładowy skrypt, pozostałe wykresy oraz analiza statystyczna znajdują się w~rozdziale \ref{Chapter_AnalizaRezultatow}.
 
       \begin{sample}[ht]
         \begin{verbatim}
@@ -174,7 +174,7 @@ done
   \section{Szczegóły techniczne implementacji}\label{Section_ImplementationDetails}
 
   \subsection{Abstrakcja strumienia wideo}\label{Subsection_VideoStream}
-  Bardzo ważnym elementem przygotowanym na samym początku i~wykorzystywanym jako główny element pracy magisterskiej jest koncepcja \textit{strumienia wideo} zaimplementowana jako klasa \textit{VideoStream}.
+  Bardzo ważnym elementem przygotowanym na samym początku i~wykorzystywanym jako główna abstrakcja w~kodzie źródłowym jest koncepcja \textit{strumienia wideo} zaimplementowana jako klasa \textit{VideoStream}.
 
   Omawiana abstrakcja reprezentuje sekwencję ramek wczytanych z~określonego pliku wideo, przetwarzanych oraz zapisywanych do innego pliku wideo w~identycznym formacie. Z~koncepcją przetwarzania związana jest abstrakcja przekształcenia pojedynczej klatki obrazu zaimplementowana w~klasach pochodnych do klas abstrakcyjnych \textit{FrameTransformer} oraz \textit{ArgumentsAwareFrameTransformer}. Druga z~nich posiada informację o~modyfikowalnych parametrach, argumentach, przekazywanych z~zewnętrznego źródła.
 
@@ -201,7 +201,7 @@ done
   \subsection{Generacja zbiorów treningowych}
   Zbiory treningowe dla metody wykorzystującej las drzew losowych generowane są na podstawie przekształceń afinicznych oraz szumów wprowadzonych do odpowiednio przygotowanej pierwszej klatki animacji (operacja ta została omówiona w~sekcji \ref{Subsection_AdjustFirstFrame}).
 
-  Wyróżniamy następujące przekształcenia i~szumy wprowadzone do danych treningowych:
+  Wyróżnione zostały następujące przekształcenia i~szumy wprowadzone do danych treningowych:
 
   \begin{itemize}
     \item Obrót względem środka obrazu o~kąt z~zakresu $[-30\degree; 30\degree]$ co 10\degree.
@@ -230,7 +230,7 @@ done
   \subsection{Implementacja wewnętrzna lasu drzew losowych}
   Wewnętrzna implementacja lasu drzew losowych opiera się na trzech klasach klasycznych (\textit{RandomForest}, \textit{RandomTreeBuilder}, \textit{RandomForestBuilder}) oraz dwóch szablonach klas (\textit{Tree} oraz \textit{TreeWalker}).
 
-  Głównym elementem jest klasa szablonowa \textit{Tree}, która jest strukturą danych reprezentującą drzewo losowe. Szablon sparametryzowany jest klasą reprezentującą węzeł drzewa oraz maksymalną liczbą dzieci podlegających pod~dany węzeł. W~pracy magisterskiej implementacja węzła znajduje się w~klasie \textit{DecisionNode}. Kolejna klasa szablonowa \textit{TreeWalker} enkapsuluje algorytm poruszania się po zbudowanym drzewie (algorytm wykorzystywany jest przy klasyfikacji, zaimplementowanej wewnątrz klasy \textit{RandomForest}).
+  Głównym elementem jest klasa szablonowa \textit{Tree}, która jest strukturą danych reprezentującą drzewo losowe. Szablon sparametryzowany jest klasą reprezentującą węzeł drzewa oraz maksymalną liczbą dzieci podlegających pod~dany węzeł. Implementacja węzła znajduje się w~klasie \textit{DecisionNode}. Kolejna klasa szablonowa \textit{TreeWalker} enkapsuluje algorytm poruszania się po zbudowanym drzewie (algorytm wykorzystywany jest przy klasyfikacji, zaimplementowanej wewnątrz klasy \textit{RandomForest}).
 
   Klasa \textit{RandomForest} reprezentuje zbudowaną i~wyuczoną strukturę lasu drzew losowych, dzięki której możliwe jest przeprowadzenie procesu klasyfikacji. Szczegóły algorytmu klasyfikacji zostały omówione w~rozdziale \ref{Subsection_RandomizedTrees}.
 
@@ -258,7 +258,7 @@ done
 
     Na rysunku \ref{fig:AlgorithmsPresentation} zaprezentowano jak wygląda stworzony interfejs użytkownika. Z~dwóch pól wyboru zostają podane jako parametry wejściowe nazwa sekwencji wideo oraz nazwa zaimplementowanego algorytmu śledzenia. Poniżej, w~indywidualnym panelu, istnieje możliwość zmiany parametrów dla wybranego sposobu śledzenia punktów charakterystycznych. Istnieje możliwość podglądu wybranej sekwencji za pomocą odtwarzacza wideo.
 
-    Po zaakceptowaniu wyboru, parametry zostają przesłane do serwera pośredniczącego i~po zakończeniu przetworzenia danych otrzymamy nową sekwencję wideo będącą końcowym rezultatem, która może zostać przeglądnięta w~tym samym odtwarzaczu wideo.
+    Po zaakceptowaniu wyboru, parametry zostają przesłane do serwera pośredniczącego i~po zakończeniu przetworzenia danych odesłana zostanie nowa sekwencja wideo będącą końcowym rezultatem, która może zostać przeglądnięta w~tym samym odtwarzaczu wideo.
 
   \section{Zaznaczanie punktów kluczowych}\label{Section_Keypoints}
     Każda z~zebranych próbek zgodnie z~protokołem (zamieszczonym w~rozdziale \ref{Section_DefinicjeGestow}) reprezentuje określony kształt lub gest. W~celu wykonania badań jakościowych zaistniała potrzeba zaznaczenia punktów kluczowych połączonych ścieżkami wraz z~otoczeniem samych punktów. Do realizacja zadania został stworzony kolejny interfejs użytkownika.
@@ -270,9 +270,9 @@ done
       \label{fig:Keypoints}
     \end{figure}
 
-    Na rysunku \ref{fig:Keypoints} widzimy identyczne pole wyboru sekwencji wideo, odtwarzacz oraz pole robocze do zaznaczania punktów. Po wybraniu odpowiedniej próbki za pomocą odtwarzacza wideo lub strzałek na klawiaturze możemy analizować kolejne klatki wideo. Na obszarze roboczym za pomocą lewego klawisza myszki zostają zaznaczone kolejne punkty, które zostają kolejno połączone ścieżkami.
+    Na rysunku \ref{fig:Keypoints} zaprezentowano identyczne pole wyboru sekwencji wideo, odtwarzacz oraz pole robocze do zaznaczania punktów. Po wybraniu odpowiedniej próbki za pomocą odtwarzacza wideo lub strzałek na klawiaturze możliwa jest analiza kolejnych klatek wideo. Na obszarze roboczym za pomocą lewego klawisza myszki zostają zaznaczone kolejne punkty, które zostają kolejno połączone ścieżkami.
 
-    Za pomocą klawiatury (klawisze \textit{U} oraz \textit{R}) lub przycisków możemy usunąć lub przywrócić ostatnio dodany punkt. Pole liczbowe służy do manipulacji promieniem okręgów otaczających poszczególne punkty kluczowe.
+    Za pomocą klawiatury (klawisze \textit{U} oraz \textit{R}) lub przycisków istnieje możliwość usunięcia lub przywrócenia ostatnio dodanego punktu. Pole liczbowe służy do manipulacji promieniem okręgów otaczających poszczególne punkty kluczowe.
 
     Po uzyskaniu najlepszego kształtu, dane mogą zostać wysłane i~zapisane po stronie serwera pośredniczącego do formatu tekstowego (rozszerzenie \textit{keypoints}, format zaprezentowany w~przykładzie \ref{KeypointsTxt}) oraz formatu XML zaprezentowanego w~przykładzie \ref{KeypointsXml}. Pliki z~zapisanymi punktami kluczowymi posiadają taką samą nazwę jak sekwencja wideo.
 
@@ -337,7 +337,7 @@ done
 
 
   \section{Interfejs linii komend programu przetwarzającego sekwencje wideo}\label{Section_CLI}
-    Omawiany program jest sercem implementacyjnym pracy magisterskiej. Do niego serwer pośredniczący przesyła parametry wejściowe i~po zakończeniu jego działania wysyła rezultaty z~powrotem do interfejsu graficznego. Również rezultaty badań jakościowych oraz wydajnościowych są prezentowane za jego pomocą (jak widać na obrazie \ref{fig:Cli} służy do tego opcjonalny przełącznik \textit{-{}-include-results}).
+    Omawiany program jest sercem implementacyjnym całej pracy. Do niego serwer pośredniczący przesyła parametry wejściowe i~po zakończeniu jego działania wysyła rezultaty z~powrotem do interfejsu graficznego. Również rezultaty badań jakościowych oraz wydajnościowych są prezentowane za jego pomocą (jak widać na obrazie \ref{fig:Cli} służy do tego opcjonalny przełącznik \textit{-{}-include-results}).
 
     \newpage
     \begin{figure}[!ht]
