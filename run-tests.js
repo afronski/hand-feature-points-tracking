@@ -61,7 +61,9 @@ var path = require("path"),
 
 console.log("Compiling ./bin/tracking in release mode...".rainbow);
 
-if (execSync.code("scons debug=1") === 0) {
+if (execSync.code("scons") === 0) {
+
+  backup("before_");
 
   algorithms.forEach(function(algorithm) {
     glob.sync("./assets/*.avi").forEach(function(fileName) {
