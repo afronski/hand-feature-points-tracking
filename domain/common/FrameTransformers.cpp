@@ -228,6 +228,30 @@ Dictionary FrameTransformer::getResults() const {
   return results;
 }
 
+bool FrameTransformer::contains(const cv::Point2f& point) const {
+  if (boundingRectangle != 0) {
+    return boundingRectangle->contains(point);
+  }
+
+  return true;
+}
+
+bool FrameTransformer::contains(const cv::Point2d& point) const {
+  if (boundingRectangle != 0) {
+    return boundingRectangle->contains(point);
+  }
+
+  return true;
+}
+
+bool FrameTransformer::contains(const cv::Point& point) const {
+  if (boundingRectangle != 0) {
+    return boundingRectangle->contains(point);
+  }
+
+  return true;
+}
+
 // Private methods.
 void FrameTransformer::calculateBoundingRectangle(const std::string& movieName) {
   readKeypointsFromFile(movieName, keypoints, baseKeypoints);

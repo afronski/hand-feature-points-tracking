@@ -39,7 +39,7 @@ void DenseOpticalFlowTracker::drawOpticalFlowMap(cv::Mat& frame) {
 
       cv::Scalar actualColor(MapOverlayColor);
 
-      if (boundingRectangle->contains(point) && cv::norm(pointWithFlow - point) >= FloatThreshold) {
+      if (contains(point) && cv::norm(pointWithFlow - point) >= FloatThreshold) {
         flowPoints.push_back(point);
         actualColor = MapOverlayColorWhichIndicatesChange;
       }

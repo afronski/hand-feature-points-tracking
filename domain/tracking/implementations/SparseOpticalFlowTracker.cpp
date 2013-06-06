@@ -34,9 +34,7 @@ bool SparseOpticalFlowTracker::pointShouldBeAccepted(unsigned int number) {
   double xDifference = std::abs(salientPoints[0][number].x - salientPoints[1][number].x),
          yDifference = std::abs(salientPoints[0][number].y - salientPoints[1][number].y);
 
-  return status[number] &&
-         (xDifference + yDifference > 2.0) &&
-         boundingRectangle->contains(salientPoints[1][number]);
+  return status[number] && (xDifference + yDifference > 2.0) && contains(salientPoints[1][number]);
 }
 
 void SparseOpticalFlowTracker::drawTrackedPoints(cv::Mat& frame) {

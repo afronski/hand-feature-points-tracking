@@ -44,6 +44,10 @@ class FrameTransformer {
            std::size_t meaningfulAmount,
            cv::Mat& frame);
 
+    bool contains(const cv::Point2f& point) const;
+    bool contains(const cv::Point2d& point) const;
+    bool contains(const cv::Point& point) const;
+
   protected:
     common::Timer memoryMeasureOverheadTimer;
     common::Timer processingFrameTimer;

@@ -295,7 +295,7 @@ void RandomForestTracker::drawFeaturePointsCorrespondence(
       throw std::logic_error("Feature correspondence is out of image!");
     }
 
-    if (boundingRectangle->contains(rawInputImageFeaturePoint)) {
+    if (contains(rawInputImageFeaturePoint)) {
       actualColor = DrawingColor;
       implementation->pointsForAverage.push_back(cv::Point2d(
                                                   static_cast<double>(rawInputImageFeaturePoint.x),
