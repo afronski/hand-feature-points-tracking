@@ -10,7 +10,10 @@
     <meta name="viewport" content="width=device-width">
 
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/dependencies/nv.d3.css">
+
     <script src="/js/dependencies/d3.min.js"></script>
+    <script src="/js/dependencies/nv.d3.min.js"></script>
   </head>
 
   <body>
@@ -20,11 +23,14 @@
 
     <section class="main-content">
       <section>
-        <label for="results">Select result:</label>
-        <select name="results" id="results" disabled>
-          <option value="-1">No result</option>
+        <label for="types">Select type:</label>
+        <select name="types" id="types" disabled>
+          <option value="-1">Empty</option>
+          <option value="0">Memory</option>
         </select>
       </section>
+
+      <section id="charts"></section>
     </section>
 
     <script src="/js/common.js"></script>

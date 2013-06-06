@@ -99,7 +99,7 @@ label {
 }
 
 #movies,
-#results {
+#types {
   font-size: 1.5em;
   width: 480px;
   margin-left: 31px;
@@ -132,4 +132,21 @@ label {
 
 .hidden {
   display: none;
+}
+
+#charts {
+  width: 80%;
+}
+
+#charts svg {
+  width: 100%;
+  height: 500px;
+
+  padding: 30px;
+}
+
+#charts h2 {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
 }
