@@ -8,6 +8,12 @@ body {
 label {
   font-size: 1.5em;
   margin-right: 33px;
+  width: 130px;
+  display: inline-block;
+}
+
+.longer {
+  width: 250px;
 }
 
 .keypoints {
@@ -99,15 +105,12 @@ label {
 }
 
 #movies,
-#types {
-  font-size: 1.5em;
-  width: 480px;
-  margin-left: 31px;
-}
-
+#types,
+#files,
 #algorithms {
   font-size: 1.5em;
   width: 480px;
+  margin-left: 31px;
 }
 
 #invoke {

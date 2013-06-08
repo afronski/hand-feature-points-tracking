@@ -69,5 +69,29 @@ application.post("/keypoints", function(request, response) {
   common.sendJSON(response, { status: "OK" });
 });
 
+application.get("/charts/memory/:file", function(request, response) {
+  common.debug(util.format("Get chart data from file '%s' for memory usage", request.params.file));
+
+  common.sendJSON(response, reporting.memory(request.params.file));
+});
+
+application.get("/charts/timing/:file", function(request, response) {
+  common.debug(util.format("Get chart data from file '%s' for timing", request.params.file));
+
+  common.sendJSON(response, reporting.timing(request.params.file));
+});
+
+application.get("/charts/quality/:file", function(request, response) {
+  common.debug(util.format("Get chart data from file '%s' for quality", request.params.file));
+
+  common.sendJSON(response, reporting.quality(request.params.file));
+});
+
+application.get("/charts/overhead/:file", function(request, response) {
+  common.debug(util.format("Get chart data from file '%s' for overhead", request.params.file));
+
+  common.sendJSON(response, reporting.overhead(request.params.file));
+});
+
 application.listen(Port);
 common.log("Listening on port ", Port);
