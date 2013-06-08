@@ -5,22 +5,40 @@ var glob = require("glob"),
 
     common = require("./common"),
 
-    repository = exports = module.exports = {};
+    repository = exports = module.exports = {},
+
+    // Cached collections.
+    movies = null,
+    results = null,
+    algorithm = null;
 
 repository.getMovieList = function() {
-  var movies = glob.sync("./assets/*.avi").filter(common.notTrackingResults).map(common.fileMapper);
-
-  common.debug("Listing movie files from assets directory: " + common.prettyPrint(movies));
+  if (!movies) {
+    movies = glob.sync("./assets/*.avi").filter(common.notTrackingResults).map(common.fileMapper);
+    common.debug("Listing movie files from assets directory: " + common.prettyPrint(movies));
+  }
 
   return movies;
 };
 
 repository.getResultsList = function() {
-  var results = glob.sync("./assets/*.json").filter(common.notTrackingResults).map(common.fileMapper);
-
-  common.debug("Listing JSON files from assets directory: " + common.prettyPrint(results));
+  if (!results) {
+    results = glob.sync("./assets/*.json").filter(common.notTrackingResults).map(common.fileMapper);
+    common.debug("Listing JSON files from assets directory: " + common.prettyPrint(results));
+  }
 
   return results;
+};
+
+repository.getAlgorithmsList = function() {
+  var output;
+
+  if (!algorithms) {
+    output = execSync.stdout("./bin/tracking --list-algorithms");
+    algorithms = output.split("\n").filter(common.nonEmpty).map(common.toAlgorithm);
+  }
+
+  return algorithms;
 };
 
 repository.getMovieListWithoutKeypoints = function() {
@@ -39,11 +57,4 @@ repository.getMovieListWithoutKeypoints = function() {
                common.prettyPrint(result));
 
   return result;
-};
-
-repository.getAlgorithmsList = function() {
-  var output = execSync.stdout("./bin/tracking --list-algorithms"),
-      algorithms = output.split("\n").filter(common.nonEmpty).map(common.toAlgorithm);
-
-  return algorithms;
 };

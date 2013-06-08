@@ -89,12 +89,35 @@ function extractMemory(element, index) {
   return { x: index + 1, y: element / ToMB };
 }
 
-function extractSpecialisedMemory(key, element) {
+function extractSpecialised(key, element) {
   return { x: element.index, y: element[key] };
+}
+
+function extractCollectedErrors(element, index) {
+  return { x: index + 1, y: element.value };
+}
+
+function toPoint(element, index) {
+  return { x: index + 1, y: element };
 }
 
 function convertToMB(value) {
   return value / ToMB;
+}
+
+function convertToPoint(element) {
+  return element.value;
+}
+
+function repeat(value, times) {
+  var array = [],
+      i;
+
+  for (i = 0; i < times; ++i) {
+    array.push(value);
+  }
+
+  return array;
 }
 
 function min(array) {
@@ -131,6 +154,14 @@ function get(file, key) {
   return JSON.parse(fs.readFileSync("./assets/" + file))[key];
 }
 
+function getBoundingCircleSeries(radius, errors) {
+  return {
+    values: repeat(radius, errors.length).map(toPoint),
+    key: "Promień okręgu otaczającego",
+    color: "#FF0000"
+  };
+}
+
 function getFirstParameter(point) {
   return point.parameters.indexOf(" ") === -1;
 }
@@ -139,7 +170,7 @@ function getOnlyOneGesture(gesture, point) {
   return point.gesture === gesture;
 }
 
-function getDataPointFromKeyInFile(key, file) {
+function getDataPointFromMemoryKeyInFile(key, file) {
   var data = extractDataAndParametersFromName(file),
       memory = get(file, key),
       rawParameters = data.parameters.indexOf(" ") !== -1 ?
@@ -150,6 +181,25 @@ function getDataPointFromKeyInFile(key, file) {
     minimum: min(memory.map(convertToMB)),
     maximum: max(memory.map(convertToMB)),
     average: avg(memory.map(convertToMB)),
+    index: parseInt(rawParameters, 10),
+    parameters: data.parameters,
+    person: data.person,
+    gesture: data.gesture
+  };
+}
+
+function getDataPointFromErrorKeyInFile(key, file) {
+  var data = extractDataAndParametersFromName(file),
+      errors = get(file, key),
+      rawParameters = data.parameters.indexOf(" ") !== -1 ?
+                        data.parameters.split(" ")[1] :
+                        data.parameters;
+
+  return {
+    minimum: min(errors.map(convertToPoint)),
+    maximum: max(errors.map(convertToPoint)),
+    average: avg(errors.map(convertToPoint)),
+    radius: get(file, "pointsBoundaryRadius"),
     index: parseInt(rawParameters, 10),
     parameters: data.parameters,
     person: data.person,
@@ -177,7 +227,7 @@ reporting.memoryUsageForSpecialisedMethod = function(method) {
 
       files = getFileByMethodAndOnlyParametrized(method),
 
-      physical = files.map(getDataPointFromKeyInFile.curry("residentSetMemoryUsage")),
+      physical = files.map(getDataPointFromMemoryKeyInFile.curry("residentSetMemoryUsage")),
 
       physicalMemoryGestureC = physical.filter(getOnlyOneGesture.curry("C")),
       physicalMemoryGestureO = physical.filter(getOnlyOneGesture.curry("O")),
@@ -191,32 +241,32 @@ reporting.memoryUsageForSpecialisedMethod = function(method) {
 
   result.series.push({
     key: util.format(residentLabel, "minimalne zużycie", "G", "O"),
-    values: physicalMemoryGestureO.map(extractSpecialisedMemory.curry("minimum")).sort(byX)
+    values: physicalMemoryGestureO.map(extractSpecialised.curry("minimum")).sort(byX)
   });
 
   result.series.push({
     key: util.format(residentLabel, "maksymalne zużycie", "G", "O"),
-    values: physicalMemoryGestureO.map(extractSpecialisedMemory.curry("maximum")).sort(byX)
+    values: physicalMemoryGestureO.map(extractSpecialised.curry("maximum")).sort(byX)
   });
 
   result.series.push({
     key: util.format(residentLabel, "średnie zużycie", "G", "O"),
-    values: physicalMemoryGestureO.map(extractSpecialisedMemory.curry("average")).sort(byX)
+    values: physicalMemoryGestureO.map(extractSpecialised.curry("average")).sort(byX)
   });
 
   result.series.push({
     key: util.format(residentLabel, "minimalne zużycie", "G", "C"),
-    values: physicalMemoryGestureC.map(extractSpecialisedMemory.curry("minimum")).sort(byX)
+    values: physicalMemoryGestureC.map(extractSpecialised.curry("minimum")).sort(byX)
   });
 
   result.series.push({
     key: util.format(residentLabel, "maksymalne zużycie", "G", "C"),
-    values: physicalMemoryGestureC.map(extractSpecialisedMemory.curry("maximum")).sort(byX)
+    values: physicalMemoryGestureC.map(extractSpecialised.curry("maximum")).sort(byX)
   });
 
   result.series.push({
     key: util.format(residentLabel, "średnie zużycie", "G", "C"),
-    values: physicalMemoryGestureC.map(extractSpecialisedMemory.curry("average")).sort(byX)
+    values: physicalMemoryGestureC.map(extractSpecialised.curry("average")).sort(byX)
   });
 
   return result;
@@ -374,20 +424,117 @@ reporting.virtualMemoryForMethodAndPerson = function(method, person) {
   return result;
 };
 
-// TODO:
 // Quality data preparation.
 reporting.quality = function(file) {
-  var result = prepareName("Quality", file);
+  var result = prepareName("Quality - Keypoint distance", file),
+      errors = get(file, "collectedErrors");
 
   result.series = [
-    { values: [ 1, 2, 3, 4 ].map(extract), key: "Linear" },
-    { values: [ 1, 4, 9, 16 ].map(extract), key: "Quadratic" },
-    { values: [ 1, 8, 27, 64 ].map(extract), key: "Cubic" }
+    {
+      values: errors.map(extractCollectedErrors),
+      key: "Odległości od punktów kluczowych"
+    },
+    getBoundingCircleSeries(get(file, "pointsBoundaryRadius"), errors)
   ];
 
   return result;
 };
 
+reporting.qualityPath = function(file) {
+  var result = prepareName("Quality - Path distance", file),
+      errors = get(file, "collectedPathErrors");
+
+  result.series = [
+    {
+      values: errors.map(extractCollectedErrors),
+      key: "Odległości od ścieżek kluczowych"
+    },
+    getBoundingCircleSeries(get(file, "pointsBoundaryRadius"), errors)
+  ];
+
+  return result;
+};
+
+function specialisedQuality(key, name, method) {
+  var result = {
+        name: util.format(name, method),
+        series: []
+      },
+
+      files = getFileByMethodAndOnlyParametrized(method),
+
+      errors = files.map(getDataPointFromErrorKeyInFile.curry(key)),
+
+      errorsGestureC = errors.filter(getOnlyOneGesture.curry("C")),
+      errorsGestureO = errors.filter(getOnlyOneGesture.curry("O")),
+
+      residentLabel = "Odległości %s od punktów kluczowych (osoba '%s', gest '%s')";
+
+  if (method === "Sparse Optical Flow") {
+    errorsGestureC = errorsGestureC.filter(getFirstParameter);
+    errorsGestureO = errorsGestureO.filter(getFirstParameter);
+  }
+
+  result.series.push({
+    key: "Promień okręgu otaczającego dla gestu O",
+    values: errorsGestureO.map(extractSpecialised.curry("radius")).sort(byX),
+    color: "#FF0000"
+  });
+
+  result.series.push({
+    key: util.format(residentLabel, "minimalne", "G", "O"),
+    values: errorsGestureO.map(extractSpecialised.curry("minimum")).sort(byX),
+    color: "#0000FF"
+  });
+
+  result.series.push({
+    key: util.format(residentLabel, "maksymalne", "G", "O"),
+    values: errorsGestureO.map(extractSpecialised.curry("maximum")).sort(byX),
+    color: "#00FF00"
+  });
+
+  result.series.push({
+    key: util.format(residentLabel, "średnie", "G", "O"),
+    values: errorsGestureO.map(extractSpecialised.curry("average")).sort(byX),
+    color: "#00FFFF"
+  });
+
+  result.series.push({
+    key: "Promień okręgu otaczającego dla gestu C",
+    values: errorsGestureC.map(extractSpecialised.curry("radius")).sort(byX),
+    color: "#880000"
+  });
+
+  result.series.push({
+    key: util.format(residentLabel, "minimalne", "G", "C"),
+    values: errorsGestureC.map(extractSpecialised.curry("minimum")).sort(byX),
+    color: "#000088"
+  });
+
+  result.series.push({
+    key: util.format(residentLabel, "maksymalne", "G", "C"),
+    values: errorsGestureC.map(extractSpecialised.curry("maximum")).sort(byX),
+    color: "#008800"
+  });
+
+  result.series.push({
+    key: util.format(residentLabel, "średnie", "G", "C"),
+    values: errorsGestureC.map(extractSpecialised.curry("average")).sort(byX),
+    color: "#008888"
+  });
+
+  return result;
+};
+
+reporting.qualitySpecialisedForMethod = specialisedQuality.curry(
+                                                            "collectedErrors",
+                                                            "Quality - Keypoints distance - Method '%s'");
+
+reporting.qualityPathSpecialisedForMethod = specialisedQuality.curry(
+                                                            "collectedPathErrors",
+                                                            "Quality - Path distance - Method '%s'");
+
+// TODO:
 // Timing data preparation.
 reporting.timing = function(file) {
   var result = prepareName("Timing", file);

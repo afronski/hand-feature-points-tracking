@@ -1,8 +1,14 @@
-(function(Common, d3, nv) {
+(function(Common, d3, nv, canvg) {
   "use strict";
 
   // Alias and variables.
-  var $ = Common.$;
+  var $ = Common.$,
+
+      qualityChart,
+      qualityChartWithX,
+
+      memoryChart,
+      memoryChartWithX;
 
   // Charts.
   function linearChart(config) {
@@ -30,25 +36,7 @@
     nv.utils.windowResize(chart.update);
   }
 
-  function memoryChart(className, results) {
-    if (typeof(results) === "undefined") {
-      results = className;
-      className = "";
-    }
-
-    linearChart({
-      name: results.name,
-
-      xLabel: "Numer klatki animacji",
-      yLabel: "Zużycie pamięci [MB]",
-
-      svgClassName: className,
-
-      series: results.series
-    });
-  }
-
-  function memoryChartWithX(xLabel, results) {
+  function chart(yLabel, xLabel, className, results) {
     if (typeof(results) === "undefined") {
       results = className;
       className = "";
@@ -58,11 +46,19 @@
       name: results.name,
 
       xLabel: xLabel,
-      yLabel: "Zużycie pamięci [MB]",
+      yLabel: yLabel,
+
+      svgClassName: className,
 
       series: results.series
     });
   }
+
+  qualityChart = chart.curry("Odległość [piksel]", "Numer punktu kluczowego");
+  qualityChartWithX = chart.curry("Odległość [piksel]");
+
+  memoryChart = chart.curry("Zużycie pamięci [MB]", "Numer klatki animacji");
+  memoryChartWithX = chart.curry("Zużycie pamięci [MB]");
 
   // Chart Factory.
   function chartsFactory(type, file) {
@@ -161,6 +157,56 @@
         argument = getSelectedOptionFromTypes().getAttribute("data-method");
 
         d3.json("/charts/memory/specialised/method/" + argument, memoryChartWithX.curry(special));
+        break;
+
+      case 23:
+        d3.json("/charts/quality/" + file, qualityChart);
+        break;
+
+      case 24:
+        d3.json("/charts/quality/path/" + file, qualityChart);
+        break;
+
+      case 25:
+        special = "Rozmiar siatki"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/quality/specialised/method/" + argument, qualityChartWithX.curry(special));
+        break;
+
+      case 26:
+        special = "Liczba wytrenowanych drzew losowych"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/quality/specialised/method/" + argument, qualityChartWithX.curry(special));
+        break;
+
+      case 27:
+        special = "Minimalna odległość między punktami charakterystycznymi"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/quality/specialised/method/" + argument, qualityChartWithX.curry(special));
+        break;
+
+      case 28:
+        special = "Rozmiar siatki"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/quality/specialised/path/method/" + argument, qualityChartWithX.curry(special));
+        break;
+
+      case 29:
+        special = "Liczba wytrenowanych drzew losowych"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/quality/specialised/path/method/" + argument, qualityChartWithX.curry(special));
+        break;
+
+      case 30:
+        special = "Minimalna odległość między punktami charakterystycznymi"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/quality/specialised/path/method/" + argument, qualityChartWithX.curry(special));
         break;
     }
   }
@@ -292,6 +338,8 @@
         gestures = $("#gestures"),
         people = $("#people"),
 
+        charts = $("#charts"),
+
         invoke = $("#invoke");
 
     types.removeAttribute("disabled");
@@ -314,4 +362,4 @@
 
   document.addEventListener("DOMContentLoaded", init, true);
 
-} (window.Common, window.d3, window.nv));
+} (window.Common, window.d3, window.nv, window.canvg));

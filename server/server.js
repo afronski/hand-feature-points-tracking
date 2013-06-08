@@ -145,17 +145,35 @@ application.get("/charts/memory/virtual/method/:method/person/:person", function
                                         request.params.person));
 });
 
+application.get("/charts/quality/:file", function(request, response) {
+  common.debug(util.format("Get quality chart data from file '%s'", request.params.file));
+
+  common.sendJSON(response, reporting.quality(request.params.file));
+});
+
+application.get("/charts/quality/path/:file", function(request, response) {
+  common.debug(util.format("Get quality path chart data from file '%s'", request.params.file));
+
+  common.sendJSON(response, reporting.qualityPath(request.params.file));
+});
+
+application.get("/charts/quality/specialised/method/:method", function(request, response) {
+  common.debug(util.format("Get specialised quality chart data from file '%s'", request.params.method));
+
+  common.sendJSON(response, reporting.qualitySpecialisedForMethod(request.params.method));
+});
+
+application.get("/charts/quality/specialised/path/method/:method", function(request, response) {
+  common.debug(util.format("Get specialised quality path chart data from file '%s'", request.params.method));
+
+  common.sendJSON(response, reporting.qualityPathSpecialisedForMethod(request.params.method));
+});
+
 // TODO:
 application.get("/charts/timing/:file", function(request, response) {
   common.debug(util.format("Get chart data from file '%s' for timing", request.params.file));
 
   common.sendJSON(response, reporting.timing(request.params.file));
-});
-
-application.get("/charts/quality/:file", function(request, response) {
-  common.debug(util.format("Get chart data from file '%s' for quality", request.params.file));
-
-  common.sendJSON(response, reporting.quality(request.params.file));
 });
 
 application.get("/charts/overhead/:file", function(request, response) {
