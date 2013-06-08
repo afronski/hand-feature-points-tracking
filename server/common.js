@@ -9,6 +9,22 @@ var util = require("util"),
 
     common = exports = module.exports = {};
 
+// Non-standard currying arguments method.
+if (!Function.prototype.curry) {
+  Function.prototype.curry = function() {
+    if (arguments.length < 1) {
+        return this;
+    }
+
+    var method = this,
+        args = [].slice.call(arguments);
+
+    return function() {
+        return method.apply(this, args.concat([].slice.call(arguments)));
+    };
+  };
+}
+
 // Filtering.
 common.getById = function(array, id) {
   var result = array.filter(function(element) { return element.value === id; })[0];
@@ -51,7 +67,7 @@ common.sendJSON = function(response, object) {
   var body = JSON.stringify(object);
 
   response.setHeader("Content-Type", "application/json");
-  response.setHeader("Content-Length", body.length);
+  response.setHeader("Content-Length", Buffer.byteLength(body, "utf8"));
 
   response.end(body);
 };

@@ -25,8 +25,87 @@
       <section>
         <label for="types">Select type:</label>
         <select name="types" id="types" disabled>
-          <option value="-1">Empty</option>
-          <option value="0">Memory</option>
+          <option value="-1">
+            Empty
+          </option>
+          <option disabled>---</option>
+          <option value="0">
+            Memory usage for single method, person and gesture
+          </option>
+          <option disabled>---</option>
+          <option value="1" data-special="gestures" data-method="Dense Optical Flow">
+            Resident memory usage for Dense Optical Flow and selected gesture
+          </option>
+          <option value="2" data-special="gestures" data-method="Random Forest Tracker">
+            Resident memory usage for Random Forest Tracker and selected gesture
+          </option>
+          <option value="3" data-special="gestures" data-method="Sparse Optical Flow">
+            Resident memory usage for Sparse Optical Flow and selected gesture
+          </option>
+          <option disabled>---</option>
+          <option value="4" data-special="gestures" data-method="Dense Optical Flow">
+            Virtual memory usage for Dense Optical Flow and selected gesture
+          </option>
+          <option value="5" data-special="gestures" data-method="Random Forest Tracker">
+            Virtual memory usage for Random Forest Tracker and selected gesture
+          </option>
+          <option value="6" data-special="gestures" data-method="Sparse Optical Flow">
+            Virtual memory usage for Sparse Optical Flow and selected gesture
+          </option>
+          <option disabled>---</option>
+          <option value="7" data-special="both" data-method="Dense Optical Flow">
+            Resident memory usage for Dense Optical Flow
+          </option>
+          <option value="8" data-special="both" data-method="Random Forest Tracker">
+            Resident memory usage for Random Forest Tracker
+          </option>
+          <option value="9" data-special="both" data-method="Sparse Optical Flow">
+            Resident memory usage for Sparse Optical Flow
+          </option>
+          <option disabled>---</option>
+          <option value="10" data-special="both" data-method="Dense Optical Flow">
+            Virtual memory usage for Dense Optical Flow
+          </option>
+          <option value="11" data-special="both" data-method="Random Forest Tracker">
+            Virtual memory usage for Random Forest Tracker
+          </option>
+          <option value="12" data-special="both" data-method="Sparse Optical Flow">
+            Virtual memory usage for Sparse Optical Flow
+          </option>
+          <option disabled>---</option>
+          <option value="13" data-special="people" data-method="Dense Optical Flow">
+            Resident memory usage for Dense Optical Flow and selected person
+          </option>
+          <option value="14" data-special="people" data-method="Random Forest Tracker">
+            Resident memory usage for Random Forest Tracker and selected person
+          </option>
+          <option value="15" data-special="people" data-method="Sparse Optical Flow">
+            Resident memory usage for Sparse Optical Flow and selected person
+          </option>
+          <option disabled>---</option>
+          <option value="16" data-special="people" data-method="Dense Optical Flow">
+            Virtual memory usage for Dense Optical Flow and selected person
+          </option>
+          <option value="17" data-special="people" data-method="Random Forest Tracker">
+            Virtual memory usage for Random Forest Tracker and selected person
+          </option>
+          <option value="18" data-special="people" data-method="Sparse Optical Flow">
+            Virtual memory usage for Sparse Optical Flow and selected person
+          </option>
+          <option disabled>---</option>
+          <option value="19" data-special="people,gestures">
+            Memory usage for selected gesture and person
+          </option>
+          <option disabled>---</option>
+          <option value="20" data-special="specialised" data-method="Dense Optical Flow">
+            Memory usage for specialised Dense Optical Flow
+          </option>
+          <option value="21" data-special="specialised" data-method="Random Forest Tracker">
+            Memory usage for specialised Random Forest Tracker
+          </option>
+          <option value="22" data-special="specialised" data-method="Sparse Optical Flow">
+            Memory usage for specialised Sparse Optical Flow
+          </option>
         </select>
       </section>
 
@@ -35,6 +114,40 @@
         <select name="files" id="files" disabled>
           <option value="-1">Empty</option>
         </select>
+      </section>
+
+      <section>
+        <label for="gestures">Select gesture:</label>
+        <select name="gestures" id="gestures" disabled>
+          <option value="-1">Empty</option>
+          <option value="0">C</option>
+          <option value="1">Crush</option>
+          <option value="2">L</option>
+          <option value="3">O</option>
+          <option value="4">Stretch</option>
+          <option value="5">X</option>
+        </select>
+      </section>
+
+      <section>
+        <label for="people">Select person:</label>
+        <select name="people" id="people" disabled>
+          <option value="-1">Empty</option>
+          <option value="0">A</option>
+          <option value="1">B</option>
+          <option value="2">C</option>
+          <option value="3">D</option>
+          <option value="4">E</option>
+          <option value="5">F</option>
+          <option value="6">G</option>
+          <option value="7">H</option>
+          <option value="8">I</option>
+          <option value="9">J</option>
+        </select>
+      </section>
+
+      <section>
+        <input type="submit" id="invoke" value="Invoke" disabled />
       </section>
 
       <section id="charts"></section>

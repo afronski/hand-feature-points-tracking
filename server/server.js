@@ -69,12 +69,83 @@ application.post("/keypoints", function(request, response) {
   common.sendJSON(response, { status: "OK" });
 });
 
-application.get("/charts/memory/:file", function(request, response) {
-  common.debug(util.format("Get chart data from file '%s' for memory usage", request.params.file));
+application.get("/charts/memory/file/:file", function(request, response) {
+  common.debug(util.format("Get memory usage chart data for file '%s'", request.params.file));
 
   common.sendJSON(response, reporting.memory(request.params.file));
 });
 
+application.get("/charts/memory/person/:person/gesture/:gesture", function(request, response) {
+  common.debug(util.format("Get memory usage chart data for one person '%s' and one gesture '%s'",
+                           request.params.person,
+                           request.params.gesture));
+
+  common.sendJSON(response, reporting.memoryUsageForOneGestureAndOnePerson(
+                                        request.params.person,
+                                        request.params.gesture));
+});
+
+application.get("/charts/memory/specialised/method/:method", function(request, response) {
+  common.debug(util.format("Get specialised memory usage chart data for '%s'", request.params.method));
+
+  common.sendJSON(response, reporting.memoryUsageForSpecialisedMethod(request.params.method));
+});
+
+application.get("/charts/memory/resident/method/:method", function(request, response) {
+  common.debug(util.format("Get resident memory usage chart data for method '%s'",
+                           request.params.method));
+
+  common.sendJSON(response, reporting.residentMemoryForMethod(request.params.method));
+});
+
+application.get("/charts/memory/virtual/method/:method", function(request, response) {
+  common.debug(util.format("Get virtual memory usage chart data for method '%s'",
+                           request.params.method));
+
+  common.sendJSON(response, reporting.virtualMemoryForMethod(request.params.method));
+});
+
+application.get("/charts/memory/resident/method/:method/gesture/:gesture", function(request, response) {
+  common.debug(util.format("Get resident memory usage chart data for method '%s' and gesture '%s'",
+                           request.params.method,
+                           request.params.gesture));
+
+  common.sendJSON(response, reporting.residentMemoryForMethodAndGesture(
+                                        request.params.method,
+                                        request.params.gesture));
+});
+
+application.get("/charts/memory/virtual/method/:method/gesture/:gesture", function(request, response) {
+  common.debug(util.format("Get virtual memory usage chart data for method '%s' and gesture '%s'",
+                           request.params.method,
+                           request.params.gesture));
+
+  common.sendJSON(response, reporting.virtualMemoryForMethodAndGesture(
+                                        request.params.method,
+                                        request.params.gesture));
+});
+
+application.get("/charts/memory/resident/method/:method/person/:person", function(request, response) {
+  common.debug(util.format("Get resident memory usage chart data for method '%s' and person '%s'",
+                           request.params.method,
+                           request.params.person));
+
+  common.sendJSON(response, reporting.residentMemoryForMethodAndPerson(
+                                        request.params.method,
+                                        request.params.person));
+});
+
+application.get("/charts/memory/virtual/method/:method/person/:person", function(request, response) {
+  common.debug(util.format("Get virtual memory usage chart data for method '%s' and person '%s'",
+                           request.params.method,
+                           request.params.person));
+
+  common.sendJSON(response, reporting.virtualMemoryForMethodAndPerson(
+                                        request.params.method,
+                                        request.params.person));
+});
+
+// TODO:
 application.get("/charts/timing/:file", function(request, response) {
   common.debug(util.format("Get chart data from file '%s' for timing", request.params.file));
 

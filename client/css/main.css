@@ -107,6 +107,8 @@ label {
 #movies,
 #types,
 #files,
+#gestures,
+#people,
 #algorithms {
   font-size: 1.5em;
   width: 480px;
@@ -147,6 +149,11 @@ label {
 
   padding: 30px;
 }
+
+#charts svg.huge {
+  height: 1000px;
+}
+
 
 #charts h2 {
   font-size: 2em;
