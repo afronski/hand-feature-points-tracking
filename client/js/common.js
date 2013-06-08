@@ -122,6 +122,15 @@ window.Common = (function() {
     return select.options[select.selectedIndex].innerText;
   }
 
+  function getOptionValue(from) {
+    var select;
+
+    from = from || DefaultCollectionHolderSelector;
+    select = $(from);
+
+    return parseInt(select.options[select.selectedIndex].value, 10);
+  }
+
   function changeVideo(name) {
     if (!!name) {
       $("#player").setAttribute("src", "/videos-converted/%webm".replace("%webm", name));
@@ -138,6 +147,7 @@ window.Common = (function() {
 
     getCollection: getCollection,
     getOptionText: getOptionText,
+    getOptionValue: getOptionValue,
 
     changeVideo: changeVideo,
 

@@ -108,13 +108,32 @@ v.erase(std::remove(v.begin(), v.end(), 5), v.end());
 
       \begin{sample}[ht]
         \begin{verbatim}
-(function(d3) {
+(function(d3, nv) {
+  var chart = nv.models.lineChart();
 
-  d3.selectAll("TODO");
+  chart.xAxis
+    .axisLabel(config.xLabel)
+    .tickFormat(d3.format(config.xFormat || ",r"));
 
-} (window.d3));
+  chart.yAxis
+    .axisLabel(config.yLabel)
+    .tickFormat(d3.format(config.yFormat || ".02f"));
+
+  d3.select("#charts")
+    .insert("section", ":first-child")
+      .append("svg")
+        .datum(config.extractor(results))
+          .call(chart);
+
+  d3.select("#charts")
+    .insert("h2", ":first-child")
+    .text(config.name);
+
+  nv.utils.windowResize(chart.update);
+
+} (window.d3, window.nv));
         \end{verbatim}
-        \caption{Skrypt przygotowujący wykres czasu wykonania każdego z~algorytmów}
+        \caption{Skrypt przygotowujący wykres liniowy za pomocą biblioteki d3.js}
         \label{ChartForRunningTimePerAlgorithm}
       \end{sample}
 
@@ -127,8 +146,6 @@ v.erase(std::remove(v.begin(), v.end(), 5), v.end());
 
       \subsubsection{Automatyzacja pracy}
       Wszystkie procesy, zarówno dotyczące budowania aplikacji jak i~zbierania pomiarów oraz generacji wyników, są silnie zautomatyzowane. Kluczowym elementem w~tym przypadku jest system budowania \textit{SCons} oparty o~język programowania \textit{Python} oraz narzędzia pomocnicze: język skryptowy \textit{Bash} i~narzędzie \textit{FFmpeg}.
-
-      Automatyzacja procesu budowania ułatwia w~znacznym stopniu proces tworzenia oraz testowania oprogramowania, która w~przypadku języka \textit{C++} oraz większych aplikacji może być kłopotliwa. Dzięki zastosowaniu systemu budowania opartego o~język interpretowany (w~tym przypadku \textit{Python}) ułatwia wykorzystanie skryptów budowania na innym systemie operacyjnym niż został oryginalnie przewidziany - jedyną dodatkową zależnością będzie interpreter. W~przypadku zastosowania klasycznego systemu budowania opartego o~program \textit{Makefile}, ponowne wykorzystanie na platformie \textit{Windows} byłoby znacznie utrudnione - \textit{SCons} kosztem jednego dodatkowego elementu sprowadza ponowne wykorzystanie skryptów budowania do instalacji wspomnianej zależności. Poniżej zaprezentowano wycinek skryptu budowania dla opisywanego narzędzia.
 
       \begin{sample}[ht]
         \begin{verbatim}
@@ -153,9 +170,10 @@ environment.Program("./bin/export-first-frame",
         \label{BuildingProcessScript}
       \end{sample}
 
+      Automatyzacja procesu budowania ułatwia w~znacznym stopniu proces tworzenia oraz testowania oprogramowania, która w~przypadku języka \textit{C++} oraz większych aplikacji może być kłopotliwa. Dzięki zastosowaniu systemu budowania opartego o~język interpretowany (w~tym przypadku \textit{Python}) ułatwia wykorzystanie skryptów budowania na innym systemie operacyjnym niż został oryginalnie przewidziany - jedyną dodatkową zależnością będzie interpreter. W~przypadku zastosowania klasycznego systemu budowania opartego o~program \textit{Makefile}, ponowne wykorzystanie na platformie \textit{Windows} byłoby znacznie utrudnione - \textit{SCons} kosztem jednego dodatkowego elementu sprowadza ponowne wykorzystanie skryptów budowania do instalacji wspomnianej zależności. Na listingu \ref{BuildingProcessScript} zaprezentowano wycinek skryptu budowania dla opisywanego narzędzia.
+
       Uruchamianie, akwizycja danych testowych w~początkowej fazie tworzenia oprogramowania oraz konwersja wideo do najróżniejszych formatów została zrealizowana za pomocą skryptów \textit{Bash} i~narzędzia \textit{FFmpeg}. Dzięki krótkim skryptom (kilka linii kodu źródłowego) udało się sprowadzić do minimum procesy, które programista musiałby wykonywać ręcznie. Poniżej znajduje się fragment jednego ze skryptów pomocniczych.
 
-      \newpage
       \begin{sample}[ht]
         \begin{verbatim}
 #!/bin/sh
@@ -211,21 +229,21 @@ done
     \item Dodanie do obrazu szum jednostajnego (ang. \textit{uniform noise}).
   \end{itemize}
 
-  \newpage
-
-  \begin{figure}[!ht]
-    \centering
-    \includegraphics[width=14cm]{GeneratedElements}
-    \caption[Fragment wygenerowanych danych treningowych dla sekwencji Person\_A\_Crush]{Fragment wygenerowanych danych treningowych dla sekwencji \textit{Person\_A\_Crush}}
-    \label{fig:GeneratedElements}
-  \end{figure}
-
   Przykładowy zestaw danych treningowych dla sekwencji wideo o~nazwie \textit{Person\_A\_Crush} według powyższych zakresów przekształceń oraz selekcji 100 najlepszych cech zajmuje \textit{1.1 GB} przestrzeni na dysku twardym. Czas generacji wraz z~zapisem danych na dysk wynosi około \textit{21 sekund}.
 
   \subsection{Dostosowanie obrazu wejściowego na podstawie punktów kluczowych}\label{Subsection_AdjustFirstFrame}
   Ważnym szczegółem implementacyjnym dla generacji zbiorów treningowych algorytmu śledzenia za pomocą lasu drzew losowych jest przystosowanie obrazu wejściowego (pierwszej klatki animacji analizowanej sekwencji wideo).
 
   W~pierwszym kroku zaraz po ekstrakcji pierwszej ramki, konwertowana jest ona do skali szarości. Następnie przycinany jest obszar roboczy. Każda sekwencja wideo posiada wyznaczony kształt za pomocą punktów kluczowych wraz z~okręgami otaczającymi dla każdego punktu. Po nałożeniu punktów wraz z~okręgami na pierwszą klatkę animacji, wyznaczany jest prostokąt otaczający dla całego kształtu i~według niego następuje przycięcie obszaru roboczego dla obrazu wejściowego. W~następnych krokach już przycięty obraz zostaje wykorzystany jako wzór do generacji zbioru treningowego.
+
+  \newpage
+
+  \begin{figure}[!ht]
+    \centering
+    \includegraphics[width=14cm]{GeneratedElements}
+    \caption[Fragment wygenerowanych danych treningowych dla sekwencji Person\_A\_Crush]{Fragment wygenerowanych danych treningowych dla sekwencji \\\textit{Person\_A\_Crush}}
+    \label{fig:GeneratedElements}
+  \end{figure}
 
   \subsection{Implementacja wewnętrzna lasu drzew losowych}
   Wewnętrzna implementacja lasu drzew losowych opiera się na trzech klasach klasycznych (\textit{RandomForest}, \textit{RandomTreeBuilder}, \textit{RandomForestBuilder}) oraz dwóch szablonach klas (\textit{Tree} oraz \textit{TreeWalker}).
@@ -335,7 +353,6 @@ done
         \label{KeypointsXml}
       \end{sample}
 
-
   \section{Interfejs linii komend programu przetwarzającego sekwencje wideo}\label{Section_CLI}
     Omawiany program jest sercem implementacyjnym całej pracy. Do niego serwer pośredniczący przesyła parametry wejściowe i~po zakończeniu jego działania wysyła rezultaty z~powrotem do interfejsu graficznego. Również rezultaty badań jakościowych oraz wydajnościowych są prezentowane za jego pomocą (jak widać na obrazie \ref{fig:Cli} służy do tego opcjonalny przełącznik \textit{-{}-include-results}).
 
@@ -348,14 +365,33 @@ done
     \end{figure}
 
     Poniżej, w~listingu \ref{SampleInvoke}, został zamieszczony przykład wywołania (wywołanie wykonane z~głównego katalogu źródłowego):
-      \begin{sample}[ht]
-        \begin{verbatim}
+
+    \begin{sample}[ht]
+      \begin{verbatim}
 ./bin/tracking assets/Person_A_C.avi "Random Forest Tracker" 30 100
-        \end{verbatim}
-        \caption{Przykładowe wywołanie interfejsu konsolowego}
-        \label{SampleInvoke}
-      \end{sample}
+      \end{verbatim}
+      \caption{Przykładowe wywołanie interfejsu konsolowego}
+      \label{SampleInvoke}
+    \end{sample}
 
     Program dostarcza również listy zaimplementowanych algorytmów (prezentowanej w~interfejsie użytkownika, w~polu wyboru algorytmu śledzenia) uzyskiwanej za pomocą przełącznika \textit{-{}-list-algorithms}.
 
     Wywołanie interfejsu linii komend bez parametrów (lub z~niewystarczającą liczbą argumentów) pokaże instrukcję użycia, widoczną również na rysunku \ref{fig:Cli}.
+
+  \section{Interfejs użytkownika do prezentacja wykresów z~zebranych danych}
+
+    Zupełnie odrębnym widokiem zaprojektowanym i~zaimplementowanym w~aplikacji jest prezentacja wykresów z~zebranych danych pomiarowych. Został on zbudowany w~oparciu o~technologie szczegółowo omówione w~rozdziale \ref{Subsection_PomocniczeTechnologie}. Na rysunku \ref{fig:Charts} został zaprezentowany przykładowy widok.
+
+    \newpage
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{Charts}
+      \caption[Interfejs graficzny prezentujący wykresy z~zebranych danych]{Interfejs graficzny prezentujący wykresy z~zebranych danych}
+      \label{fig:Charts}
+    \end{figure}
+
+    Użytkownik za pomocą pola wyboru umieszczonego w~górnej części interfejsu użytkownika ma możliwość wykonania odpowiedniego typu wykresu. Po zaznaczeniu odpowiedniej opcji (oraz krótkiej chwili, ponieważ generacja oraz rysowanie wykresów jest procesem kosztownym obliczeniowo) w~oknie przeglądarki pojawią się wygenerowane rezultaty.
+
+    Prezentacja wszystkich wykresów danego typu na jednej stronie ułatwia porównywanie pomiędzy poszczególnymi wynikami. Stworzone wykresy są interaktywne - możliwe jest wyłączenie poszczególnych serii oraz sprawdzenie dokładnej wartości jaka znajduje się w~danym punkcie.
+
+    Warto nadmienić, że rezultaty zamieszczone w~pracy w~rozdziale \ref{Chapter_AnalizaRezultatow} zostały stworzone właśnie za pomocą tego widoku.
