@@ -151,10 +151,50 @@ application.get("/charts/quality/:file", function(request, response) {
   common.sendJSON(response, reporting.quality(request.params.file));
 });
 
+application.get("/charts/quality/person/:person/gesture/:gesture", function(request, response) {
+  common.debug(util.format("Get quality chart data for person '%s' and gesture '%s'",
+                           request.params.person,
+                           request.params.gesture));
+
+  common.sendJSON(response, reporting.qualityForPersonAndGesture(request.params.person, request.params.gesture));
+});
+
 application.get("/charts/quality/path/:file", function(request, response) {
   common.debug(util.format("Get quality path chart data from file '%s'", request.params.file));
 
   common.sendJSON(response, reporting.qualityPath(request.params.file));
+});
+
+application.get("/charts/quality/method/:method/person/:person", function(request, response) {
+  common.debug(util.format("Get quality chart data for method '%s' and person '%s'",
+                           request.params.method,
+                           request.params.person));
+
+  common.sendJSON(response, reporting.qualityForMethodAndPerson(request.params.method, request.params.person));
+});
+
+application.get("/charts/quality/path/method/:method/person/:person", function(request, response) {
+  common.debug(util.format("Get quality path chart data for method '%s' and person '%s'",
+                           request.params.method,
+                           request.params.person));
+
+  common.sendJSON(response, reporting.qualityPathForMethodAndPerson(request.params.method, request.params.person));
+});
+
+application.get("/charts/quality/method/:method/gesture/:gesture", function(request, response) {
+  common.debug(util.format("Get quality chart data for method '%s' and gesture '%s'",
+                           request.params.method,
+                           request.params.gesture));
+
+  common.sendJSON(response, reporting.qualityForMethodAndGesture(request.params.method, request.params.gesture));
+});
+
+application.get("/charts/quality/path/method/:method/gesture/:gesture", function(request, response) {
+  common.debug(util.format("Get quality path chart data for method '%s' and gesture '%s'",
+                           request.params.method,
+                           request.params.gesture));
+
+  common.sendJSON(response, reporting.qualityPathForMethodAndGesture(request.params.method, request.params.gesture));
 });
 
 application.get("/charts/quality/specialised/method/:method", function(request, response) {

@@ -11,6 +11,15 @@ var fs = require("fs"),
     ToMB = 1024,
     FileFormat = "Person_%s_%s_results_for_%s.json",
 
+    Gestures = {
+      "C": "Litera C",
+      "Crush": "Zgniatanie",
+      "L": "Litera L",
+      "O": "Okrąg",
+      "Stretch": "Rozszerzanie",
+      "X": "Krzyż"
+    },
+
     reporting = exports = module.exports = {};
 
 // Extracting data from name.
@@ -97,6 +106,14 @@ function extractCollectedErrors(element, index) {
   return { x: index + 1, y: element.value };
 }
 
+function extractWithGesture(key, element) {
+  return { label: element.gesture, value: element[key] };
+}
+
+function extractWithPerson(key, element) {
+  return { label: element.person, value: element[key] };
+}
+
 function toPoint(element, index) {
   return { x: index + 1, y: element };
 }
@@ -136,6 +153,10 @@ function avg(array) {
   return array.reduce(sum, 0) / array.length;
 }
 
+function avgFromValue(array) {
+  return avg(array.map(convertToPoint));
+}
+
 // Common methods.
 function prepareName(chartName, file) {
   var data = extractDataFromName(file);
@@ -146,8 +167,12 @@ function prepareName(chartName, file) {
   }
 }
 
-function byX(a, b) {
+function byInteger(a, b) {
   return a.x - b.x;
+}
+
+function byString(a, b) {
+  return a.label.localeCompare(b.label);
 }
 
 function get(file, key) {
@@ -188,7 +213,7 @@ function getDataPointFromMemoryKeyInFile(key, file) {
   };
 }
 
-function getDataPointFromErrorKeyInFile(key, file) {
+function getSpecialisedDataPointsFromErrorKeyInFile(key, file) {
   var data = extractDataAndParametersFromName(file),
       errors = get(file, key),
       rawParameters = data.parameters.indexOf(" ") !== -1 ?
@@ -204,6 +229,21 @@ function getDataPointFromErrorKeyInFile(key, file) {
     parameters: data.parameters,
     person: data.person,
     gesture: data.gesture
+  };
+}
+
+function getDataPointFromErrorKeyInFile(key, file) {
+  var data = extractDataFromName(file),
+      errors = get(file, key);
+
+  return {
+    minimum: min(errors.map(convertToPoint)),
+    maximum: max(errors.map(convertToPoint)),
+    average: avg(errors.map(convertToPoint)),
+    radius: get(file, "pointsBoundaryRadius"),
+    index: Gestures[data.gesture],
+    person: data.person,
+    gesture: Gestures[data.gesture]
   };
 }
 
@@ -232,7 +272,7 @@ reporting.memoryUsageForSpecialisedMethod = function(method) {
       physicalMemoryGestureC = physical.filter(getOnlyOneGesture.curry("C")),
       physicalMemoryGestureO = physical.filter(getOnlyOneGesture.curry("O")),
 
-      residentLabel = "Pamięć fizyczna - %s (osoba '%s', gest '%s')";
+      label = "Pamięć fizyczna - %s (osoba '%s', gest '%s')";
 
   if (method === "Sparse Optical Flow") {
     physicalMemoryGestureC = physicalMemoryGestureC.filter(getFirstParameter);
@@ -240,33 +280,33 @@ reporting.memoryUsageForSpecialisedMethod = function(method) {
   }
 
   result.series.push({
-    key: util.format(residentLabel, "minimalne zużycie", "G", "O"),
-    values: physicalMemoryGestureO.map(extractSpecialised.curry("minimum")).sort(byX)
+    key: util.format(label, "minimalne zużycie", "G", "O"),
+    values: physicalMemoryGestureO.map(extractSpecialised.curry("minimum")).sort(byInteger)
   });
 
   result.series.push({
-    key: util.format(residentLabel, "maksymalne zużycie", "G", "O"),
-    values: physicalMemoryGestureO.map(extractSpecialised.curry("maximum")).sort(byX)
+    key: util.format(label, "maksymalne zużycie", "G", "O"),
+    values: physicalMemoryGestureO.map(extractSpecialised.curry("maximum")).sort(byInteger)
   });
 
   result.series.push({
-    key: util.format(residentLabel, "średnie zużycie", "G", "O"),
-    values: physicalMemoryGestureO.map(extractSpecialised.curry("average")).sort(byX)
+    key: util.format(label, "średnie zużycie", "G", "O"),
+    values: physicalMemoryGestureO.map(extractSpecialised.curry("average")).sort(byInteger)
   });
 
   result.series.push({
-    key: util.format(residentLabel, "minimalne zużycie", "G", "C"),
-    values: physicalMemoryGestureC.map(extractSpecialised.curry("minimum")).sort(byX)
+    key: util.format(label, "minimalne zużycie", "G", "C"),
+    values: physicalMemoryGestureC.map(extractSpecialised.curry("minimum")).sort(byInteger)
   });
 
   result.series.push({
-    key: util.format(residentLabel, "maksymalne zużycie", "G", "C"),
-    values: physicalMemoryGestureC.map(extractSpecialised.curry("maximum")).sort(byX)
+    key: util.format(label, "maksymalne zużycie", "G", "C"),
+    values: physicalMemoryGestureC.map(extractSpecialised.curry("maximum")).sort(byInteger)
   });
 
   result.series.push({
-    key: util.format(residentLabel, "średnie zużycie", "G", "C"),
-    values: physicalMemoryGestureC.map(extractSpecialised.curry("average")).sort(byX)
+    key: util.format(label, "średnie zużycie", "G", "C"),
+    values: physicalMemoryGestureC.map(extractSpecialised.curry("average")).sort(byInteger)
   });
 
   return result;
@@ -463,12 +503,12 @@ function specialisedQuality(key, name, method) {
 
       files = getFileByMethodAndOnlyParametrized(method),
 
-      errors = files.map(getDataPointFromErrorKeyInFile.curry(key)),
+      errors = files.map(getSpecialisedDataPointsFromErrorKeyInFile.curry(key)),
 
       errorsGestureC = errors.filter(getOnlyOneGesture.curry("C")),
       errorsGestureO = errors.filter(getOnlyOneGesture.curry("O")),
 
-      residentLabel = "Odległości %s od punktów kluczowych (osoba '%s', gest '%s')";
+      label = "Odległości %s od punktów kluczowych (osoba '%s', gest '%s')";
 
   if (method === "Sparse Optical Flow") {
     errorsGestureC = errorsGestureC.filter(getFirstParameter);
@@ -477,49 +517,49 @@ function specialisedQuality(key, name, method) {
 
   result.series.push({
     key: "Promień okręgu otaczającego dla gestu O",
-    values: errorsGestureO.map(extractSpecialised.curry("radius")).sort(byX),
+    values: errorsGestureO.map(extractSpecialised.curry("radius")).sort(byInteger),
     color: "#FF0000"
   });
 
   result.series.push({
-    key: util.format(residentLabel, "minimalne", "G", "O"),
-    values: errorsGestureO.map(extractSpecialised.curry("minimum")).sort(byX),
+    key: util.format(label, "minimalne", "G", "O"),
+    values: errorsGestureO.map(extractSpecialised.curry("minimum")).sort(byInteger),
     color: "#0000FF"
   });
 
   result.series.push({
-    key: util.format(residentLabel, "maksymalne", "G", "O"),
-    values: errorsGestureO.map(extractSpecialised.curry("maximum")).sort(byX),
+    key: util.format(label, "maksymalne", "G", "O"),
+    values: errorsGestureO.map(extractSpecialised.curry("maximum")).sort(byInteger),
     color: "#00FF00"
   });
 
   result.series.push({
-    key: util.format(residentLabel, "średnie", "G", "O"),
-    values: errorsGestureO.map(extractSpecialised.curry("average")).sort(byX),
+    key: util.format(label, "średnie", "G", "O"),
+    values: errorsGestureO.map(extractSpecialised.curry("average")).sort(byInteger),
     color: "#00FFFF"
   });
 
   result.series.push({
     key: "Promień okręgu otaczającego dla gestu C",
-    values: errorsGestureC.map(extractSpecialised.curry("radius")).sort(byX),
+    values: errorsGestureC.map(extractSpecialised.curry("radius")).sort(byInteger),
     color: "#880000"
   });
 
   result.series.push({
-    key: util.format(residentLabel, "minimalne", "G", "C"),
-    values: errorsGestureC.map(extractSpecialised.curry("minimum")).sort(byX),
+    key: util.format(label, "minimalne", "G", "C"),
+    values: errorsGestureC.map(extractSpecialised.curry("minimum")).sort(byInteger),
     color: "#000088"
   });
 
   result.series.push({
-    key: util.format(residentLabel, "maksymalne", "G", "C"),
-    values: errorsGestureC.map(extractSpecialised.curry("maximum")).sort(byX),
+    key: util.format(label, "maksymalne", "G", "C"),
+    values: errorsGestureC.map(extractSpecialised.curry("maximum")).sort(byInteger),
     color: "#008800"
   });
 
   result.series.push({
-    key: util.format(residentLabel, "średnie", "G", "C"),
-    values: errorsGestureC.map(extractSpecialised.curry("average")).sort(byX),
+    key: util.format(label, "średnie", "G", "C"),
+    values: errorsGestureC.map(extractSpecialised.curry("average")).sort(byInteger),
     color: "#008888"
   });
 
@@ -533,6 +573,195 @@ reporting.qualitySpecialisedForMethod = specialisedQuality.curry(
 reporting.qualityPathSpecialisedForMethod = specialisedQuality.curry(
                                                             "collectedPathErrors",
                                                             "Quality - Path distance - Method '%s'");
+
+function qualityForMethodAndPerson(key, name, method, person) {
+  var result = {
+      name: util.format(name, method, person),
+      series: []
+    },
+
+    files = getFileByMethodAndPersonWithoutParametrized(method, person),
+
+    label = "Odległości %s od punktów kluczowych",
+
+    circles = [],
+    minimum = [],
+    maximum = [],
+    average = [],
+
+    errors,
+    i;
+
+  for (i = 0; i < files.length; ++i) {
+    errors = getDataPointFromErrorKeyInFile(key, files[i]);
+
+    circles.push(extractWithGesture("radius", errors));
+    minimum.push(extractWithGesture("minimum", errors));
+    maximum.push(extractWithGesture("maximum", errors));
+    average.push(extractWithGesture("average", errors));
+  }
+
+  result.series.push({
+    key: util.format(label, "minimalne"),
+    values: minimum.sort(byString)
+  });
+
+  result.series.push({
+    key: util.format(label, "maksymalne"),
+    values: maximum.sort(byString)
+  });
+
+  result.series.push({
+    key: util.format(label, "średnie"),
+    values: average.sort(byString)
+  });
+
+  result.series.push({
+    key: "Wartości promieni okręgów otaczających dla każdego gestu",
+    values: circles.sort(byString),
+    color: "#FF0000"
+  });
+
+  return result;
+}
+
+reporting.qualityForMethodAndPerson = qualityForMethodAndPerson.curry(
+                                        "collectedErrors",
+                                        "Quality - Keypoints distance - Method '%s' - Person '%s'");
+
+reporting.qualityPathForMethodAndPerson = qualityForMethodAndPerson.curry(
+                                        "collectedPathErrors",
+                                        "Quality - Path distance - Method '%s' - Person '%s'");
+
+function qualityForMethodAndGesture(key, name, method, gesture) {
+  var result = {
+      name: util.format(name, method, gesture),
+      series: []
+    },
+
+    files = getFileByMethodAndGestureWithoutParametrized(method, gesture),
+
+    label = "Odległości %s od punktów kluczowych",
+
+    circles = [],
+    minimum = [],
+    maximum = [],
+    average = [],
+
+    errors,
+    i;
+
+  for (i = 0; i < files.length; ++i) {
+    errors = getDataPointFromErrorKeyInFile(key, files[i]);
+
+    circles.push(extractWithPerson("radius", errors));
+    minimum.push(extractWithPerson("minimum", errors));
+    maximum.push(extractWithPerson("maximum", errors));
+    average.push(extractWithPerson("average", errors));
+  }
+
+  result.series.push({
+    key: util.format(label, "minimalne"),
+    values: minimum.sort(byString)
+  });
+
+  result.series.push({
+    key: util.format(label, "maksymalne"),
+    values: maximum.sort(byString)
+  });
+
+  result.series.push({
+    key: util.format(label, "średnie"),
+    values: average.sort(byString)
+  });
+
+  result.series.push({
+    key: "Wartości promieni okręgów otaczających dla każdej osoby",
+    values: circles.sort(byString),
+    color: "#FF0000"
+  });
+
+  return result;
+}
+
+reporting.qualityForMethodAndGesture = qualityForMethodAndGesture.curry(
+                                        "collectedErrors",
+                                        "Quality - Keypoints distance - Method '%s' - Gesture '%s'");
+
+reporting.qualityPathForMethodAndGesture = qualityForMethodAndGesture.curry(
+                                            "collectedPathErrors",
+                                            "Quality - Path distance - Method '%s' - Gesture '%s'");
+
+reporting.qualityForPersonAndGesture = function(person, gesture) {
+  var result = {
+        name: util.format("Quality - Person '%s' - Gesture '%s'", person, gesture)
+      },
+      sparseOpticalFlowFile = util.format(FileFormat, person, gesture, "Sparse_Optical_Flow"),
+      denseOpticalFlowFile = util.format(FileFormat, person, gesture, "Dense_Optical_Flow"),
+      randomForestTrackerFile = util.format(FileFormat, person, gesture, "Random_Forest_Tracker"),
+
+      sparseKeypointErrors = get(sparseOpticalFlowFile, "collectedErrors"),
+      denseKeypointErrors = get(denseOpticalFlowFile, "collectedErrors"),
+      randomKeypointErrors = get(randomForestTrackerFile, "collectedErrors"),
+
+      sparsePathErrors = get(sparseOpticalFlowFile, "collectedPathErrors"),
+      densePathErrors = get(denseOpticalFlowFile, "collectedPathErrors"),
+      randomPathErrors = get(randomForestTrackerFile, "collectedPathErrors");
+
+  result.series = [
+    {
+      values: sparseKeypointErrors.map(extractCollectedErrors),
+      key: "Odległość od punktów kluczowych (rzadki przepływ optyczny)"
+    },
+    {
+      values: sparsePathErrors.map(extractCollectedErrors),
+      key: "Odległość od ścieżek kluczowych (rzadki przepływ optyczny)"
+    },
+    {
+      values: denseKeypointErrors.map(extractCollectedErrors),
+      key: "Odległość od punktów kluczowych (gęsty przepływ optyczny)"
+    },
+    {
+      values: densePathErrors.map(extractCollectedErrors),
+      key: "Odległość od ścieżek kluczowych (gęsty przepływ optyczny)"
+    },
+    {
+      values: randomKeypointErrors.map(extractCollectedErrors),
+      key: "Odległość od punktów kluczowych (las drzew losowych)"
+    },
+    {
+      values: randomPathErrors.map(extractCollectedErrors),
+      key: "Odległość od ścieżek kluczowych (las drzew losowych)"
+    },
+
+    {
+      values: repeat(avgFromValue(sparseKeypointErrors), sparseKeypointErrors.length).map(toPoint),
+      key: "Średnia odległość od punktów kluczowych (rzadki przepływ optyczny)"
+    },
+    {
+      values: repeat(avgFromValue(sparsePathErrors), sparsePathErrors.length).map(toPoint),
+      key: "Średnia odległość od ścieżek kluczowych (rzadki przepływ optyczny)"
+    },
+    {
+      values: repeat(avgFromValue(denseKeypointErrors), denseKeypointErrors.length).map(toPoint),
+      key: "Średnia odległość od punktów kluczowych (gęsty przepływ optyczny)"
+    },
+    {
+      values: repeat(avgFromValue(densePathErrors), densePathErrors.length).map(toPoint),
+      key: "Średnia odległość od ścieżek kluczowych (gęsty przepływ optyczny)"
+    },
+    {
+      values: repeat(avgFromValue(randomKeypointErrors), randomKeypointErrors.length).map(toPoint),
+      key: "Średnia odległość od punktów kluczowych (las drzew losowych)"
+    },
+    {
+      values: repeat(avgFromValue(randomPathErrors), randomPathErrors.length).map(toPoint),
+      key: "Średnia odległość od ścieżek kluczowych (las drzew losowych)"
+    },
+  ];
+
+  return result;
+};
 
 // TODO:
 // Timing data preparation.

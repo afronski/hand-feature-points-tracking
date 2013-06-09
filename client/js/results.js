@@ -8,19 +8,21 @@
       qualityChartWithX,
 
       memoryChart,
-      memoryChartWithX;
+      memoryChartWithX,
+
+      qualityPerSpecial;
 
   // Charts.
   function linearChart(config) {
     var chart = nv.models.lineChart();
 
     chart.xAxis
-        .axisLabel(config.xLabel)
-        .tickFormat(d3.format(config.xFormat || ",r"));
+      .axisLabel(config.xLabel)
+      .tickFormat(d3.format(config.xFormat || ",r"));
 
     chart.yAxis
-        .axisLabel(config.yLabel)
-        .tickFormat(d3.format(config.yFormat || ".02f"));
+      .axisLabel(config.yLabel)
+      .tickFormat(d3.format(config.yFormat || ".02f"));
 
     d3.select("#charts")
       .insert("section", ":first-child")
@@ -36,7 +38,50 @@
     nv.utils.windowResize(chart.update);
   }
 
-  function chart(yLabel, xLabel, className, results) {
+  function horizontalBarChart(config) {
+    var chart = nv.models.multiBarHorizontalChart()
+                          .x(function(data) { return data.label; })
+                          .y(function(data) { return data.value; })
+                            .tooltips(false)
+                            .showControls(false)
+                            .showValues(true);
+
+    chart.yAxis
+      .axisLabel(config.yLabel)
+      .tickFormat(d3.format(config.yFormat || ".02f"));
+
+    d3.select("#charts")
+      .insert("section", ":first-child")
+        .append("svg")
+          .attr("class", config.svgClassName || "")
+          .datum(config.series)
+            .call(chart);
+
+    d3.select("#charts")
+      .insert("h2", ":first-child")
+      .text(config.name);
+
+    nv.utils.windowResize(chart.update);
+  }
+
+  function drawHorizontalBarChart(yLabel, className, results) {
+    if (typeof(results) === "undefined") {
+      results = className;
+      className = "";
+    }
+
+    horizontalBarChart({
+      name: results.name,
+
+      yLabel: yLabel,
+
+      svgClassName: className,
+
+      series: results.series
+    });
+  }
+
+  function drawLinearChart(yLabel, xLabel, className, results) {
     if (typeof(results) === "undefined") {
       results = className;
       className = "";
@@ -54,11 +99,13 @@
     });
   }
 
-  qualityChart = chart.curry("Odległość [piksel]", "Numer punktu kluczowego");
-  qualityChartWithX = chart.curry("Odległość [piksel]");
+  qualityChart = drawLinearChart.curry("Odległość [piksel]", "Numer punktu kluczowego");
+  qualityChartWithX = drawLinearChart.curry("Odległość [piksel]");
 
-  memoryChart = chart.curry("Zużycie pamięci [MB]", "Numer klatki animacji");
-  memoryChartWithX = chart.curry("Zużycie pamięci [MB]");
+  memoryChart = drawLinearChart.curry("Zużycie pamięci [MB]", "Numer klatki animacji");
+  memoryChartWithX = drawLinearChart.curry("Zużycie pamięci [MB]");
+
+  qualityPerSpecial = drawHorizontalBarChart.curry("Odległość i rozmiar [piksel]");
 
   // Chart Factory.
   function chartsFactory(type, file) {
@@ -207,6 +254,53 @@
         argument = getSelectedOptionFromTypes().getAttribute("data-method");
 
         d3.json("/charts/quality/specialised/path/method/" + argument, qualityChartWithX.curry(special));
+        break;
+
+      case 31:
+      case 32:
+      case 33:
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+        special = getActiveTextFromSpecialUI();
+        specialName = getSpecialName();
+
+        d3.json("/charts/quality/method/" + argument + "/" + specialName + "/" + special, qualityPerSpecial);
+        break;
+
+      case 34:
+      case 35:
+      case 36:
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+        special = getActiveTextFromSpecialUI();
+        specialName = getSpecialName();
+
+        d3.json("/charts/quality/path/method/" + argument + "/" + specialName + "/" + special, qualityPerSpecial);
+        break;
+
+      case 37:
+      case 38:
+      case 39:
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+        special = getActiveTextFromSpecialUI();
+        specialName = getSpecialName();
+
+        d3.json("/charts/quality/method/" + argument + "/" + specialName + "/" + special, qualityPerSpecial);
+        break;
+
+      case 40:
+      case 41:
+      case 42:
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+        special = getActiveTextFromSpecialUI();
+        specialName = getSpecialName();
+
+        d3.json("/charts/quality/path/method/" + argument + "/" + specialName + "/" + special, qualityPerSpecial);
+        break;
+
+      case 43:
+        argument = Common.getOptionText("#people");
+        special = Common.getOptionText("#gestures");
+
+        d3.json("/charts/quality/person/" + argument + "/gesture/" + special, qualityChart);
         break;
     }
   }
