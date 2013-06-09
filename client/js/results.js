@@ -9,12 +9,17 @@
 
       qualityChart,
       qualityChartWithX,
-
       qualityPerSpecial,
       qualityScatterPlot,
 
       discriteBarChart,
-      overheadLinearChart;
+      overheadLinearChart,
+
+      timingLinearChart,
+      timingPerSpecial,
+      timingStackedLinearChart,
+      longTimingLinearChartWithX,
+      timingLinearChartWithX;
 
   // Charts.
   function linearChart(config) {
@@ -95,13 +100,39 @@
     nv.utils.windowResize(chart.update);
   }
 
-  function discriteBars(config) {
+  function discreteBars(config) {
     var chart = nv.models.discreteBarChart()
                           .x(function(point) { return point.label })
                           .y(function(point) { return point.value })
                             .staggerLabels(true)
                             .tooltips(false)
                             .showValues(true);
+
+    chart.yAxis
+      .axisLabel(config.yLabel)
+      .tickFormat(d3.format(config.yFormat || ".02f"));
+
+    d3.select("#charts")
+      .insert("section", ":first-child")
+        .append("svg")
+          .attr("class", config.svgClassName || "")
+          .datum(config.series)
+            .call(chart);
+
+    d3.select("#charts")
+      .insert("h2", ":first-child")
+      .text(config.name);
+
+    nv.utils.windowResize(chart.update);
+  }
+
+  function stackedChart(config) {
+    var chart = nv.models.stackedAreaChart()
+                          .showControls(false);
+
+    chart.xAxis
+      .axisLabel(config.xLabel)
+      .tickFormat(d3.format(config.xFormat || ",r"));
 
     chart.yAxis
       .axisLabel(config.yLabel)
@@ -180,7 +211,7 @@
       className = "";
     }
 
-    discriteBars({
+    discreteBars({
       name: results.name,
 
       yLabel: yLabel,
@@ -191,11 +222,29 @@
     });
   }
 
-  qualityChart = drawLinearChart.curry("Odległość [piksel]", "Numer punktu kluczowego");
-  qualityChartWithX = drawLinearChart.curry("Odległość [piksel]");
+  function drawStackedChart(yLabel, xLabel, className, results) {
+    if (typeof(results) === "undefined") {
+      results = className;
+      className = "";
+    }
+
+    stackedChart({
+      name: results.name,
+
+      xLabel: xLabel,
+      yLabel: yLabel,
+
+      svgClassName: className,
+
+      series: results.series
+    });
+  }
 
   memoryChart = drawLinearChart.curry("Zużycie pamięci [MB]", "Numer klatki animacji");
   memoryChartWithX = drawLinearChart.curry("Zużycie pamięci [MB]");
+
+  qualityChart = drawLinearChart.curry("Odległość [piksel]", "Numer punktu kluczowego");
+  qualityChartWithX = drawLinearChart.curry("Odległość [piksel]");
 
   qualityPerSpecial = drawHorizontalBarChart.curry("Odległość i rozmiar [piksel]");
 
@@ -203,6 +252,14 @@
 
   discriteBarChart = drawDiscriteBarChart.curry("Narzut czasowy [s]");
   overheadLinearChart = drawLinearChart.curry("Narzut czasowy [s]");
+
+  timingLinearChart = drawLinearChart.curry("Czas przetwarzania klatki [ms]", "Numer klatki animacji");
+  timingPerSpecial = drawHorizontalBarChart.curry("Czas przetwarzania klatki [ms]");
+
+  timingStackedLinearChart = drawStackedChart.curry("Czas przetwarzania klatki [ms]", "Number klatki animacji");
+
+  longTimingLinearChartWithX = drawLinearChart.curry("Czas przetwarzania [s]");
+  timingLinearChartWithX = drawLinearChart.curry("Czas przetwarzania klatki [ms]");
 
   // Chart Factory.
   function chartsFactory(type, file) {
@@ -283,7 +340,7 @@
         break;
 
       case 20:
-        special = "Rozmiar siatki"
+        special = "Rozmiar siatki [piksel]"
         argument = getSelectedOptionFromTypes().getAttribute("data-method");
 
         d3.json("/charts/memory/specialised/method/" + argument, memoryChartWithX.curry(special));
@@ -297,7 +354,7 @@
         break;
 
       case 22:
-        special = "Minimalna odległość między punktami charakterystycznymi"
+        special = "Minimalna odległość między punktami charakterystycznymi [piksel]"
         argument = getSelectedOptionFromTypes().getAttribute("data-method");
 
         d3.json("/charts/memory/specialised/method/" + argument, memoryChartWithX.curry(special));
@@ -312,7 +369,7 @@
         break;
 
       case 25:
-        special = "Rozmiar siatki"
+        special = "Rozmiar siatki [piksel]"
         argument = getSelectedOptionFromTypes().getAttribute("data-method");
 
         d3.json("/charts/quality/specialised/method/" + argument, qualityChartWithX.curry(special));
@@ -326,14 +383,14 @@
         break;
 
       case 27:
-        special = "Minimalna odległość między punktami charakterystycznymi"
+        special = "Minimalna odległość między punktami charakterystycznymi [piksel]"
         argument = getSelectedOptionFromTypes().getAttribute("data-method");
 
         d3.json("/charts/quality/specialised/method/" + argument, qualityChartWithX.curry(special));
         break;
 
       case 28:
-        special = "Rozmiar siatki"
+        special = "Rozmiar siatki [piksel]"
         argument = getSelectedOptionFromTypes().getAttribute("data-method");
 
         d3.json("/charts/quality/specialised/path/method/" + argument, qualityChartWithX.curry(special));
@@ -347,7 +404,7 @@
         break;
 
       case 30:
-        special = "Minimalna odległość między punktami charakterystycznymi"
+        special = "Minimalna odległość między punktami charakterystycznymi [piksel]"
         argument = getSelectedOptionFromTypes().getAttribute("data-method");
 
         d3.json("/charts/quality/specialised/path/method/" + argument, qualityChartWithX.curry(special));
@@ -419,7 +476,7 @@
         break;
 
       case 47:
-        special = "Rozmiar siatki"
+        special = "Rozmiar siatki [piksel]"
         argument = getSelectedOptionFromTypes().getAttribute("data-method");
 
         d3.json("/charts/overhead/specialised/method/" + argument, overheadLinearChart.curry(special));
@@ -433,10 +490,74 @@
         break;
 
       case 49:
-        special = "Minimalna odległość między punktami charakterystycznymi"
+        special = "Minimalna odległość między punktami charakterystycznymi [piksel]"
         argument = getSelectedOptionFromTypes().getAttribute("data-method");
 
         d3.json("/charts/overhead/specialised/method/" + argument, overheadLinearChart.curry(special));
+        break;
+
+      case 50:
+        d3.json("/charts/timing/file/" + file, timingLinearChart);
+        break;
+
+      case 51:
+        argument = Common.getOptionText("#people");
+        special = Common.getOptionText("#gestures");
+
+        d3.json("/charts/timing/person/" + argument + "/gesture/" + special, timingLinearChart);
+        break;
+
+      case 52:
+      case 53:
+      case 54:
+      case 55:
+      case 56:
+      case 57:
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+        special = getActiveTextFromSpecialUI();
+        specialName = getSpecialName();
+
+        d3.json("/charts/timing/method/" + argument + "/" + specialName + "/" + special, timingPerSpecial);
+        break;
+
+      case 58:
+        d3.json("/charts/timing/stacked/file/" + file, timingStackedLinearChart);
+        break;
+
+      case 59:
+        special = "Liczba wytrenowanych drzew losowych"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/timing/specialised/learning", longTimingLinearChartWithX.curry(special));
+        break;
+
+      case 60:
+        special = "Rozmiar siatki [piksel]"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/timing/specialised/processing/method/" + argument, timingLinearChartWithX.curry(special));
+        break;
+
+      case 61:
+        special = "Liczba wytrenowanych drzew losowych"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/timing/specialised/processing/method/" + argument, timingLinearChartWithX.curry(special));
+        break;
+
+      case 62:
+        special = "Minimalna odległość między punktami charakterystycznymi [piksel]"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/timing/specialised/processing/method/" + argument, timingLinearChartWithX.curry(special));
+        break;
+
+      case 63:
+        special = "Liczba punktów charakterystycznych"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/timing/specialised/processing/features/method/" + argument,
+                timingLinearChartWithX.curry(special));
         break;
     }
   }

@@ -244,12 +244,65 @@ application.get("/charts/overhead/specialised/method/:method", function(request,
   common.sendJSON(response, reporting.fullOverheadForSpecialisedMethod(request.params.method));
 });
 
-// TODO:
 // Timing charts.
-application.get("/charts/timing/:file", function(request, response) {
+application.get("/charts/timing/file/:file", function(request, response) {
   common.debug(util.format("Get chart data from file '%s' for timing", request.params.file));
 
   common.sendJSON(response, reporting.timing(request.params.file));
+});
+
+application.get("/charts/timing/stacked/file/:file", function(request, response) {
+  common.debug(util.format("Get stacked chart data from file '%s' for timing", request.params.file));
+
+  common.sendJSON(response, reporting.timingStacked(request.params.file));
+});
+
+application.get("/charts/timing/person/:person/gesture/:gesture", function(request, response) {
+  common.debug(util.format("Get timing chart data for person '%s' and gesture '%s'",
+                           request.params.person,
+                           request.params.gesture));
+
+  common.sendJSON(response, reporting.timingForPersonAndGesture(
+                                        request.params.person,
+                                        request.params.gesture));
+});
+
+application.get("/charts/timing/method/:method/person/:person", function(request, response) {
+  common.debug(util.format("Get timing chart data for method '%s' and person '%s'",
+                           request.params.method,
+                           request.params.person));
+
+  common.sendJSON(response, reporting.timingForMethodAndPerson(
+                                        request.params.method,
+                                        request.params.person));
+});
+
+application.get("/charts/timing/method/:method/gesture/:gesture", function(request, response) {
+  common.debug(util.format("Get timing chart data for method '%s' and gesture '%s'",
+                           request.params.method,
+                           request.params.gesture));
+
+  common.sendJSON(response, reporting.timingForMethodAndGesture(
+                                        request.params.method,
+                                        request.params.gesture));
+});
+
+application.get("/charts/timing/specialised/learning", function(request, response) {
+  common.debug("Get timing chart data for different amounts of trees of Random Forest tracker");
+
+  common.sendJSON(response, reporting.timingForLearningRandomForestTracker());
+});
+
+application.get("/charts/timing/specialised/processing/method/:method", function(request, response) {
+  common.debug(util.format("Get timing chart data for method '%s'", request.params.method));
+
+  common.sendJSON(response, reporting.timingSpecialisedForMethod(request.params.method));
+});
+
+application.get("/charts/timing/specialised/processing/features/method/:method", function(request, response) {
+  common.debug(util.format("Get timing chart data for method '%s'", request.params.method));
+
+  common.sendJSON(response, reporting.timingSpecialisedFeaturesForMethod(request.params.method));
 });
 
 application.listen(Port);
