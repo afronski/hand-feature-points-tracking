@@ -274,13 +274,13 @@ function getDataPointFromErrorKeyInFile(key, file) {
 function extractVideoDurationAndProcessingTime(file) {
   var data = extractDataAndParametersFromName(file),
       videoDuration = get(file, "videoDuration"),
-      videoProcessingTime = get(file, "videoProcessingTime"),
+      videoProcessingTime = get(file, "totalVideoProcessingTime"),
       rawParameters = data.parameters.indexOf(" ") !== -1 ?
                         data.parameters.split(" ")[1] :
                         data.parameters;
 
   return {
-    value: videoProcessingTime - videoDuration
+    value: toSeconds(videoProcessingTime - videoDuration),
     index: parseInt(rawParameters, 10),
     parameters: data.parameters,
     person: data.person,
@@ -924,7 +924,7 @@ reporting.fullOverheadForSpecialisedMethod = function(method) {
       timeOverheadGestureC = videosDuration.filter(getOnlyOneGesture.curry("C")),
       timeOverheadGestureO = videosDuration.filter(getOnlyOneGesture.curry("O")),
 
-      label = "%s narzut czasowy (osoba '%s', gest '%s')";
+      label = "Narzut czasowy (osoba '%s', gest '%s')";
 
   if (method === "Sparse Optical Flow") {
     timeOverheadGestureC = timeOverheadGestureC.filter(getFirstParameter);
@@ -932,12 +932,12 @@ reporting.fullOverheadForSpecialisedMethod = function(method) {
   }
 
   result.series.push({
-    key: util.format(label, "Minimalny", "G", "O"),
+    key: util.format(label, "G", "O"),
     values: timeOverheadGestureO.map(extractSpecialised.curry("value")).sort(byInteger)
   });
 
   result.series.push({
-    key: util.format(label, "Minimalny", "G", "C"),
+    key: util.format(label, "G", "C"),
     values: timeOverheadGestureC.map(extractSpecialised.curry("value")).sort(byInteger)
   });
 

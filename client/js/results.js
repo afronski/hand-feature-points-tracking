@@ -13,7 +13,8 @@
       qualityPerSpecial,
       qualityScatterPlot,
 
-      discriteBarChart;
+      discriteBarChart,
+      overheadLinearChart;
 
   // Charts.
   function linearChart(config) {
@@ -201,6 +202,7 @@
   qualityScatterPlot = drawScatterPlot.curry("Y [piksel]", "X [piksel]");
 
   discriteBarChart = drawDiscriteBarChart.curry("Narzut czasowy [s]");
+  overheadLinearChart = drawLinearChart.curry("Narzut czasowy [s]");
 
   // Chart Factory.
   function chartsFactory(type, file) {
@@ -416,7 +418,26 @@
         d3.json("/charts/overhead/full/person/" + argument + "/gesture/" + special, discriteBarChart);
         break;
 
-      // TODO: 47
+      case 47:
+        special = "Rozmiar siatki"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/overhead/specialised/method/" + argument, overheadLinearChart.curry(special));
+        break;
+
+      case 48:
+        special = "Liczba wytrenowanych drzew losowych"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/overhead/specialised/method/" + argument, overheadLinearChart.curry(special));
+        break;
+
+      case 49:
+        special = "Minimalna odległość między punktami charakterystycznymi"
+        argument = getSelectedOptionFromTypes().getAttribute("data-method");
+
+        d3.json("/charts/overhead/specialised/method/" + argument, overheadLinearChart.curry(special));
+        break;
     }
   }
 
