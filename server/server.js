@@ -69,6 +69,9 @@ application.post("/keypoints", function(request, response) {
   common.sendJSON(response, { status: "OK" });
 });
 
+// Charts REST API.
+
+// Memory charts.
 application.get("/charts/memory/file/:file", function(request, response) {
   common.debug(util.format("Get memory usage chart data for file '%s'", request.params.file));
 
@@ -86,7 +89,7 @@ application.get("/charts/memory/person/:person/gesture/:gesture", function(reque
 });
 
 application.get("/charts/memory/specialised/method/:method", function(request, response) {
-  common.debug(util.format("Get specialised memory usage chart data for '%s'", request.params.method));
+  common.debug(util.format("Get specialised memory usage chart data for method '%s'", request.params.method));
 
   common.sendJSON(response, reporting.memoryUsageForSpecialisedMethod(request.params.method));
 });
@@ -145,6 +148,7 @@ application.get("/charts/memory/virtual/method/:method/person/:person", function
                                         request.params.person));
 });
 
+// Quality related charts.
 application.get("/charts/quality/:file", function(request, response) {
   common.debug(util.format("Get quality chart data from file '%s'", request.params.file));
 
@@ -198,28 +202,54 @@ application.get("/charts/quality/path/method/:method/gesture/:gesture", function
 });
 
 application.get("/charts/quality/specialised/method/:method", function(request, response) {
-  common.debug(util.format("Get specialised quality chart data from file '%s'", request.params.method));
+  common.debug(util.format("Get specialised quality chart data from method '%s'", request.params.method));
 
   common.sendJSON(response, reporting.qualitySpecialisedForMethod(request.params.method));
 });
 
 application.get("/charts/quality/specialised/path/method/:method", function(request, response) {
-  common.debug(util.format("Get specialised quality path chart data from file '%s'", request.params.method));
+  common.debug(util.format("Get specialised quality path chart data from method '%s'", request.params.method));
 
   common.sendJSON(response, reporting.qualityPathSpecialisedForMethod(request.params.method));
 });
 
+application.get("/charts/scatter-plot/file/:file", function(request, response) {
+  common.debug(util.format("Get scatter plot data from file '%s'", request.params.file));
+
+  common.sendJSON(response, reporting.qualityScatterPlot(request.params.file));
+});
+
+// Overhead charts.
+application.get("/charts/overhead/person/:person/gesture/:gesture", function(request, response) {
+  common.debug(util.format("Get overhead chart data from person '%s' and gesture '%s'",
+                           request.params.person,
+                           request.params.gesture));
+
+  common.sendJSON(response, reporting.overhead(request.params.person, request.params.gesture));
+});
+
+application.get("/charts/overhead/full/person/:person/gesture/:gesture", function(request, response) {
+  common.debug(util.format("Get full overhead chart data from person '%s' and gesture '%s'",
+                           request.params.person,
+                           request.params.gesture));
+
+  common.sendJSON(response, reporting.fullOverheadForRandomForestTracker(
+                                        request.params.person,
+                                        request.params.gesture));
+});
+
+application.get("/charts/overhead/specialised/method/:method", function(request, response) {
+  common.debug(util.format("Get specialised overhead chart data for method '%s'", request.params.method));
+
+  common.sendJSON(response, reporting.fullOverheadForSpecialisedMethod(request.params.method));
+});
+
 // TODO:
+// Timing charts.
 application.get("/charts/timing/:file", function(request, response) {
   common.debug(util.format("Get chart data from file '%s' for timing", request.params.file));
 
   common.sendJSON(response, reporting.timing(request.params.file));
-});
-
-application.get("/charts/overhead/:file", function(request, response) {
-  common.debug(util.format("Get chart data from file '%s' for overhead", request.params.file));
-
-  common.sendJSON(response, reporting.overhead(request.params.file));
 });
 
 application.listen(Port);

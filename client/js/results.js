@@ -4,13 +4,16 @@
   // Alias and variables.
   var $ = Common.$,
 
-      qualityChart,
-      qualityChartWithX,
-
       memoryChart,
       memoryChartWithX,
 
-      qualityPerSpecial;
+      qualityChart,
+      qualityChartWithX,
+
+      qualityPerSpecial,
+      qualityScatterPlot,
+
+      discriteBarChart;
 
   // Charts.
   function linearChart(config) {
@@ -44,6 +47,59 @@
                           .y(function(data) { return data.value; })
                             .tooltips(false)
                             .showControls(false)
+                            .showValues(true);
+
+    chart.yAxis
+      .axisLabel(config.yLabel)
+      .tickFormat(d3.format(config.yFormat || ".02f"));
+
+    d3.select("#charts")
+      .insert("section", ":first-child")
+        .append("svg")
+          .attr("class", config.svgClassName || "")
+          .datum(config.series)
+            .call(chart);
+
+    d3.select("#charts")
+      .insert("h2", ":first-child")
+      .text(config.name);
+
+    nv.utils.windowResize(chart.update);
+  }
+
+  function scatterPlot(config) {
+    var chart = nv.models.scatterChart()
+                          .showDistX(true)
+                          .showDistY(true);
+
+    chart.xAxis
+      .axisLabel(config.xLabel)
+      .tickFormat(d3.format(config.xFormat || ".02f"));
+
+    chart.yAxis
+      .axisLabel(config.yLabel)
+      .tickFormat(d3.format(config.yFormat || ".02f"));
+
+    d3.select("#charts")
+      .insert("section", ":first-child")
+        .append("svg")
+          .attr("class", config.svgClassName || "")
+          .datum(config.series)
+            .call(chart);
+
+    d3.select("#charts")
+      .insert("h2", ":first-child")
+      .text(config.name);
+
+    nv.utils.windowResize(chart.update);
+  }
+
+  function discriteBars(config) {
+    var chart = nv.models.discreteBarChart()
+                          .x(function(point) { return point.label })
+                          .y(function(point) { return point.value })
+                            .staggerLabels(true)
+                            .tooltips(false)
                             .showValues(true);
 
     chart.yAxis
@@ -99,6 +155,41 @@
     });
   }
 
+  function drawScatterPlot(yLabel, xLabel, className, results) {
+    if (typeof(results) === "undefined") {
+      results = className;
+      className = "";
+    }
+
+    scatterPlot({
+      name: results.name,
+
+      xLabel: xLabel,
+      yLabel: yLabel,
+
+      svgClassName: className,
+
+      series: results.series
+    });
+  }
+
+  function drawDiscriteBarChart(yLabel, className, results) {
+    if (typeof(results) === "undefined") {
+      results = className;
+      className = "";
+    }
+
+    discriteBars({
+      name: results.name,
+
+      yLabel: yLabel,
+
+      svgClassName: className,
+
+      series: results.series
+    });
+  }
+
   qualityChart = drawLinearChart.curry("Odległość [piksel]", "Numer punktu kluczowego");
   qualityChartWithX = drawLinearChart.curry("Odległość [piksel]");
 
@@ -106,6 +197,10 @@
   memoryChartWithX = drawLinearChart.curry("Zużycie pamięci [MB]");
 
   qualityPerSpecial = drawHorizontalBarChart.curry("Odległość i rozmiar [piksel]");
+
+  qualityScatterPlot = drawScatterPlot.curry("Y [piksel]", "X [piksel]");
+
+  discriteBarChart = drawDiscriteBarChart.curry("Narzut czasowy [s]");
 
   // Chart Factory.
   function chartsFactory(type, file) {
@@ -302,6 +397,26 @@
 
         d3.json("/charts/quality/person/" + argument + "/gesture/" + special, qualityChart);
         break;
+
+      case 44:
+        d3.json("/charts/scatter-plot/file/" + file, qualityScatterPlot);
+        break;
+
+      case 45:
+        argument = Common.getOptionText("#people");
+        special = Common.getOptionText("#gestures");
+
+        d3.json("/charts/overhead/person/" + argument + "/gesture/" + special, discriteBarChart);
+        break;
+
+      case 46:
+        argument = Common.getOptionText("#people");
+        special = Common.getOptionText("#gestures");
+
+        d3.json("/charts/overhead/full/person/" + argument + "/gesture/" + special, discriteBarChart);
+        break;
+
+      // TODO: 47
     }
   }
 

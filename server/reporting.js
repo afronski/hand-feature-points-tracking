@@ -114,6 +114,26 @@ function extractWithPerson(key, element) {
   return { label: element.person, value: element[key] };
 }
 
+function mapToClosest(average, element, index) {
+  return average[element.key];
+}
+
+function extractDataPointForScatterPlot(sizes, point, index) {
+  return {
+    x: point[0],
+    y: -point[1],
+    size: sizes[index].value / max(sizes.map(convertToPoint)),
+  };
+}
+
+function extractDataPointForScatterPlotWithSize(size, point) {
+  return {
+    x: point[0],
+    y: -point[1],
+    size: size
+  };
+}
+
 function toPoint(element, index) {
   return { x: index + 1, y: element };
 }
@@ -165,6 +185,10 @@ function prepareName(chartName, file) {
     name: util.format("%s - Person '%s' - Gesture '%s' - Method '%s'",
                       chartName, data.person, data.gesture, data.method)
   }
+}
+
+function toSeconds(value) {
+  return value / 1000.0;
 }
 
 function byInteger(a, b) {
@@ -244,6 +268,23 @@ function getDataPointFromErrorKeyInFile(key, file) {
     index: Gestures[data.gesture],
     person: data.person,
     gesture: Gestures[data.gesture]
+  };
+}
+
+function extractVideoDurationAndProcessingTime(file) {
+  var data = extractDataAndParametersFromName(file),
+      videoDuration = get(file, "videoDuration"),
+      videoProcessingTime = get(file, "videoProcessingTime"),
+      rawParameters = data.parameters.indexOf(" ") !== -1 ?
+                        data.parameters.split(" ")[1] :
+                        data.parameters;
+
+  return {
+    value: videoProcessingTime - videoDuration
+    index: parseInt(rawParameters, 10),
+    parameters: data.parameters,
+    person: data.person,
+    gesture: data.gesture
   };
 }
 
@@ -653,8 +694,8 @@ function qualityForMethodAndGesture(key, name, method, gesture) {
 
   for (i = 0; i < files.length; ++i) {
     errors = getDataPointFromErrorKeyInFile(key, files[i]);
+    radius = extractWithPerson("radius", errors);
 
-    circles.push(extractWithPerson("radius", errors));
     minimum.push(extractWithPerson("minimum", errors));
     maximum.push(extractWithPerson("maximum", errors));
     average.push(extractWithPerson("average", errors));
@@ -763,23 +804,150 @@ reporting.qualityForPersonAndGesture = function(person, gesture) {
   return result;
 };
 
-// TODO:
-// Timing data preparation.
-reporting.timing = function(file) {
-  var result = prepareName("Timing", file);
+reporting.qualityScatterPlot = function(file) {
+  var result = prepareName("Quality - Scatter Plot", file),
+      errors = get(file, "collectedErrors"),
+      average = get(file, "averagePoints");
 
   result.series = [
-    { values: [ 1, 2, 3, 4 ].map(extract), key: "Linear" },
-    { values: [ 1, 4, 9, 16 ].map(extract), key: "Quadratic" },
-    { values: [ 1, 8, 27, 64 ].map(extract), key: "Cubic" }
+    {
+      values: get(file, "baseKeypoints").map(extractDataPointForScatterPlot.curry(errors)),
+      key: "Punkty kluczowe",
+      color: "#FF0000"
+    },
+    {
+      values: average.map(extractDataPointForScatterPlotWithSize.curry(0.1)),
+      key: "Uśrednione punkty na wyznaczonej ścieżce",
+      color: "#008800"
+    },
+    {
+      values: errors.map(mapToClosest.curry(average)).map(extractDataPointForScatterPlotWithSize.curry(0.3)),
+      key: "Nabliższy uśredniony punkt z wyznaczonej ścieżki",
+      color: "#0000FF"
+    }
   ];
 
   return result;
 };
 
 // Overhead data preparation.
-reporting.overhead = function(file) {
-  var result = prepareName("Overhead", file);
+reporting.overhead = function(person, gesture) {
+  var result = {
+        name: util.format("Overhead - Person '%s' - Gesture '%s'", person, gesture)
+      },
+
+      sparseOpticalFlowFile = util.format(FileFormat, person, gesture, "Sparse_Optical_Flow"),
+      denseOpticalFlowFile = util.format(FileFormat, person, gesture, "Dense_Optical_Flow"),
+      randomForestTrackerFile = util.format(FileFormat, person, gesture, "Random_Forest_Tracker"),
+
+      sparseVideoDuration = get(sparseOpticalFlowFile, "videoDuration"),
+      denseVideoDuration = get(denseOpticalFlowFile, "videoDuration"),
+      randomVideoDuration = get(randomForestTrackerFile, "videoDuration"),
+
+      sparseVideoProcessingDuration = get(sparseOpticalFlowFile, "totalVideoProcessingTime"),
+      denseVideoProcessingDuration = get(denseOpticalFlowFile, "totalVideoProcessingTime"),
+      randomVideoProcessingDuration = get(randomForestTrackerFile, "totalVideoProcessingTime");
+
+  result.series = [
+    {
+      key: "Narzut czasowy",
+      values: [
+        {
+          label: "Rzadki przepływ optyczny",
+          value: toSeconds(sparseVideoProcessingDuration - sparseVideoDuration)
+        },
+        {
+          label: "Las drzew losowych",
+          value: toSeconds(randomVideoProcessingDuration - randomVideoDuration)
+        },
+        {
+          label: "Gęsty przepływ optyczny",
+          value: toSeconds(denseVideoProcessingDuration - denseVideoDuration)
+        }
+      ]
+    }
+  ];
+
+  return result;
+};
+
+reporting.fullOverheadForRandomForestTracker = function(person, gesture) {
+  var result = {
+        name: util.format("Overhead - Random Forest Tracker - Person '%s' - Gesture '%s'", person, gesture)
+      },
+
+      randomForestTrackerFile = util.format(FileFormat, person, gesture, "Random_Forest_Tracker"),
+
+      randomVideoDuration = get(randomForestTrackerFile, "videoDuration"),
+      randomVideoProcessingDuration = get(randomForestTrackerFile, "totalVideoProcessingTime"),
+
+      randomLearningDuration = get(randomForestTrackerFile, "trainingTimeOverhead") +
+                               get(randomForestTrackerFile, "loadingTrainingBaseOverhead"),
+
+      randomTrainingBaseCreationDuration = get(randomForestTrackerFile, "buildingTrainingBaseTimeOverhead") +
+                                           get(randomForestTrackerFile, "savingTrainingBaseOverhead");
+
+  result.series = [
+    {
+      key: "Narzut czasowy",
+      values: [
+        {
+          label: "Bez uczenia oraz generacji danych treningowych",
+          value: toSeconds(randomVideoProcessingDuration - randomVideoDuration)
+        },
+        {
+          label: "Bez generacji danych treningowych",
+          value: toSeconds(randomLearningDuration + randomVideoProcessingDuration - randomVideoDuration)
+        },
+        {
+          label: "Całkowity narzut",
+          value: toSeconds(randomTrainingBaseCreationDuration + randomLearningDuration +
+                           randomVideoProcessingDuration - randomVideoDuration)
+        }
+      ]
+    }
+  ];
+
+  return result;
+}
+
+reporting.fullOverheadForSpecialisedMethod = function(method) {
+  var result = {
+        name: util.format("Overhead - Method '%s'", method),
+        series: []
+      },
+
+      files = getFileByMethodAndOnlyParametrized(method),
+
+      videosDuration = files.map(extractVideoDurationAndProcessingTime),
+
+      timeOverheadGestureC = videosDuration.filter(getOnlyOneGesture.curry("C")),
+      timeOverheadGestureO = videosDuration.filter(getOnlyOneGesture.curry("O")),
+
+      label = "%s narzut czasowy (osoba '%s', gest '%s')";
+
+  if (method === "Sparse Optical Flow") {
+    timeOverheadGestureC = timeOverheadGestureC.filter(getFirstParameter);
+    timeOverheadGestureO = timeOverheadGestureO.filter(getFirstParameter);
+  }
+
+  result.series.push({
+    key: util.format(label, "Minimalny", "G", "O"),
+    values: timeOverheadGestureO.map(extractSpecialised.curry("value")).sort(byInteger)
+  });
+
+  result.series.push({
+    key: util.format(label, "Minimalny", "G", "C"),
+    values: timeOverheadGestureC.map(extractSpecialised.curry("value")).sort(byInteger)
+  });
+
+  return result;
+};
+
+// TODO:
+// Timing data preparation.
+reporting.timing = function(file) {
+  var result = prepareName("Timing", file);
 
   result.series = [
     { values: [ 1, 2, 3, 4 ].map(extract), key: "Linear" },
