@@ -183,4 +183,4 @@ application.get("/charts/overhead/:file", function(request, response) {
 });
 
 application.listen(Port);
-common.log("Listening on port ", Port);
+common.log("Listening on port", Port);

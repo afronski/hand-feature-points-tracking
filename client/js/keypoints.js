@@ -27,7 +27,7 @@
   function drawCircle(x, y, r, color) {
     context.strokeStyle = color;
     context.beginPath();
-    context.arc(x, y, r, 0, 2 * Math.PI);
+    context.arc(x, y, r  * Zoom, 0, 2 * Math.PI);
     context.stroke();
   }
 
@@ -113,7 +113,7 @@
         data = {
           id: id,
           keypoints: points.map(convertToNaturalPosition),
-          boundingCircleRadius: getBoundingCircleRadius() * InvertedZoom
+          boundingCircleRadius: getBoundingCircleRadius()
         };
 
     if (data.keypoints.length <= 0) {
