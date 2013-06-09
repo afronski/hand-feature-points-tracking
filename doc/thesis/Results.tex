@@ -1,27 +1,52 @@
 \chapter{Analiza wyników badań}\label{Chapter_AnalizaRezultatow}
 
   \section{Opis wygenerowanych zbiorów i~rezultatów}\label{Section_Results}
-  Rozmiar wygenerowanych zbiorów treningowych dla domyślnych parametrów (domyślne parametry generacji) = 43 GB
+  Zanim zostaną dokładnie omówione i~przeanalizowane wyniki przeprowadzonych badań, warto przybliżyć kilka szczegółów dotyczących zebrancyh rezultatów.
 
-  Rozmiar wszystkich rezultatów *.json = 4,1 MB
+  Wszystkie wyniki zostały zebrane z~plikach z~rozszerzeniem JSON (są to pliki tekstowe, samoopisujace się, ogólnego przeznaczenia, oparte na strukturze słownika \textit{klucz} - \textit{wartość}). Rozmiar wygenerowanych danych wynosi $4,1$ MB, co jak na dane czysto tekstowe jest dość dużą liczbą (ponad 4 miliony znaków).
 
-  Czas generacji (podstawowe testy) = ok. 3h
+  Czas trwania podstawowych testów (analiza wszystkich zebranych próbek - 3 różne algorytmy o~domyślnych parametrach, 10 osób po 6 gestów) to ponad dwie i~pół godziny. Dla wyspecjalizowanych przypadków czas przetwarzania wyniósł trzy i~pół godziny (wybrane parametry dla 3 algorytmów na 2 najlepszych jakościowo próbkach 2 gestów). Przypadki dodatkowe zostały zebrane w~pliku \textit{parametrized.json} umieszczonym w~katalogu głównym kodu źródłowego.
 
-  Czas generacji (specjalizowane testy) = ok. 3h
+  W~przypadku algorytmu opartego na uczeniu maszynowym, rozmiar wygenerowanych zbiorów treningowych dla domyślnych parametrów (las złożony z~5~drzew losowych, 200 punktów charakterystycznych, wymiar boku kwadratowej łaty - 20 pikseli) wyniósł dokładnie $43$ GB. Czas generacji został uwzględniony w~powyższym akapicie.
 
-  \section{Wnioski i~wyniki weryfikacji wydajności badanych algorytmów}\label{Section_TimingAndOverhead}
+  Rezultaty zostały zebrane za pomocą 64 wykresów, analizujących cztery różne obszary porównawcze, tj.:
+  \begin{itemize}
+    \item Zużycie pamięci wirtualnej i~fizycznej.
+    \item Wydajność (czasy przetwarzania klatki animacji oraz czas dodatkowych operacji niezbędnych do obliczeń).
+    \item Narzut czasowy obliczeń, wprowadzony do nominalnego czasu trwania sekwencji wideo.
+    \item Jakość wygenerowanej ścieżki w~stosunku do wyznaczonych manualnie punktów i~ścieżek kluczowych.
+  \end{itemize}
 
-  \section{Wnioski i~wyniki weryfikacji złożoności pamięciowej badanych algorytmów}\label{Section_Memory}
+  W~kolejnych sekcjach zostały szczegółowo omówione wyniki oraz przedstawione wnioski dla każdego z~analizowanych obszarów.
+
+  \section{Wnioski i~wyniki związane z~zużyciem pamięci badanych algorytmów}\label{Section_Memory}
+
+  \section{Wnioski i~wyniki badania wydajności}\label{Section_Timing}
+
+  \section{Wnioski i~wyniki związane z~wprowadzonym narzutem czasowym}\label{Section_Overhead}
 
   \section{Wyniki i~wnioski weryfikacji jakości badanych algorytmów}\label{Section_Quality}
 
-  Zbiór G (prezentacja wyników jakościowych).
-
-  Dodatkowy wykres jakości w~zależności od liczby drzew (Random Forest)
-  Dodatkowy wykres jakości w~zależności od ilości cech (Sparse Optical Flow)
-  Dodatkowy wykres jakości w~zależności od minimalnej odległości między punktami (Sparse Optical Flow)
-  Dodatkowy wykres jakości w~zależności od gęstości siatki (Dense Optical Flow)
+  Na podstawie analizy zawartej w~powyższych podrozdziałach nasuwa się kilka wniosków i~potencjalnych ulepszeń. Zostały one zebrane i~omówione w~następnej sekcji.
 
   \section{Proponowane usprawnienia}\label{Section_Usprawnienia}
+
+  \begin{itemize}
+    \item \textbf{Rozszerzenie sposobu budowania bazy treningowej dla algorytmu wykorzystującego las drzew losowych.}
+
+    Aby zwiększyć jakość klasyfikacji oraz jeszcze bardziej uodpornić algorytm na zmianę kształtu śledzonej dłoni należy udoskonalić proces generacji danych wejściowych. Potencjalnym rozszerzeniem może być wykorzystanie nie tylko pierwszej klatki animacji, do generowania zbioru danych treningowych. Innym rozszerzeniem, może być dodanie kolejnych transformacji źródłowej klatki animacji (np. celowego zniekształcenia perspektywy lub tzw. \textit{rybiego oka} oraz dodatkowego rodzaju szumu).
+
+    \item \textbf{Optymalizacja zużycia pamięci dla algorytmu przepływu optycznego gęstego.}
+
+    W~sekcji \ref{Section_Memory} podczas omawiania zużycia pamięci dla wspomnianego algorytmu dało się zauważyć ciągłą zmianę zużywanej pamięci fizycznej (i~w konsekwencji także wirtualnej). Ciągla alokacja i~zwalnianie przydzielonych zasobów negatywnie wpływa na czas przetwarzania klatki sekwencji wideo. Narzut ten, może zostać zniwelowany za pomocą zmiany sposobu alokacji pamięci np. poprzez zastosowanie wielokrotnie wykorzystywanej i~współdzielonej puli pamięci.
+
+    \item \textbf{Optymalizacja zużycia pamięci dla algorytmu opartego o drzewa losowe.}
+
+    Omawiany algorytm podczas pracy wykorzystuje bardzo dużo (w~odniesieniu do pozostałych dwóch metod) pamięci fizycznej. W~celu zwiększenia przydatności algorytmu należy przeprowadzić proces optymalizacji zużycia pamięci.
+
+    \item \textbf{Przyspieszenie procesu uczenia, odczytu oraz zapisu bazy treningowej.}
+
+     W~obecnej implementacji przy generacji, zapisie oraz odczycie bazy treningowej wykorzystywany jest jeden wątek (w~konsekwencji również jeden procesor). W~oryginalnym algorytmie (opisanym w~pracy \cite{RandomizedTrees06}) autorzy proponują rozdzielenie omawianych etapów pracy algorytmu na cztery wątki, co zdecydowanie lepiej wykorzystuje możliwości współczesnego sprzętu.
+  \end{itemize}
 
 \chapter{Podsumowanie}\label{Section_Podsumowanie}
