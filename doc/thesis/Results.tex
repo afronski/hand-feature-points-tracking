@@ -339,6 +339,17 @@
 
   \section{Wyniki i~wnioski weryfikacji jakości badanych algorytmów}\label{Section_Quality}
 
+    Podstawowym elementem porównawczym jeśli chodzi o~jakość wyznaczonego rozwiązania, jest wartość odległości w~pikselach (w~metryce euklidesowej) od ścieżek i~punktów kluczowych. Za pomocą wyznaczonych wartości jesteśmy w~stanie porównać jak bardzo zaproponowane przez algorytm rozwiązanie jest zbliżone do rozwiązania wyznaczonego manualnie dla każdej sekwencji wideo.
+
+    Na serii wykresów od \ref{fig:DenseKeypointsPersonG} do \ref{fig:SparsePathGestureC} zostały zamieszczone wyniki badań jakościowych. Widać, że pod względem jakościowym dla wybranego zbioru \textit{G} oraz gestu o~nazwie \textit{Wielka litera C} najbardziej uniwersalnie radzi sobie algorytm rzadkiego przepływu optycznego. W~niewielkiej ilości przypadków maksymalna wartość odległości dla obu analizowanych parametrów wykracza poza przyjęty promień otaczający punkt kluczowy.
+
+    Nieco gorzej (zwłaszcza jeśli chodzi o~wariancje wartości maksymalnych i~minimalnych) radzi sobie algorytm oparty o~uczenie maszynowe. Wykorzystanie lasu drzew losowych dla przypadków brzegowych (np. zmiana kształtu dłoni) powoduje uzyskanie dużej wartości odległości co oznacza, że punkt został pominięty. Jest to niepożądana sytuacja, potencjalne usprawnienie zostało opisane w~sekcji \ref{Section_Usprawnienia}.
+
+    Problematyczna sekwencja i~błędna klasyfikacja została dokładnie odzwierciedlona na wykresach \ref{fig:KeypointsQualityAC} oraz \ref{fig:KeypointsQualityGO}. Widać wyraźnie, że metoda oparta o~klasyfikator w~środkowej części wprowadza bardzo duży błąd rzutujący całościowo na jakość rozwiązania końcowego. Na wspomnianych wykresach widać również wyraźnie przewagę algorytmu przepływu optycznego w~wariancie rzadkim, jeśli chodzi o~odległość od punktów kluczowych. W~przypadku odległości od ścieżek kluczowych zdecydowanie najmniejszym błędem obarczona jest metoda wykorzystująca las drzew losowych, jednak jej nieprzewidywalność oraz duża wariancja mogą być wadą w~przypadku wdrożenia w~środowisku o~dużych wymaganiach dotyczących stabilności i~jakości.
+
+    Algorytm przepływu optycznego w~wariancie gęstym radzi sobie lepiej dla sekwencji obarczonych dużym błędem w~poprzednio omawianej metodzie, jednak radzi sobie gorzej dla sekwencji poprawnie sklasyfikowanych przez algorytm wykorzystujący las drzew losowych. Jest to metoda pośrednia, o stabilnej i~przewidywalnej dokładności (co w~jej przypadku jest niewątpliwą zaletą, zwłaszcza w~porównaniu do poprzednio omawianej metody).
+
+    \newpage
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=14cm]{charts/quality/DenseKeypointsPersonG}
@@ -457,6 +468,8 @@
       \label{fig:KeypointsQualityGO}
     \end{figure}
 
+    Poniżej można zaobserwować po raz kolejny jest problem niestabilności metody opartej o~proces uczenia maszynowego (środkowa część wykresu \ref{fig:PathQualityAC}). W~przypadku próbek \textit{Person\_A\_C} oraz \textit{Person\_G\_O} najmniejszy błąd jeśli chodzi o~odległość od ścieżek kluczowych został zaprezentowany przez algorytm przepływu optycznego w~wariancie gęstym. Metoda oparta o~algorytm \textit{LK} dla analizowanych próbek była nieznacznie gorsza od najlepszej implementacji.
+
     \newpage
     \begin{figure}[!ht]
       \centering
@@ -473,6 +486,8 @@
               {Odległość od ścieżek kluczowych dla próbki \textit{Person\_G\_O}}
       \label{fig:PathQualityGO}
     \end{figure}
+
+    Ciekawym przypadkiem jest próbka \textit{Person\_G\_C}, w~której stabilnie zaprezentował się algorytm wykorzystujący las drzew losowych. Rezultat obliczony za pomocą tej metody charakteryzował się najmniejszym błędem i~najlepszą jakością, co zostało zobrazowane na wykresach \ref{fig:DenseQualityKeypointsGC}, \ref{fig:RandomQualityKeypointsGC} oraz \ref{fig:SparseQualityKeypointsGC} (oraz \ref{fig:DenseQualityPathGC}, \ref{fig:RandomQualityPathGC}, \ref{fig:SparseQualityPathGC}). Rezultat ten pozwala wierzyć, że po wprowadzeniu usprawnień do procesu budowy bazy treningowej i~dopracowaniu samego klasyfikatora (poprzez uodpornienie na sytuacje brzegowe tj. zmiana kształtu dłoni) algorytm ten będzie najdokładniejszy.
 
     \newpage
     \begin{figure}[!ht]
@@ -549,7 +564,8 @@
       \label{fig:SparseScatterGC}
     \end{figure}
 
-    \newpage
+    Na wykresach \ref{fig:DenseScatterGC}, \ref{fig:RandomScatterGC}, \ref{fig:SparseScatterGC} została przedstawiona wizualna reprezentacja wyznaczonych punktów charakterystycznych wyznaczonej ścieżki (kolor zielony) oraz najbliższych uśrednionych punktów (kolor niebieski) w~odniesieniu do wyznaczonych manualnie punktów kluczowych (kolor czerwony). Promień okręgu otaczającego punkt kluczowy jest wprost proporcjonalny do błędu (odległości najbliższego średniego punktu). Po analizie wzrokowej, widać że największe czerwone punkty (zwłaszcza na boku wyznaczonego kształtu) posiada metoda wykorzystująca las drzew losowych.
+
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=14cm]{charts/quality/DenseKeypointsPerMapSize}
@@ -565,6 +581,8 @@
               {Odległość od ścieżek kluczowych w~zależności od rozmiaru siatki (gęsty przepływ optyczny)}
       \label{fig:DensePathPerMapSize}
     \end{figure}
+
+    W~przypadku wykresów \ref{fig:DenseKeypointsPerMapSize} oraz \ref{fig:DensePathPerMapSize} zaprezentowany został spadek jakości wraz ze~zwiększającym się rozmiarem siatki dla przepływu optycznego w~wariancie gęstym.
 
     \newpage
     \begin{figure}[!ht]
@@ -582,6 +600,8 @@
               {Odległości od ścieżek kluczowych w~zależności od liczby drzew losowych (las drzew losowych)}
       \label{fig:RandomPathPerTrainedTreesAmount}
     \end{figure}
+
+    Dla metody lasów losowych liczba drzew losowych wpływa w~niewielkim stopniu na jakość, co zostało zaprezentowane na wykresach \ref{fig:RandomKeypointsPerTrainedTreesAmount} oraz \ref{fig:RandomPathPerTrainedTreesAmount}. Większa wartość omawianego współczynnika pozwala w~niewielkim stopniu zmniejszyć maksymalny błąd (wartości od 30 do 45) związany z~odległością od punktów kluczowych.
 
     \newpage
     \begin{figure}[!ht]
