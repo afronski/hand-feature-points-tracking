@@ -751,8 +751,8 @@ function qualityForMethodAndGesture(key, name, method, gesture) {
 
   for (i = 0; i < files.length; ++i) {
     errors = getDataPointFromErrorKeyInFile(key, files[i]);
-    radius = extractWithPerson("radius", errors);
 
+    circles.push(extractWithPerson("radius", errors));
     minimum.push(extractWithPerson("minimum", errors));
     maximum.push(extractWithPerson("maximum", errors));
     average.push(extractWithPerson("average", errors));

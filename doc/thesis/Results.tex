@@ -12,7 +12,7 @@
     Rezultaty zostały zebrane za pomocą 64 wykresów, analizujących cztery różne obszary porównawcze, tj.:
     \begin{itemize}
       \item Zużycie pamięci wirtualnej i~fizycznej.
-      \item Wydajność (czasy przetwarzania klatki animacji oraz czas dodatkowych operacji niezbędnych do obliczeń).
+      \item Wydajność (czas przetwarzania klatki animacji oraz czas dodatkowych operacji niezbędnych do obliczeń).
       \item Narzut czasowy obliczeń, wprowadzony do nominalnego czasu trwania sekwencji wideo.
       \item Jakość wygenerowanej ścieżki w~stosunku do wyznaczonych manualnie punktów i~ścieżek kluczowych.
     \end{itemize}
@@ -172,16 +172,16 @@
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=12cm]{charts/timing/DenseForGestureC}
-      \caption[Czasy przetwarzania klatki poszczególnych osób dla gestu \\Wielka Litera C (gęsty przepływ optyczny)]
-              {Czasy przetwarzania klatki poszczególnych osób dla gestu \\\textit{Wielka Litera C} (gęsty przepływ optyczny)}
+      \caption[Czas przetwarzania klatki poszczególnych osób dla gestu C]
+              {Czas przetwarzania klatki poszczególnych osób dla gestu \\\textit{Wielka Litera C} (gęsty przepływ optyczny)}
       \label{fig:DenseForGestureC}
     \end{figure}
 
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=13cm]{charts/timing/DenseTimingForPersonE}
-      \caption[Czasy przetwarzania klatki poszczególnych gestów dla osoby E\\(gęsty przepływ optyczny)]
-              {Czasy przetwarzania klatki poszczególnych gestów dla osoby \textit{E}\\(gęsty przepływ optyczny)}
+      \caption[Czas przetwarzania klatki poszczególnych gestów dla osoby E]
+              {Czas przetwarzania klatki poszczególnych gestów dla osoby \textit{E}\\(gęsty przepływ optyczny)}
       \label{fig:DenseTimingForPersonE}
     \end{figure}
 
@@ -208,16 +208,16 @@
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=12cm]{charts/timing/RandomForGestureC}
-      \caption[Czasy przetwarzania klatki poszczególnych osób dla gestu\\Wielka Litera C (las drzew losowych)]
-              {Czasy przetwarzania klatki poszczególnych osób dla gestu\\\textit{Wielka Litera C} (las drzew losowych)}
+      \caption[Czas przetwarzania klatki poszczególnych osób dla gestu C]
+              {Czas przetwarzania klatki poszczególnych osób dla gestu\\\textit{Wielka Litera C} (las drzew losowych)}
       \label{fig:RandomForGestureC}
     \end{figure}
 
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=12cm]{charts/timing/RandomTimingForPersonE}
-      \caption[Czasy przetwarzania klatki poszczególnych gestów dla osoby E\\(las drzew losowych)]
-              {Czasy przetwarzania klatki poszczególnych gestów dla osoby \textit{E}\\(las drzew losowych)}
+      \caption[Czas przetwarzania klatki poszczególnych gestów dla osoby E]
+              {Czas przetwarzania klatki poszczególnych gestów dla osoby \textit{E}\\(las drzew losowych)}
       \label{fig:RandomTimingForPersonE}
     \end{figure}
 
@@ -252,16 +252,16 @@
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=12.5cm]{charts/timing/SparseForGestureC}
-      \caption[Czasy przetwarzania klatki poszczególnych osób dla gestu\\Wielka Litera C (rzadki przepływ optyczny)]
-              {Czasy przetwarzania klatki poszczególnych osób dla gestu\\\textit{Wielka Litera C} (rzadki przepływ optyczny)}
+      \caption[Czas przetwarzania klatki poszczególnych osób dla gestu C]
+              {Czas przetwarzania klatki poszczególnych osób dla gestu\\\textit{Wielka Litera C} (rzadki przepływ optyczny)}
       \label{fig:SparseForGestureC}
     \end{figure}
 
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=12.5cm]{charts/timing/SparseTimingForPersonE}
-      \caption[Czasy przetwarzania klatki poszczególnych gestów dla osoby E\\(rzadki przepływ optyczny)]
-              {Czasy przetwarzania klatki poszczególnych gestów dla osoby \textit{E}\\(rzadki przepływ optyczny)}
+      \caption[Czas przetwarzania klatki poszczególnych gestów dla osoby E]
+              {Czas przetwarzania klatki poszczególnych gestów dla osoby \textit{E}\\(rzadki przepływ optyczny)}
       \label{fig:SparseTimingForPersonE}
     \end{figure}
 
@@ -283,11 +283,23 @@
     \end{figure}
 
   \section{Wnioski i~wyniki związane z~wprowadzonym narzutem czasowym}\label{Section_Overhead}
+    Na podstawie wyników zaprezentowanych w~poprzedniej sekcji można skutecznie określić, który algorytm wprowadza najmniejszy całkowity narzut czasowy przetwarzania sekwencji wideo. Na wykresie \ref{fig:OverheadGL} zostały zestawione wartości dla każdego z~algorytmów. Najbardziej optymalnym algorytmem jest algorytm przepływu optycznego w~wariancie rzadkim.
 
+    Porównanie zawarte na wykresie omówionym powyżej, nie zawiera pełnego narzutu dla metody opartej o~uczenie maszynowe. Całkowite podsumowanie zostało umieszczone na rysunku \ref{fig:RandomForestTrackerOverhead}. Widać wyraźnie, że w~przypadku pełnej generacji (zapisu, odczytu i~budowania bazy treningowej) dla jednego drzewa narzut jest ogromny (około 1 minuty). Mimo, iż narzut czasowy wprowadzony tylko poprzez klasyfikacji w~oparciu o~wytrenowany zbiór jest niski, to metoda jest bardzo kosztowna. W~sekcji \ref{Section_Usprawnienia} zwrócono uwagę na analizowany problem i~zaproponowano potencjalne rozwiązanie.
+
+    Na wykresach \ref{fig:SpecialisedDenseOverhead}, \ref{fig:SpecialisedRandomOverhead} oraz \ref{fig:SpecialisedSparseOverhead} zaprezentowane zostały zależności całkowitego narzutu czasowego w~odniesieniu do podstawowych parametrów zaimplementowanych metod.
+
+    W~przypadku algorytmu gęstego przepływu optycznego, narzut zmniejsza się wraz z~rozrzedzeniem siatki (zwiększeniem rozmiaru jej oczka) i~stabilizuje się w~okolicy rozmiaru równego 10 pikseli. Jak zostanie przedstawione w~następnym rozdziale wspomniana wartość może zostać przyjęta jako rozsądny kompromis pomiędzy jakością jak i~czasem działania algorytmu.
+
+    Dla algorytmu wykorzystującego las drzew losowych całkowity narzut stabilizuje się wraz z~wykorzystaniem większej liczby drzew losowych. Biorąc pod uwagę czas wykonania, liczba pięciu drzew wydaje się rozsądnym kompromisem pomiędzy całkowitym narzutem czasowym oraz jakością.
+
+    Dla algorytmu przepływu optycznego w~wariancie rzadkim mniejsze wartości minimalnej odległości pomiędzy punktami charakterystycznymi skutkują brakiem narzutu czasowego (wartość ujemna oznacza rezerwę jeśli chodzi o~czas przetwarzania). Biorąc jednak pod uwagę jakość omówioną w~sekcji \ref{Section_Quality} warto zwiększyć ten współczynnik w~celu zwiększenia jakości wyznaczonej ścieżki.
+
+    \newpage
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=14cm]{charts/overhead/OverheadGL}
-      \caption[Narzut czasowy wprowadzony przez każdy algorytm\\(próbka Person\_G\_L)]
+      \caption[Narzut czasowy wprowadzony przez każdy algorytm]
               {Narzut czasowy wprowadzony przez każdy algorytm\\(próbka \textit{Person\_G\_L})}
       \label{fig:OverheadGL}
     \end{figure}
@@ -300,31 +312,51 @@
       \label{fig:RandomForestTrackerOverhead}
     \end{figure}
 
+    \newpage
     \begin{figure}[!ht]
       \centering
-      \includegraphics[width=14cm]{charts/overhead/DenseOverheadPerMapSize}
-      \caption[Narzut czasowy w~zależności od rozmiaru siatki\\(gęsty przepływ optyczny)]
+      \includegraphics[width=10cm]{charts/overhead/DenseOverheadPerMapSize}
+      \caption[Narzut czasowy w~zależności od rozmiaru siatki]
               {Narzut czasowy w~zależności od rozmiaru siatki\\(gęsty przepływ optyczny)}
       \label{fig:SpecialisedDenseOverhead}
     \end{figure}
 
     \begin{figure}[!ht]
       \centering
-      \includegraphics[width=14cm]{charts/overhead/RandomOverheadPerTrainedTreesAmount}
-      \caption[Narzut czasowy w~zależności od liczby drzew losowych\\(las drzew losowych)]
+      \includegraphics[width=10cm]{charts/overhead/RandomOverheadPerTrainedTreesAmount}
+      \caption[Narzut czasowy w~zależności od liczby drzew losowych]
               {Narzut czasowy w~zależności od liczby drzew losowych\\(las drzew losowych)}
       \label{fig:SpecialisedRandomOverhead}
     \end{figure}
 
     \begin{figure}[!ht]
       \centering
-      \includegraphics[width=14cm]{charts/overhead/SparseOverheadPerMinimalDistance}
-      \caption[Narzut czasowy w~zależności od minimalnej odległości między punktami charakterystycznymi (rzadki przepływ optyczny)]
-              {Narzut czasowy w~zależności od minimalnej odległości między punktami charakterystycznymi (rzadki przepływ optyczny)}
+      \includegraphics[width=10cm]{charts/overhead/SparseOverheadPerMinimalDistance}
+      \caption[Narzut czasowy w~zależności od minimalnej odległości pomiędzy punktami charakterystycznymi]
+              {Narzut czasowy w~zależności od minimalnej odległości pomiędzy punktami charakterystycznymi (rzadki przepływ optyczny)}
       \label{fig:SpecialisedSparseOverhead}
     \end{figure}
 
   \section{Wyniki i~wnioski weryfikacji jakości badanych algorytmów}\label{Section_Quality}
+
+    \newpage
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/quality/PathDistanceSparsePerMinimalDistance}
+      \caption[Odległość od ścieżki kluczowej w~zależności od minimalnej odległości pomiędzy punktami charakterystycznymi]
+              {Odległość od ścieżki kluczowej w~zależności od minimalnej odległości pomiędzy punktami charakterystycznymi (rzadki przepływ optyczny)}
+      \label{fig:SpecialisedSparsePathDistance}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/quality/KeypointsDistanceSparsePerMinimalDistance}
+      \caption[Odległość od punktu kluczowego w~zależności od minimalnej odległości pomiędzy punktami charakterystycznymi]
+              {Odległość od punktu kluczowego w~zależności od minimalnej odległości pomiędzy punktami charakterystycznymi (rzadki przepływ optyczny)}
+      \label{fig:SpecialisedSparseKeypointsDistance}
+    \end{figure}
+
+    Jak wspomniano w~sekcji \ref{Section_Overhead} i~co widać na wykresach \ref{fig:SpecialisedSparsePathDistance} oraz \ref{fig:SpecialisedSparseKeypointsDistance}, warto zwiększyć wartość współczynnika minimalnej odległości pomiędzy punktami charakterystycznymi, w~celu zmniejszenia maksymalnego błędu (odległości od ścieżek oraz punktów kluczowych). Dzięki temu zmniejszy się również, wartość średnia odległości i~poprawi jakość ścieżki wyznaczonej ze śledzonych punktów.
 
   \section{Proponowane usprawnienia}\label{Section_Usprawnienia}
 
