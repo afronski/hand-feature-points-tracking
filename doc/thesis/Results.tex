@@ -31,7 +31,7 @@
       \label{fig:MemoryUsagePersonAC}
     \end{figure}
 
-    W~przypadku gęstego przepływu optycznego zużycie pamięci fizycznej nie przekracza $80$ MB, dla implementacji algorytmu opartego o~metodę \textit{LK} osiąga wartość co najwyżej $50$ MB. Oba algorytmy są zdecydowanie oszczędniejsze od trzeciej zapronowanej implementacji.
+    W~przypadku gęstego przepływu optycznego zużycie pamięci fizycznej nie przekracza $80$ MB, dla implementacji algorytmu opartego o~metodę \textit{LK} osiąga wartość co najwyżej $50$ MB. Oba algorytmy są zdecydowanie oszczędniejsze od trzeciej zaproponowanej implementacji.
 
     \begin{figure}[!ht]
       \centering
@@ -61,7 +61,7 @@
       \label{fig:RandomForestTrackerPerTrainedTreesAmount}
     \end{figure}
 
-    Rzadki przepływ optyczny charakteryzuje się niewielkimi wahaniami zużycia pamięci w~zależności od minimalnej odległości pomiędzy śledzonymi punktami charakterystycznymi (jak można było przypuszczać, im większa odległość tym mniejsze zużycie pamięci). Na wykresie \ref{fig:SparseOpticalFlowPerMinimalDistanceBetweenPoints} widać, że fluktuacje mieszczą się w~przedziale o~szerokości około $30$ MB i~nie przekraczają wartości $63$ MB, co nie jest bez znaczenia w~środowisku z~ograniczonymi zasobami pamięciowymi (np. systemy wbudowane lub urządzenia mobilne). Z trzech porównywanych implementacji, metoda oparta o~algorytm \textit{LK} w~wariancie piramidalnym jest najoptymalniejsza pod względem zużycia pamięci.
+    Rzadki przepływ optyczny charakteryzuje się niewielkimi wahaniami zużycia pamięci w~zależności od minimalnej odległości pomiędzy śledzonymi punktami charakterystycznymi (jak można było przypuszczać, im większa odległość tym mniejsze zużycie pamięci). Na wykresie \ref{fig:SparseOpticalFlowPerMinimalDistanceBetweenPoints} widać, że fluktuacje mieszczą się w~przedziale o~szerokości około $30$ MB i~nie przekraczają wartości $63$ MB, co nie jest bez znaczenia w~środowisku z~ograniczonymi zasobami pamięciowymi (np. systemy wbudowane lub urządzenia mobilne). Z trzech porównywanych implementacji, metoda oparta o~algorytm \textit{LK} w~wariancie piramidalnym jest najbardziej optymalna pod względem zużycia pamięci.
 
     \begin{figure}[!ht]
       \centering
@@ -81,13 +81,248 @@
 
     \newpage
 
-    W~wariancie gęstym zależnym od rozmiaru przyjętej siatki, przepływ optyczny charakteryzuje się wyższym zużyciem pamięci (maksymalnie około $72$ MB), jednak same wahania są stabilniejsze, mieszczą się w~przedziale o~szerokości około $5$ MB. Widać, że zwiększenie wymiarów siatki (intuicyjnie, rozrzedzenie jej) nie zawsze idzie w~parze z~malejącym zużyciem pamięci. Warto jednak zauważyć, że wahania odbywają sie w~bardzo niewielkim zakresie.
+    W~wariancie gęstym zależnym od rozmiaru przyjętej siatki, przepływ optyczny charakteryzuje się wyższym zużyciem pamięci (maksymalnie około $72$ MB), jednak same wahania są stabilniejsze, mieszczą się w~przedziale o~szerokości około $5$ MB. Widać, że zwiększenie wymiarów siatki (intuicyjnie, rozrzedzenie jej) nie zawsze idzie w~parze z~malejącym zużyciem pamięci. Warto jednak zauważyć, że wahania odbywają się w~bardzo niewielkim zakresie.
 
     Mimo wyższego zużycia całościowego, jego wartość nadal nie jest zbyt wysoka i~algorytm gęstego przepływu optycznego sprawdzi się w~środowisku z~ograniczonymi zasobami pamięciowymi.
 
-  \section{Wnioski i~wyniki badania wydajności}\label{Section_Timing}
+  \section{Wnioski i~wyniki badania wydajności zaimplementowanych algorytmów}\label{Section_Timing}
+
+    Pod pojęciem badań wydajności zostały zebrane wszystkie testy oraz wykresy prezentujące czas przetwarzania pojedynczej klatki algorytmu. Wszystkie implementacje zostały szczegółowo zbadane pod tym kątem, aby wybrać algorytm najefektywniejszy i~dokładający najmniejszy narzut w~każdej kolejnej klatce sekwencji wideo.
+
+    Na wykresach \ref{fig:DenseTimingPersonAC}, \ref{fig:RandomTimingPersonAC} oraz \ref{fig:SparseTimingPersonAC} widać wartości czasu przetwarzania klatki, wraz z~naniesioną wartością średnią dla zaimplementowanych algorytmów kolejno przepływu w~wariancie gęstym, wykorzystującym lasy drzew losowych oraz rzadkiego przepływu optycznego.
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/timing/DenseTimingPersonAC}
+      \caption[Wykres czasu przetwarzania klatki dla algorytmu gęstego przepływu optycznego]
+              {Wykres czasu przetwarzania klatki dla algorytmu gęstego przepływu optycznego}
+      \label{fig:DenseTimingPersonAC}
+    \end{figure}
+
+    \newpage
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=12cm]{charts/timing/RandomTimingPersonAC}
+      \caption[Wykres czasu przetwarzania klatki dla algorytmu lasu drzew losowych]
+              {Wykres czasu przetwarzania klatki dla algorytmu lasu drzew losowych}
+      \label{fig:RandomTimingPersonAC}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=12cm]{charts/timing/SparseTimingPersonAC}
+      \caption[Wykres czasu przetwarzania klatki dla algorytmu rzadkiego przepływu optycznego]
+              {Wykres czasu przetwarzania klatki dla algorytmu rzadkiego przepływu optycznego}
+      \label{fig:SparseTimingPersonAC}
+    \end{figure}
+
+    Widać, że najmniejszym średnim czasem przetwarzania charakteryzują się dwa ostatnie algorytmu. Gęsty przepływ optyczny jest algorytmem o~bardzo dużym koszcie obliczeniowym, co objawia się bardzo wysokimi wartościami czasu przetwarzania klatki (oraz w~konsekwencji dużo wyższą wartością średnią). Zależność tą najlepiej widać na wykresach \ref{fig:PersonBO} oraz \ref{fig:PersonGO}.
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/timing/PersonBO}
+      \caption[Porównanie czasu przetwarzania klatki dla próbki Person\_B\_O]
+              {Porównanie czasu przetwarzania klatki dla próbki \textit{Person\_B\_O}}
+      \label{fig:PersonBO}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/timing/PersonGO}
+      \caption[Porównanie czasu przetwarzania klatki dla próbki Person\_G\_O]
+              {Porównanie czasu przetwarzania klatki dla próbki \textit{Person\_G\_O}}
+      \label{fig:PersonGO}
+    \end{figure}
+
+    Warto zauważyć, że praktycznie każdy z~algorytmów charakteryzuje się niewielkimi wahaniami w~zakresie czasu przetwarzania (wyjątkiem jest początkowa faza działania algorytmu gęstego przepływu optycznego, gdzie następuje inicjalizacja macierzy przepływu, w~kolejnym etapie czas przetwarzania stabilizuje się).
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=10cm]{charts/timing/StackedDensePersonEGestureCrush}
+      \caption[Narzut czasowy dodatkowych etapów przetwarzania dla każdej klatki\\(gęsty przepływ optyczny)]
+              {Narzut czasowy dodatkowych etapów przetwarzania dla każdej klatki\\(gęsty przepływ optyczny)}
+      \label{fig:StackedDense}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=10cm]{charts/timing/StackedSparsePersonEGestureCrush}
+      \caption[Narzut czasowy dodatkowych etapów przetwarzania dla każdej klatki\\(rzadki przepływ optyczny)]
+              {Narzut czasowy dodatkowych etapów przetwarzania dla każdej klatki\\(rzadki przepływ optyczny)}
+      \label{fig:StackedSparse}
+    \end{figure}
+
+    \newpage
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=12cm]{charts/timing/StackedRandomPersonEGestureCrush}
+      \caption[Narzut czasowy dodatkowych etapów przetwarzania dla każdej klatki\\(las drzew losowych)]
+              {Narzut czasowy dodatkowych etapów przetwarzania dla każdej klatki\\(las drzew losowych)}
+      \label{fig:StackedRandom}
+    \end{figure}
+
+    Reprezentacja graficzna narzutu dodatkowych etapów przetwarzania została zamieszczona na wykresach \ref{fig:StackedDense}, \ref{fig:StackedSparse} oraz \ref{fig:StackedRandom}. Widać wyraźnie, że w~przypadku algorytmów z~rodziny przepływu optycznego dodatkowy narzut mieści się w~granicy błędu statystycznego (maksymalne wartości odpowiednio $0.6$ oraz $0.33$ milisekundy).
+
+    W~przypadku algorytmu opartego o~uczenie maszynowe, odzyskanie reprezentacji śledzonych punktów wiąże się z~niewielkim narzutem czasowym, odzwierciedlonym na przebiegu \ref{fig:StackedRandom} (maksymalnie ok. $50$ milisekund).
+
+    Dla algorytmu gęstego przepływu optycznego najcięższą przeprawą jeśli chodzi o~przetwarzanie okazał się zestaw próbek \textit{G}, choć tak naprawdę czasy przetwarzania wszystkich zbiorów mieszczą się w~przedziale o~dość niewielkiej szerokości (jeśli chodzi o~średnie czas przetwarzania, przedział ma szerokość około $20$ milisekund). Omawiana implementacja charakteryzuje się bardzo stabilnym czasem przetwarzania pojedynczej klatki. Niemniej, jest to zbyt duża wartość, aby można było mówić o~zastosowaniu tej metody w~przypadku ścisłych wymagań czasowych.
+
+    Tak jak w~przypadku zbiorów, również podział ze względu na gesty dla wybranej próbki charakteryzuje się stabilnym czasem przetwarzania. Różnice pomiędzy średnimi wartościami są niewielkie (szerokość przedziału to około 25 milisekund).
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=12cm]{charts/timing/DenseForGestureC}
+      \caption[Czasy przetwarzania klatki poszczególnych osób dla gestu \\Wielka Litera C (gęsty przepływ optyczny)]
+              {Czasy przetwarzania klatki poszczególnych osób dla gestu \\\textit{Wielka Litera C} (gęsty przepływ optyczny)}
+      \label{fig:DenseForGestureC}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=13cm]{charts/timing/DenseTimingForPersonE}
+      \caption[Czasy przetwarzania klatki poszczególnych gestów dla osoby E\\(gęsty przepływ optyczny)]
+              {Czasy przetwarzania klatki poszczególnych gestów dla osoby \textit{E}\\(gęsty przepływ optyczny)}
+      \label{fig:DenseTimingForPersonE}
+    \end{figure}
+
+    \newpage
+    Na wykresie \ref{fig:DenseTimingPerMapSize} została przedstawiona zależność czasu przetwarzania od rozmiaru siatki. Intuicyjnie dla małych wartości wraz z~rozrzedzaniem gęstości siatki maleje czas przetwarzania. Po osiągnięciu pewnego pułapu (w~okolicach 10 pikseli) czas przetwarzania stabilizuje się na wcześniej obserwowanej wartości.
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/timing/DenseTimingPersonG_OC_perMapSize}
+      \caption[Czas przetwarzania klatki w~zależności od rozmiaru siatki]
+              {Czas przetwarzania klatki w~zależności od rozmiaru siatki\\(próbki \textit{Person\_G\_O} oraz \textit{Person\_G\_C})}
+      \label{fig:DenseTimingPerMapSize}
+    \end{figure}
+
+    Analogiczny zestaw testów został przeprowadzony na algorytmie wykorzystującym las drzew losowych.
+
+    W~jego przypadku największym wyzwaniem okazał się zbiór \textit{B} (rysunek \ref{fig:RandomForGestureC}). Warto zwrócić na stosunkowo niski średni czas przetwarzania w~porównaniu do uprzednio omawianego algorytmu. W~przypadku podziału na gesty, wartości minimalne, maksymalne oraz średnie są zbliżone do poprzedniej reprezentacji (wykres \ref{fig:RandomTimingForPersonE}). Algorytm charakteryzuje się niskim i~dość stabilnym średnim czasem przetwarzania klatki sekwencji wideo.
+
+    W~przypadku tej konkretnej implementacji bardzo ważnym parametrem jest czas uczenia klasyfikatora przedstawiony w~zależności od liczby wykorzystanych drzew losowych. Omawiana reprezentacja zostały przedstawione na wykresie \ref{fig:LearningTime}.
+
+    Równie ważnym parametrem jest wartość czasu przetwarzania klatki w~zależności od liczby wytrenowanych drzew. Zależność została przedstawiona na rysunku \ref{fig:TimingPerTrainedTreesAmount}.
+
+    \newpage
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=12cm]{charts/timing/RandomForGestureC}
+      \caption[Czasy przetwarzania klatki poszczególnych osób dla gestu\\Wielka Litera C (las drzew losowych)]
+              {Czasy przetwarzania klatki poszczególnych osób dla gestu\\\textit{Wielka Litera C} (las drzew losowych)}
+      \label{fig:RandomForGestureC}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=12cm]{charts/timing/RandomTimingForPersonE}
+      \caption[Czasy przetwarzania klatki poszczególnych gestów dla osoby E\\(las drzew losowych)]
+              {Czasy przetwarzania klatki poszczególnych gestów dla osoby \textit{E}\\(las drzew losowych)}
+      \label{fig:RandomTimingForPersonE}
+    \end{figure}
+
+    \newpage
+    Jak widać na wykresie \ref{fig:LearningTime} wprowadzony przez ten konkretny algorytm narzut czasowy jest znaczny oraz jest wprost proporcjonalny do liczby wytrenowanych drzew. Jest to największa wada algorytmu jeśli chodzi o~wydajność. Każda metoda wykorzystująca uczenie maszynowe, wprowadza spory narzut przeznaczony na przygotowanie klasyfikatora. Nie jest to jednak argument dyskryminujący, ponieważ przygotowana implementacja pozwala na dalsze optymalizacje i~zminimalizowanie czasu uczenia (usprawnienia zostały zebrane w~rozdziale \ref{Section_Usprawnienia}).
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=13cm]{charts/timing/LearningTimePerTrainedTreesAmount}
+      \caption[Czas nauki klasyfikatora w~zależności od liczby drzew losowych]
+              {Czas nauki klasyfikatora w~zależności od liczby drzew losowych}
+      \label{fig:LearningTime}
+    \end{figure}
+
+    Dla czasu przetwarzania klatki liczba drzew losowych ma niewielkie znaczenie. Wahania średniego czasu przetwarzania zaprezentowane na wykresie \ref{fig:TimingPerTrainedTreesAmount} mieszczą się w~przedziale o~szerokości około 20 milisekund. Dodatkowo widać, że im większa wytrenowanych drzew losowych tym stabilniejsza średnia wartość, jednocześnie nieznacznie zwiększa się minimalna wartość (wartości maksymalne czasu przetwarzania silnie zależą od określonej próbki).
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=13cm]{charts/timing/RandomTimingPersonG_OC_perTrainedTrees}
+      \caption[Czas przetwarzania klatki w~zależności od liczby wytrenowanych drzew losowych]
+              {Czas przetwarzania klatki w~zależności od liczby wytrenowanych drzew losowych (próbki \textit{Person\_G\_O} oraz \textit{Person\_G\_C})}
+      \label{fig:TimingPerTrainedTreesAmount}
+    \end{figure}
+
+    \newpage
+    Rzadki przepływ optyczny jest algorytmem o~najniższym średnim czasie przetwarzania klatki. Widać to na wykresach \ref{fig:SparseForGestureC} oraz \ref{fig:SparseTimingForPersonE}. Algorytm najlepiej poradził sobie praktycznie z~każdym zbiorem (wyjątkiem jest zbiór \textit{A}, jednak średnia wartość jest i~tak najniższa spośród trzech implementacji).
+
+    Również, jeśli chodzi o~podział ze względu na gesty omawiana implementacja jest najwydajniejsza. W~obu przypadkach wartości średnie przetwarzania klatki animacji nie przekraczają 40 milisekund, maksymalne - tylko w~jednym przypadku przekraczają 50 milisekund. Implementacja może zostać wykorzystana w~warunkach o~dużych wymaganiach jeśli chodzi o~narzut przetwarzania pojedynczej ramki sekwencji wideo.
+
+    Omawiana metoda charakteryzuje się liniową zależnością czasu obliczeń na pojedynczej klatce w~zależności od maksymalnej liczby punktów charakterystycznych (wykres \ref{fig:TimingPerFeaturesAmount}) oraz zależnością zbliżoną do logarytmicznej jeśli chodzi o~minimalną odległość pomiędzy punktami wyznaczonymi przez algorytm (wykres \ref{fig:TimingPerMinimalDistance}).
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=12.5cm]{charts/timing/SparseForGestureC}
+      \caption[Czasy przetwarzania klatki poszczególnych osób dla gestu\\Wielka Litera C (rzadki przepływ optyczny)]
+              {Czasy przetwarzania klatki poszczególnych osób dla gestu\\\textit{Wielka Litera C} (rzadki przepływ optyczny)}
+      \label{fig:SparseForGestureC}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=12.5cm]{charts/timing/SparseTimingForPersonE}
+      \caption[Czasy przetwarzania klatki poszczególnych gestów dla osoby E\\(rzadki przepływ optyczny)]
+              {Czasy przetwarzania klatki poszczególnych gestów dla osoby \textit{E}\\(rzadki przepływ optyczny)}
+      \label{fig:SparseTimingForPersonE}
+    \end{figure}
+
+    \newpage
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=12.5cm]{charts/timing/SparseTimingPersonG_OC_perFeaturesAmount}
+      \caption[Czas przetwarzania klatki w~zależności od maksymalnej ilości punktów charakterystycznych]
+              {Czas przetwarzania klatki w~zależności od maksymalnej ilości punktów charakterystycznych (próbki \textit{Person\_G\_O} oraz \textit{Person\_G\_C})}
+      \label{fig:TimingPerFeaturesAmount}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=12.5cm]{charts/timing/SparseTimingPersonG_OC_perMinimalDistance}
+      \caption[Czas przetwarzania klatki w~zależności od minimalnej odległości pomiędzy punktami charakterystycznymi]
+              {Czas przetwarzania klatki w~zależności od minimalnej odległości pomiędzy punktami charakterystycznymi (próbki \textit{Person\_G\_O} oraz \textit{Person\_G\_C})}
+      \label{fig:TimingPerMinimalDistance}
+    \end{figure}
 
   \section{Wnioski i~wyniki związane z~wprowadzonym narzutem czasowym}\label{Section_Overhead}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/overhead/OverheadGL}
+      \caption[Narzut czasowy wprowadzony przez każdy algorytm\\(próbka Person\_G\_L)]
+              {Narzut czasowy wprowadzony przez każdy algorytm\\(próbka \textit{Person\_G\_L})}
+      \label{fig:OverheadGL}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/overhead/RandomForestTrackerOverallOverhead}
+      \caption[Całkowity narzut czasowy dla algorytmu wykorzystującego las drzew losowych]
+              {Całkowity narzut czasowy dla algorytmu wykorzystującego las drzew losowych}
+      \label{fig:RandomForestTrackerOverhead}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/overhead/DenseOverheadPerMapSize}
+      \caption[Narzut czasowy w~zależności od rozmiaru siatki\\(gęsty przepływ optyczny)]
+              {Narzut czasowy w~zależności od rozmiaru siatki\\(gęsty przepływ optyczny)}
+      \label{fig:SpecialisedDenseOverhead}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/overhead/RandomOverheadPerTrainedTreesAmount}
+      \caption[Narzut czasowy w~zależności od liczby drzew losowych\\(las drzew losowych)]
+              {Narzut czasowy w~zależności od liczby drzew losowych\\(las drzew losowych)}
+      \label{fig:SpecialisedRandomOverhead}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/overhead/SparseOverheadPerMinimalDistance}
+      \caption[Narzut czasowy w~zależności od minimalnej odległości między punktami charakterystycznymi (rzadki przepływ optyczny)]
+              {Narzut czasowy w~zależności od minimalnej odległości między punktami charakterystycznymi (rzadki przepływ optyczny)}
+      \label{fig:SpecialisedSparseOverhead}
+    \end{figure}
 
   \section{Wyniki i~wnioski weryfikacji jakości badanych algorytmów}\label{Section_Quality}
 
@@ -117,6 +352,6 @@
 
 W~ramach pracy magisterskiej omówiono i~przeprowadzono badania wydajnościowe oraz jakościowe implementacji trzech algorytmów śledzenia punktów charakterystycznych pod kątem wykorzystania ich do analizy ruchu dłoni.
 
-Zebrane rezultaty pozwoliły na jednoznaczne określenie przydatności poszczególnych algorytmów w~badanym obszarze.
+Zebrane rezultaty pozwoliły na jednoznaczne określenie przydatności poszczególnych algorytmów w~badanym obszarze. Dokładne wnioski oraz~decyzje zostały zebrane i~opisane w~poprzednim rozdziale.
 
 Oprócz zaproponowanych implementacji, badań oraz~analizy zostały również zaproponowane usprawnienia i~potencjalne rozszerzenia, które zwiększą jakość oraz poprawia wydajność omawianych metod.
