@@ -21,6 +21,70 @@
 
   \section{Wnioski i~wyniki związane z~zużyciem pamięci badanych algorytmów}\label{Section_Memory}
 
+    Zaimplementowane algorytmy posiadają zupełnie trzy odrębne profile pamięciowe co zamieszczone zostało na wykresach \ref{fig:MemoryUsagePersonAC} oraz \ref{fig:MemoryUsagePersonGC}, reprezentujących dwie odrębne próbki. W~przypadku metod opartych o~rodzinę algorytmów przepływu optycznego wartość zużywanej pamięci nie różni się pomiędzy poszczególnymi próbkami. Dla trzeciego algorytmu zużycie waha się w~przedziale od $350$ do $800$ MB dla pamięci wirtualnej i~dla pamięci fizycznej w~przedziale od $150$ do $600$ MB. Widać wyraźnie, że najwięcej pamięci pochłania implementacja opierająca się algorytmie wykorzystującym las drzew losowych i~ilość zaalokowanej pamięci zależy ściśle od przygotowanej bazy treningowej oraz parametrów próbki wideo.
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/memory/PersonAC}
+      \caption[Wykres zużycia pamięci dla próbki o nazwie Person\_A\_C]
+              {Wykres zużycia pamięci dla próbki o nazwie \textit{Person\_A\_C}}
+      \label{fig:MemoryUsagePersonAC}
+    \end{figure}
+
+    W~przypadku gęstego przepływu optycznego zużycie pamięci fizycznej nie przekracza $80$ MB, dla implementacji algorytmu opartego o~metodę \textit{LK} osiąga wartość co najwyżej $50$ MB. Oba algorytmy są zdecydowanie oszczędniejsze od trzeciej zapronowanej implementacji.
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/memory/PersonGC}
+      \caption[Wykres zużycia pamięci dla próbki o nazwie Person\_G\_C]
+              {Wykres zużycia pamięci dla próbki o nazwie \textit{Person\_G\_C}}
+      \label{fig:MemoryUsagePersonGC}
+    \end{figure}
+
+    Algorytm gęstego przepływu optycznego posiada jedną wadę - mimo stosunkowo niewielkiego zużycia pamięci, na wykresie \ref{fig:OpticalFlowsMemoryUsage} został zaprezentowany piłokształtny przebieg, ciągłej alokacji i~zwalniania od 2 do 4 MB bufora pamięci pomiędzy poszczególnymi klatkami sekwencji wideo. Nie jest to korzystne zjawisko i~jego eliminacja na pewno wpłynie pozytywnie na całkowitą wydajność.
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/memory/OpticalFlows}
+      \caption[Wykres zużycia pamięci dla algorytmów przepływu optycznego]
+              {Wykres zużycia pamięci dla algorytmów przepływu optycznego}
+      \label{fig:OpticalFlowsMemoryUsage}
+    \end{figure}
+
+    W~przypadku algorytmu opartego o~las drzew losowych zużycie pamięci liniowo zależy od ilości wytrenowanych drzew wykorzystanych do budowy klasyfikatora. Zależność została zaprezentowana na rysunku \ref{fig:RandomForestTrackerPerTrainedTreesAmount}. Jednocześnie można zauważyć, że różnica pomiędzy minimalnym i~maksymalnym zużyciem pamięci jest niewielka co oznacza, że proces potrzebuje dużej ilości pamięci, ale nie jest algorytmem intensywnym w~operacje przydzielania i~zwalniania zasobów.
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/memory/RandomPerTrainedTree}
+      \caption[Wykres zużycia pamięci dla algorytmu lasu drzew losowych w~zależności od liczby wytrenowanych drzew]
+              {Wykres zużycia pamięci dla algorytmu lasu drzew losowych w~zależności od liczby wytrenowanych drzew}
+      \label{fig:RandomForestTrackerPerTrainedTreesAmount}
+    \end{figure}
+
+    Rzadki przepływ optyczny charakteryzuje się niewielkimi wahaniami zużycia pamięci w~zależności od minimalnej odległości pomiędzy śledzonymi punktami charakterystycznymi (jak można było przypuszczać, im większa odległość tym mniejsze zużycie pamięci). Na wykresie \ref{fig:SparseOpticalFlowPerMinimalDistanceBetweenPoints} widać, że fluktuacje mieszczą się w~przedziale o~szerokości około $30$ MB i~nie przekraczają wartości $63$ MB, co nie jest bez znaczenia w~środowisku z~ograniczonymi zasobami pamięciowymi (np. systemy wbudowane lub urządzenia mobilne). Z trzech porównywanych implementacji, metoda oparta o~algorytm \textit{LK} w~wariancie piramidalnym jest najoptymalniejsza pod względem zużycia pamięci.
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/memory/SparsePerMinimalDistance}
+      \caption[Wykres zużycia pamięci dla rzadkiego przepływu optycznego w~zależności przyjętej minimalnej odległości pomiędzy punktami charakterystycznymi]
+              {Wykres zużycia pamięci dla rzadkiego przepływu optycznego w~zależności przyjętej minimalnej odległości pomiędzy punktami charakterystycznymi}
+      \label{fig:SparseOpticalFlowPerMinimalDistanceBetweenPoints}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=14cm]{charts/memory/DensePerMapOverlaySize}
+      \caption[Wykres zużycia pamięci dla gęstego przepływu optycznego w~zależności od gęstości siatki]
+              {Wykres zużycia pamięci dla gęstego przepływu optycznego w~zależności od gęstości siatki}
+      \label{fig:DenseOpticalFlowPerMapSize}
+    \end{figure}
+
+    \newpage
+
+    W~wariancie gęstym zależnym od rozmiaru przyjętej siatki, przepływ optyczny charakteryzuje się wyższym zużyciem pamięci (maksymalnie około $72$ MB), jednak same wahania są stabilniejsze, mieszczą się w~przedziale o~szerokości około $5$ MB. Widać, że zwiększenie wymiarów siatki (intuicyjnie, rozrzedzenie jej) nie zawsze idzie w~parze z~malejącym zużyciem pamięci. Warto jednak zauważyć, że wahania odbywają sie w~bardzo niewielkim zakresie.
+
+    Mimo wyższego zużycia całościowego, jego wartość nadal nie jest zbyt wysoka i~algorytm gęstego przepływu optycznego sprawdzi się w~środowisku z~ograniczonymi zasobami pamięciowymi.
+
   \section{Wnioski i~wyniki badania wydajności}\label{Section_Timing}
 
   \section{Wnioski i~wyniki związane z~wprowadzonym narzutem czasowym}\label{Section_Overhead}
@@ -38,7 +102,7 @@
 
       \item \textbf{Optymalizacja zużycia pamięci dla algorytmu przepływu optycznego gęstego.}
 
-      W~sekcji \ref{Section_Memory} podczas omawiania zużycia pamięci dla wspomnianego algorytmu dało się zauważyć ciągłą zmianę zużywanej pamięci fizycznej (i~w konsekwencji także wirtualnej). Ciągła alokacja i~zwalnianie przydzielonych zasobów negatywnie wpływa na czas przetwarzania klatki sekwencji wideo. Narzut ten, może zostać zniwelowany za pomocą zmiany sposobu alokacji pamięci np. poprzez zastosowanie wielokrotnie wykorzystywanej i~współdzielonej puli pamięci.
+      W~sekcji \ref{Section_Memory} podczas omawiania zużycia pamięci dla wspomnianego algorytmu dało się zauważyć ciągłą zmianę zużywanej pamięci fizycznej (i~w konsekwencji także wirtualnej, rysunek \ref{fig:OpticalFlowsMemoryUsage}). Ciągła alokacja i~zwalnianie przydzielonych zasobów negatywnie wpływa na czas przetwarzania klatki sekwencji wideo. Narzut ten, może zostać zniwelowany za pomocą zmiany sposobu alokacji pamięci np. poprzez zastosowanie wielokrotnie wykorzystywanej i~współdzielonej puli pamięci.
 
       \item \textbf{Optymalizacja zużycia pamięci dla algorytmu opartego o drzewa losowe.}
 
