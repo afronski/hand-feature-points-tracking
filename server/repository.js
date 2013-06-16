@@ -10,7 +10,7 @@ var glob = require("glob"),
     // Cached collections.
     movies = null,
     results = null,
-    algorithm = null;
+    algorithms = null;
 
 repository.getMovieList = function() {
   if (!movies) {
