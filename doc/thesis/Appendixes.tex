@@ -1,20 +1,21 @@
 \chapter{Środowisko uruchomieniowe}\label{Chapter_EnvironmentAppendix}
+
   \section{Zależności}\label{Section_Dependencies}
 
-  Poniżej zebrane zostały zależności niezbędne do uruchomienia środowiska uruchomieniowego:
-  \begin{itemize}
-    \item Interpreter języka \textit{Python} w~wersji z~rodziny \textit{2.7.x},
-    \item Narzędzie budowania \textit{SCons},
-    \item Kompilator języka C++ (w~zależności od systemu operacyjnego \textit{GCC} lub \textit{Microsoft Visual Studio 2012 C++ Compiler}),
-    \item Biblioteka \textit{OpenCV} w~wersji \textit{2.4.3} skompilowana pod odpowiedni system operacyjny,
-    \item Środowisko uruchomieniowe \textit{node.js} w~wersji z~rodziny \textit{0.8.x},
-    \item Współczesna i~aktualna przeglądarka internetowa (najlepiej \textit{Mozilla Firefox} lub \textit{Google Chrome}).
-  \end{itemize}
+    Poniżej zebrane zostały zależności niezbędne do uruchomienia środowiska uruchomieniowego:
+      \begin{itemize}
+        \item Interpreter języka \textit{Python} w~wersji z~rodziny \textit{2.7.x},
+        \item Narzędzie budowania \textit{SCons},
+        \item Kompilator języka C++ (w~zależności od systemu operacyjnego \textit{GCC} lub \textit{Microsoft Visual Studio 2012 C++ Compiler}),
+        \item Biblioteka \textit{OpenCV} w~wersji \textit{2.4.3} skompilowana pod odpowiedni system operacyjny,
+        \item Środowisko uruchomieniowe \textit{node.js} w~wersji z~rodziny \textit{0.8.x},
+        \item Współczesna i~aktualna przeglądarka internetowa (najlepiej \textit{Mozilla Firefox} lub \textit{Google Chrome}).
+      \end{itemize}
 
   \section{Instalacja i~uruchomienie}\label{Section_Installation}
 
-  Po zainstalowaniu niezbędnych środowisk, narzędzi oraz bibliotek dostarczonych wraz z~kodem źródłowym na nośniku dołączonym do pracy, należy skopiować katalog \textit{src} w~dowolne miejsce na dysku twardym, gdzie nasz użytkownik posiada prawa zapisu.
+    Po zainstalowaniu niezbędnych środowisk, narzędzi oraz bibliotek dostarczonych wraz z~kodem źródłowym na nośniku dołączonym do pracy, należy skopiować katalog \textit{src} w~dowolne miejsce na dysku twardym, gdzie nasz użytkownik posiada prawa zapisu.
 
-  Aby rozpocząć badanie, dla obu platform (\textit{Microsoft Windows} oraz \textit{Linux}), znajdując się w~powyższym katalogu należy wykonać z~linii poleceń komendę \textit{node run-tests.js}, który ustawia odpowiednie zmienne środowiskowe i~przystępuje do kompilacji oraz uruchomienia badań.
+    Aby rozpocząć badanie, dla obu platform (\textit{Microsoft Windows} oraz \textit{Linux}), znajdując się w~powyższym katalogu należy wykonać z~linii poleceń komendę \textit{node run-tests.js}, który ustawia odpowiednie zmienne środowiskowe i~przystępuje do kompilacji oraz uruchomienia badań.
 
-  Rezultaty badań po zakończeniu procesu znajdą się w~katalogu \textit{assets} wewnątrz uprzednio skopiowanego katalogu. Wykresy mogą zostać wygenerowane na żądanie w~interfejsie użytkownika, dostępnym za pomocą przeglądarki internetowej pod adresem \textit{http://localhost:9292/results.html}, po uprzednim uruchomieniu serwera aplikacji za pomocą komendy \textit{node server/server.js}.
+    Rezultaty badań po zakończeniu procesu znajdą się w~katalogu \textit{assets} wewnątrz uprzednio skopiowanego katalogu. Wykresy mogą zostać wygenerowane na żądanie w~interfejsie użytkownika, dostępnym za pomocą przeglądarki internetowej pod adresem \textit{http://localhost:9292/results.html}, po uprzednim uruchomieniu serwera aplikacji za pomocą komendy \textit{node server/server.js}.
