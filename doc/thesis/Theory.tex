@@ -5,7 +5,7 @@
 
     Sterowanie pierwszymi maszynami obliczeniowymi ciężko nazwać interakcją, gdyż proces tworzenia kart dziurkowanych, choć wyżej w~abstrakcji od naciskania przełączników, nadal był mało interaktywny. Prawdziwym przełomem było opracowanie klawiatury, która umożliwia sterowanie komputerem za pomocą komend do dnia dzisiejszego. Kolejnym etapem ewolucji były narzędzia wskazujące w~postaci myszki komputerowej.
 
-    Gdy człowiek nauczył się komunikacji z~maszynami za pomocą urządzeń wskazujących, następnym naturalnym krokiem było skierowanie się ku kolejnemu zmysłowi - dotykowi. Obecnie urządzenia dotykowe zdominowały proces interakcji z~użytkownikiem dzięki ekranom dotykowym, telefonom komórkowym nowej generacji oraz tabletom. Przekraczając kolejne bariery ewolucja interfejsów dotarła do kolejnego etapu nie wspomaganego bezpośrednio żadnym zmysłem, gdzie urządzenia elektroniczne są wykorzystywane jedynie w~sposób pośredni - do rejestracji i~analizy. W~tym modelu sterowanie odbywa się za pomocą ruchu dłoni lub całej sylwetki. Jednym z~zaproponowanych rozwiązań jest \textit{Kinect} firmy \textit{Microsoft} odnoszący sukcesy w~branży związanej z~grami komputerowymi.
+    Gdy człowiek nauczył się komunikacji z~maszynami za pomocą urządzeń wskazujących, następnym naturalnym krokiem było skierowanie się ku kolejnemu zmysłowi~-~dotykowi. Obecnie urządzenia dotykowe zdominowały proces interakcji z~użytkownikiem dzięki ekranom dotykowym, telefonom komórkowym nowej generacji oraz tabletom. Przekraczając kolejne bariery ewolucja interfejsów dotarła do kolejnego etapu nie wspomaganego bezpośrednio żadnym zmysłem, gdzie urządzenia elektroniczne są wykorzystywane jedynie w~sposób pośredni - do rejestracji i~analizy. W~tym modelu sterowanie odbywa się za pomocą ruchu dłoni lub całej sylwetki. Jednym z~zaproponowanych rozwiązań jest \textit{Kinect} firmy \textit{Microsoft} odnoszący sukcesy w~branży związanej z~grami komputerowymi.
 
     Brak dedykowanego sprzętu elektronicznego wspomagającego proces interakcji utrudnia analizę, a~jednocześnie pozwala na wejście na kolejny stopień jeśli chodzi o~interakcję, umożliwiając personalizację obsługi (na podstawie wzorców biometrycznych i~algorytmów uczących się sposobu, w~jaki użytkownik wykorzystuje oprogramowanie) lub pozwalając na interakcję osobom głuchoniemym, dla których komunikacja za pomocą gestów jest naturalna.
 
@@ -44,11 +44,11 @@
 
     \textbf{Punktem charakterystycznym} nazywany jest punkt ramki animacji wraz z~jego otoczeniem (tzw. \textit{okno} \cite{SalientPointsTracking05}), niezbędnym do wyznaczenia parametrów wyróżniających i~umożliwiających śledzenie. Rozmiar okna oraz sposób wyznaczania własności charakteryzujących dany punkt i~jego wybitność został dokładnie omówiony w~rozdziale \ref{Section_GoodGeaturesToTrack}.
 
-    \textbf{Punktem kluczowym} jest pośredni punkt wyznaczający ważną część pokonywanej trasy lub kształtu. Pomiar odległości w~metryce euklidesowej między punktem kluczowym a~najbliższym śledzonym punktem charakterystycznym jest podstawowym parametrem jakościowym wykorzystywanym do porównania algorytmów między sobą (dokładny opis znajduje się w rozdziale~\ref{Section_Jakosc}).
+    \textbf{Punktem wzorcowym} jest pośredni punkt wyznaczający ważną część pokonywanej trasy lub kształtu. Pomiar odległości w~metryce euklidesowej między punktem wzorcowym a~najbliższym śledzonym punktem charakterystycznym jest podstawowym parametrem jakościowym wykorzystywanym do porównania algorytmów między sobą (dokładny opis znajduje się w rozdziale~\ref{Section_Jakosc}).
 
-    \textbf{Połączenie} to odcinek w~metryce euklidesowej łączący dwa wybrane punkty kluczowe. Najmniejsza odległość wśród śledzonych punktów charakterystycznych od aktualnego połączenia jest kolejną z~wartości charakteryzujących jakość algorytmu.
+    \textbf{Połączenie} to odcinek w~metryce euklidesowej łączący dwa wybrane punkty wzorcowe. Najmniejsza odległość wśród śledzonych punktów charakterystycznych od aktualnego połączenia jest kolejną z~wartości charakteryzujących jakość algorytmu.
 
-    \textbf{Kształtem} (lub \textit{trajektorią}, \textit{obwiednią}) jest zbiór punktów kluczowych połączonych za pomocą wspomnianych wyżej odcinków. Sama definicja poza nazwą i~pewną wzrokową wizualizacją nie niesie bezpośrednio ze sobą żadnych informacji jakościowych. Pośrednio, ostre lub gładkie zakończenia oraz rogi stworzonych kształtów pozwalają na wizualne zbadanie jakości trajektorii wyznaczonej przez śledzone punkty i~odstępstw od oryginalnego kształtu.
+    \textbf{Kształtem} (lub \textit{trajektorią}, \textit{obwiednią}) jest zbiór punktów wzorcowych połączonych za pomocą wspomnianych wyżej odcinków. Sama definicja poza nazwą i~pewną wzrokową wizualizacją nie niesie bezpośrednio ze sobą żadnych informacji jakościowych. Pośrednio, ostre lub gładkie zakończenia oraz rogi stworzonych kształtów pozwalają na wizualne zbadanie jakości trajektorii wyznaczonej przez śledzone punkty i~odstępstw od oryginalnego kształtu.
 
     \textbf{Oknem} nazywany jest fragment ramki sekwencji wideo (o~dowolnych wymiarach), w~środku którego znajduje się punkt charakterystyczny.
 
@@ -111,9 +111,19 @@
 
 \chapter{Analiza i~porównanie wybranych algorytmów}\label{Section_Algorytmy}
 
+  \section{Wprowadzenie}\label{Section_IntroductionToAlgorithms}
+    Tematyka śledzenia punktów charakterystycznych jest niezwykle szeroką dziedziną. Mnogość metod związana jest przede wszystkim ze~środowiskiem w~jakim algorytmy działają oraz wymaganiami jakościowymi i~wydajnościowymi jakie są stawiane w~stosunku do konkretnych implementacji.
+
+    W~pracy magisterskiej zostały wybrane trzy algorytmy śledzenia punktów charakterystycznych. Zostały zaimplementowane najpopularniejsze i~podstawowe algorytmy z~rodziny przepływu optycznego w~wariancie gęstym oraz rzadkim. Oprócz kryterium popularności, zostały one wybrane przede wszystkim przez zupełnie inne podejście do przetwarzania aktualnej klatki animacji.
+
+    W~przypadku filtrów opartych o~metody analityczne warto pamiętać o~innej rodzinie algorytmów śledzenia opartych o~filtry cząsteczkowe (ang. \textit{particle filters}) oraz szczególnym przypadku - filtrze Kalmana. Omawiane algorytmy najskuteczniej działają w~środowisku silnych zakłóceń (np. drgań lub wibracji) lub gdzie obserwator porusza się wraz z~kamerą wideo. Zbiór danych wejściowych został przygotowany w~zupełnie innych warunkach, dlatego omawiane metody nie zostały zaimplementowane w~pracy.
+
+    Diametralnie inną rodziną są algorytmy wykorzystujące uczenie maszynowe. Coraz większą popularność zdobywa metoda wykorzystująca lasy drzew losowych i~sporo problemów może być rozwiązywanych za jej pomocą. Rosnąca popularność, skuteczność oraz zupełnie inne podejście do przetwarzania sekwencji wideo, przyczyniły się do wyboru właśniej tej techniki na trzecią implementację zaproponowaną w~pracy magisterskiej.
+
+  \newpage
   \section{Algorytmy oparte o~przepływ optyczny}\label{Subsection_OpticalFlow}
 
-    \subsection{Ogólny zarys algorytmów opartych o~przepływ optyczny}
+    \subsection{Zarys algorytmów opartych o~przepływ optyczny}
     Przy śledzeniu punktów charakterystycznych, bardzo często metody nie posiadają szczegółowej wiedzy o~środowisku i~obserwowanym podmiocie. W~takiej sytuacji własności algorytmów opartych o~przepływ optyczny sprawdzają się najlepiej, ponieważ sam ruch i~zmiany zachodzące pomiędzy kolejnymi klatkami animacji same w~sobie niosą najwięcej informacji\cite{OpticalFlowNonPriori05}. Na rysunku \ref{fig:OpticalFlowDescription} zilustrowano zasadę działania przepływu optycznego.
 
     \begin{figure}[!ht]
@@ -136,9 +146,8 @@
 
     Algorytm \textit{LK} może zostać wykorzystany jako przepływ optyczny typu \textit{rzadkiego}, ponieważ wszystkie jego własności opierają się tylko i~wyłącznie na lokalnym kontekście, w~tzw. \textit{oknie} otaczającym śledzony punkt. Właśnie ta własność może być również najpoważniejszą wadą algorytmu, gdy zostanie zastosowane okno o~zbyt małych rozmiarach (punkt w~kolejnej klatce animacji może znaleźć się poza rozważanym oknem, dochodzi również problem \textit{szczeliny} i~niejednoznaczności przy analizie kierunku ruchu w~takiej sytuacji).
 
-    Aby uniknąć sytuacji, w~której dobrane okno jest zbyt małe stosuje się tzw. wariant \textit{piramidalny} algorytmu \textit{LK} opisany dokładnie w~pracy \cite{OpenCvOpticalFlow04}. Na wstępie dla aktualnej klatki animacji budowana jest piramida obrazów o~stopniowanej jakości oraz rozmiarze. Śledzenie rozpoczyna się od największego i~najmniej szczegółowego obrazu stopniowo przechodząc do mniejszych, bogatszych w~szczegóły stopni piramidy. Dzięki temu, szybszy i~bardziej dynamiczny ruch może zostać złapany nawet poprzez mniejsze okna dookoła punktów charakterystycznych.
+    Aby uniknąć sytuacji, w~której dobrane okno jest zbyt małe stosuje się tzw. wariant \textit{piramidalny} algorytmu \textit{LK} opisany dokładnie w~pracy \cite{OpenCvOpticalFlow04}. Na wstępie dla aktualnej klatki animacji budowana jest piramida obrazów o~stopniowanej jakości oraz rozmiarze. Śledzenie rozpoczyna się od największego i~najmniej szczegółowego obrazu stopniowo przechodząc do mniejszych, bogatszych w~szczegóły stopni piramidy. Dzięki temu, szybszy i~bardziej dynamiczny ruch może zostać wyłapany nawet poprzez mniejsze okna dookoła punktów charakterystycznych.
 
-    \newpage
     Algorytm rzadkiego przepływu optycznego zaproponowany przez Lucasa i~Kanadego został oparty na trzech podstawowych regułach:
     \begin{itemize}
       \item Twierdzenie o~stałej jasności - śledzony piksel obrazu nie zmienia swojej jasności (w~przypadku analizy obrazów kolorowych reguła nosi nazwę \textit{Reguły niezmienności koloru}) podczas ruchu pomiędzy klatkami.
@@ -155,14 +164,14 @@
     W~przestrzeni jednowymiarowej została wykorzystana pierwsza definicja, zastępując funkcję jasności $f(x,t)$ wyrażeniem $I(x(t), t)$ oraz zakładając zależność zmiennej $x$ od $t$. Po skorzystaniu z~twierdzenia o~pochodnej funkcji złożonej otrzymano: \[ \underbrace{ \left. \frac{\partial I}{\partial x}\right|_{t} }_{I_{x}} \underbrace{ \left(\frac{\partial x}{\partial t}\right) }_{\mathbf{v}} + \underbrace{ \left. \frac{\partial I}{\partial t}\right|_{x(t)} }_{I_{t}} = 0, \] gdzie $I_{x}$ jest pochodną pierwszego obrazu, $I_{t}$ jest pochodną obrazu następnej klatki, a~$\mathbf{v}$ jest poszukiwanym wektorem prędkości. Po przekształceniu uzyskano równanie dla przypadku jednowymiarowego: \[ \mathbf{v} = -\frac{I_{t}}{I_{x}}. \]
 
     \newpage
-    Obserwując krawędź w~przypadku jednowymiarowym, jak na rysunku \ref{fig:EdgeVelocity1D} w~jego górnej części, widzimy kształt krawędzi w~chwili $t$ oraz $t+1$. Wybierając dowolny punkt z~krawędzi w~chwili $t$ oraz poruszając się wzdłuż osi $x$ od większych wartości po lewej stronie w~stronę wartości mniejszych po stronie prawej, natrafimy na drugą reprezentację punktu na krawędzi $t+1$ opisaną jako $p'$. Na drugiej części rysunku poszukiwana prędkość $\mathbf{v}$, z~jaką punkt na krawędzi się porusza oraz wartość jasności $I_{t}$ dla punktu $p$ w~chwili $t$ tworzą wektor nachylenia danej krawędzi, oznaczony niebieską strzałką. Zgodnie z~obliczeniami oraz według powyższej definicji, w~miarę poruszania się wzdłuż osi odciętych szybkość rośnie wraz z~nachyleniem. Dodatkowo ujemny znak kompensuje nachylenie.
-
     \begin{figure}[!ht]
       \centering
       \includegraphics[width=14cm]{EdgeVelocity1D}
       \caption[Wizualizacja pomiaru szybkości poruszania się krawędzi dla przypadku jednowymiarowego]{Wizualizacja pomiaru szybkości poruszania się krawędzi dla przypadku jednowymiarowego}
       \label{fig:EdgeVelocity1D}
     \end{figure}
+
+    Obserwując krawędź w~przypadku jednowymiarowym, jak na rysunku \ref{fig:EdgeVelocity1D} w~jego górnej części, widzimy kształt krawędzi w~chwili $t$ oraz $t+1$. Wybierając dowolny punkt z~krawędzi w~chwili $t$ oraz poruszając się wzdłuż osi $x$ od większych wartości po lewej stronie w~stronę wartości mniejszych po stronie prawej, natrafimy na drugą reprezentację punktu na krawędzi $t+1$ opisaną jako $p'$. Na drugiej części rysunku poszukiwana prędkość $\mathbf{v}$, z~jaką punkt na krawędzi się porusza oraz wartość jasności $I_{t}$ dla punktu $p$ w~chwili $t$ tworzą wektor nachylenia danej krawędzi, oznaczony niebieską strzałką. Zgodnie z~obliczeniami oraz według powyższej definicji, w~miarę poruszania się wzdłuż osi odciętych szybkość rośnie wraz z~nachyleniem. Dodatkowo ujemny znak kompensuje nachylenie.
 
     Niestety, jasność nie zawsze będzie stała, i~poczynione założenie nie będzie w~takim przypadku prawdziwe - w~konsekwencji nie otrzymano dokładnego wektora prędkości. Natomiast dla małych odległości możliwe jest przybliżenie rozwiązania za pomocą \textit{iteracyjnej metody Newtona}, obliczając kolejne pochodne po czasie. Przy założeniu, że kolejne klatki reprezentują niewielki ruch, rozwiązanie jest szybko zbieżne (wystarcza około 5 iteracji), jeśli jednak pierwsze przybliżenie będzie niedokładne, zaproponowana metoda będzie rozbieżna.
 
@@ -407,6 +416,8 @@
 
     Proces powtarzany jest dla każdego węzła nie będącego liściem. Rekurencja zostanie przerwana po osiągnięciu maksymalnej wysokości drzewa lub gdy w~węźle zostanie zbyt mała liczba elementów. W~zaproponowanej implementacji minimalna liczba elementów w~węźle waha się od 50 do 100 elementów, natomiast maksymalna wysokość drzewa jest liczbą całkowitą z~przedziału $[10; 30]$.
 
+    Klasą dla analizowanego przypadku nazywamy przynależność do wygenerowanej grupy łat zbudowanych dookoła wyektrahowanych punktów kluczowych za pomocą entropii obliczonej według powyższej definicji.
+
     \subsubsection{Test zaimplementowany wewnątrz węzła drzewa losowego}
     W~zaproponowanym autorskim rozwiązaniu, zaimplementowany został test oparty na różnicy jasności dwóch pikseli $\mathbf{m_{1}}$ i~$\mathbf{m_{2}}$ wybranych w~sąsiedztwie punktu charakterystycznego. Formalnie test został zapisany jako:
 
@@ -422,7 +433,7 @@
     \subsubsection{Proces klasyfikacji}
     Proces klasyfikacji wykorzystujący nauczone lasy drzew losowych przebiega w~trzech etapach:
     \begin{itemize}
-      \item W~pierwszym kroku następuje ekstrakcja cech z~aktualnej klatki animacji. Do tego celu wykorzystywany jest algorytm wyodrębnienia narożników zgodnych z~definicją narożnika według \textit{Harrisa}. Punkty charakterystyczne zostają wyekstrahowane wraz z~otoczeniem (fragmenty, łaty).
+      \item W~pierwszym kroku następuje ekstrakcja cech z~aktualnej klatki animacji. Do tego celu wykorzystywany jest algorytm wyodrębnienia narożników zgodnych z~definicją narożnika według \textit{Harrisa}. Punkty charakterystyczne zostają wyekstrahowane wraz z~otoczeniem (fragmenty, łaty). Proces ten odbywa sie dla każdej klatki niezależnie, nie wprowadzając zależności między aktualnie przetwarzaną klatką i~kolejnymi.
       \item Drugi krok polega na wyznaczeniu klasy, do której zostanie zakwalifikowany dany fragment oraz prawdopodobieństwa, z~jakim dana łata należy do wyznaczonej klasy. Obliczenie omawianych parametrów odbywa się poprzez przepuszczenie danej cechy przez las drzew losowych i~określeniu za pomocą uśrednionej liczby głosów zawartych w~liściach wszystkich drzew, jak prawdopodobne i~do której klasy należy dany punkt wraz z~otoczeniem. Elementy z~niewłaściwą klasą lub poniżej pewnego prawdopodobieństwa (w~implementacji przyjęto wartość $0.1$) zostają odrzucone w~procesie klasyfikacji.
       \item Po przetworzeniu wszystkich fragmentów następuje faza prezentacji wyników. Trzeci krok, ze względu na stopień skomplikowania, został szczegółowo omówiony w~następnej podsekcji.
     \end{itemize}
@@ -430,7 +441,7 @@
     \subsubsection{Prezentacja wyników}
     Ostateczne dopasowanie śledzonych punktów odbywa się za pomocą odnalezienia powiązania między sklasyfikowanym punktem charakterystycznym znajdującym się w~aktualnej klatce (innymi słowy, wynikiem klasyfikacji) a~obrazem wejściowym, który posłużył jako obraz wejściowy do klasyfikacji. Zanim zostanie dokładnie omówiony proces obliczania powiązania, należy omówić zasadę działania algorytmu \textit{RANSAC}.
 
-    \textit{RANSAC} jest skrótem od angielskiego \textit{RANdom SAmple Consensus}. Jest to iteracyjna metoda przewidywania parametrów modelu matematycznego na podstawie zbioru danych zawierającego punkty odstające. Jest to niedeterministyczny algorytm, w~sensie wytworzenia przydatnego rezultatu z~określonym prawdopodobieństwem, zwiększającym się wprost proporcjonalnie do liczby iteracji.
+    \textit{RANSAC} (zgodnie z~\cite{Ransac}) jest skrótem od angielskiego \textit{RANdom SAmple Consensus}. Jest to iteracyjna metoda przewidywania parametrów modelu matematycznego na podstawie zbioru danych zawierającego punkty odstające. Jest to niedeterministyczny algorytm, w~sensie wytworzenia przydatnego rezultatu z~określonym prawdopodobieństwem, zwiększającym się wprost proporcjonalnie do liczby iteracji.
 
     Podstawowym założeniem poczynionym co do wartości zawartych w~zbiorze wejściowym jest to, że zestaw posiada wartości skrajne. Oznacza to, że rozkład danych jest zależny od konkretnego parametru modelu, jednak zmiany i~wartości skrajne powstają na skutek szumu. Jednym z~przykładów powstawania takiego szumu może być określony sposób akwizycji danych lub błędna hipoteza na temat interpretowanych danych. Metoda \textit{RANSAC} zakłada również, że mimo istnienia wartości skrajnych, możliwe jest powiązanie pozostałej części zbioru danych z~konkretnym parametrem modelu matematycznego.
 
@@ -452,7 +463,7 @@
          {Kierunek ruchu jest zgodny z~ruchem wskazówek zegara.}
          {Dłoń znajduje się na godzinie dwunastej.}
          {Punkty charakterystyczne rozmieszczone równomiernie na krawędziach dłoni.}
-         {Punkty kluczowe połączone linią ciągłą rozmieszczone na okręgu co 30\degree.}
+         {Punkty wzorcowe połączone linią ciągłą rozmieszczone na okręgu co 30\degree.}
 
     \newpage
     \gest{Krzyż}
@@ -463,7 +474,7 @@
          {W~pierwszej kolejności wykonywane jest ramię pionowe, następnie palce powracają do środka i~gest wykonywany jest w~lewą stronę a~następnie w~prawo.}
          {Ustawiona dłoń znajduje się na godzinie dwunastej.}
          {Punkty charakterystyczne rozmieszczone na czubkach wyciągniętych palców.}
-         {5 punktów kluczowych - cztery na krawędziach i~jeden w~środku figury.}
+         {5 punktów wzorcowych - cztery na krawędziach i~jeden w~środku figury.}
 
     \gest{Zgniatanie}
          {Gest wykonywany na jednolitej i~gładkiej powierzchni.}
@@ -473,7 +484,7 @@
          {Gest powinien być wykonywany bez poruszania dłonią, z~jednolitą prędkością.}
          {Otwarta dłoń z~rozłożonymi palcami, skierowana wewnętrzną stroną do kamery.}
          {Punkty charakterystyczne znajdują się na czubkach palców.}
-         {Punkty kluczowe rozmieszczone równomiernie na drodze wykonywanej przez każdy z~palców z~osobna.}
+         {Punkty wzorcowe rozmieszczone równomiernie na drodze wykonywanej przez każdy z~palców z~osobna.}
 
     \newpage
     \gest{Wielka litera C}
@@ -494,7 +505,7 @@
          {Gest powinien być wykonywany przez poruszanie tylko złączonymi palcami, nie samą dłonią.}
          {Palce na godzinie dwunastej.}
          {Punkty charakterystyczne rozmieszczone równomiernie na górnej części dłoni.}
-         {4 punkty kluczowe - na początku, na końcu, na zgięciu litery oraz dodatkowy punkt na dłuższej części litery, dokładnie w~jej połowie.}
+         {4 punkty wzorcowe - na początku, na końcu, na zgięciu litery oraz dodatkowy punkt na dłuższej części litery, dokładnie w~jej połowie.}
 
     \newpage
     \gest{Rozszerzanie}
@@ -505,17 +516,17 @@
          {Gest powinien symulować rozciąganie niewidzialnego materiału. Kształt dłoni nie powinien ulegać zmianie w~trakcie wykonywania gestu.}
          {Obie złączone dłonie znajdują się w~środku figury na wysokości klatki piersiowej.}
          {Punkty charakterystyczne rozmieszczone równomiernie na powierzchni obu dłoni.}
-         {Punkty kluczowe równomiernie rozmieszczone na przekątnej kwadratu.}
+         {Punkty wzorcowe równomiernie rozmieszczone na przekątnej kwadratu.}
 
   \section{Akwizycja i~obróbka danych wejściowych}\label{Section_Akwizycja}
 
     Przed przeprowadzeniem badań zostały zebrane dane wejściowe w~postaci sekwencji wideo, dokumentujące gesty wykonywane według powyższego protokołu. Proces akwizycji został przeprowadzony na grupie 10 osób, każda z~nich wykonała 6~gestów. Cała procedura wykonywana była w~warunkach normalnego oświetlenia dziennego z~dodatkowym sztucznym oświetleniem umiejscowionym ponad stanowiskiem.
 
-    Stanowisko akwizycji złożone było z~aparatu fotograficznego \textit{Nikon D7000}, popularnie zwanego \textit{lustrzanką}, wraz z~obiektywem Nikor o~ogniskowej 50~mm oraz liczbie przesłony obiektywu $1:1.4$. Sam aparat cyfrowy posiada matrycę \textit{CMOS} o~rozdzielczości $16.2$~MP oraz był wyposażony w~kartę pamięci typu \textit{SD} o~dużej prędkości zapisu oraz odczytu wynoszącej 95~MB/s. Lustrzanka umieszczona była na statywie na wysokości klatki piersiowej filmowanej osoby w~pozycji pionowej.
+    Stanowisko akwizycji złożone było z~aparatu fotograficznego \textit{Nikon D7000}, popularnie zwanego \textit{lustrzanką}, wraz z~obiektywem \textit{Nikkor} o~ogniskowej 50~mm oraz wartość przysłony obiektywu $1:1.4$. Sam aparat cyfrowy posiada matrycę \textit{CMOS} o~rozdzielczości $16.2$~MP oraz był wyposażony w~kartę pamięci typu \textit{SD} o~dużej prędkości zapisu oraz odczytu wynoszącej 95~MB/s. Lustrzanka umieszczona była na statywie na wysokości klatki piersiowej filmowanej osoby w~pozycji pionowej.
 
-    Sekwencja wideo była nagrywana w~rozdzielczości 1280 na 720 pikseli (720 linii poziomych obrazu), bez przeplotu z~częstotliwością 25 klatek na sekundę. Podczas nagrywania wszystkich sekwencji parametr przysłony wynosił 3.5, czas naświetlania był równy 320 oraz parametr \textit{ISO} posiadał wartość 320.
+    Sekwencja wideo była nagrywana w~rozdzielczości 1280 na 720 pikseli (720 linii poziomych obrazu), bez przeplotu z~częstotliwością 25 klatek na sekundę. Podczas nagrywania wszystkich sekwencji parametr przysłony wynosił 3.5, czas naświetlania był równy $1/320$ s oraz parametr \textit{ISO} posiadał wartość 320.
 
-    Po przeprowadzeniu akwizycji, wyselekcjonowaniu odpowiednich próbek i~nazwaniu ich wszystkie sekwencje wideo zostały przekształcone z~oryginalnego formatu \textit{MOV} (kodek \textit{h264}) na format \textit{AVI} (kodek \textit{MPEG 4.2}) za pomocą skryptu \ref{MOVtoAVIConversion}. Warto zauważyć, że podczas konwersji obraz został również obrócony o~90\degree~przeciwnie do ruchu wskazówek zegara, aby uzyskać naturalne (pionowe) ułożenie zapisanej sekwencji wideo.
+    Po przeprowadzeniu akwizycji, wyselekcjonowaniu odpowiednich próbek i~nazwaniu ich wszystkie sekwencje wideo zostały przekształcone z~oryginalnego formatu \textit{MOV} (kodek \textit{h264}) na format \textit{AVI} (kodek \textit{MPEG 4.2}) za pomocą skryptu \ref{MOVtoAVIConversion} zamieszczonego również na płycie dołączonej do pracy. Warto zauważyć, że podczas konwersji obraz został również obrócony o~90\degree~przeciwnie do ruchu wskazówek zegara, aby uzyskać naturalne (pionowe) ułożenie zapisanej sekwencji wideo.
 
       \begin{sample}[ht]
         \begin{verbatim}
@@ -536,32 +547,40 @@ popd
         \label{MOVtoAVIConversion}
       \end{sample}
 
-  \section{Procedura weryfikacji jakości badanego algorytmu}\label{Section_Jakosc}
+  \section{Ocena jakości algorytmu śledzenia}\label{Section_Jakosc}
 
-    W~celu analizy i~porównania jakości poszczególnych algorytmów przygotowano zestaw parametrów, które będą badane podczas wykonania każdego z~nich. Główną rolę odgrywają tutaj \textbf{punkty kluczowe} oraz \textbf{połączenia} między nimi.
+    W~celu analizy i~porównania jakości poszczególnych algorytmów przygotowano zestaw parametrów, które będą badane podczas wykonania każdego z~nich. Główną rolę odgrywają tutaj \textit{punkty wzorcowe} oraz \textit{połączenia} między nimi.
 
-    Jakość algorytmu wyznaczana będzie na podstawie odchyleń tras oraz pozycji punktów charakterystycznych w~stosunku do pozycji punktów kluczowych oraz tras pomiędzy nimi.
+    Jakość algorytmu wyznaczana będzie na podstawie odchyleń tras oraz pozycji punktów charakterystycznych w~stosunku do pozycji punktów wzorcowych oraz tras pomiędzy nimi.
 
-    Każdy z~gestów posiada serię punktów kluczowych połączonych ze sobą liniami prostymi (w~celu symulacji gładszych połączeń np. okręgu stosuje się odpowiednią liczbę punktów pośrednich). Każdy z~punktów kluczowych oprócz swojej pozycji posiada również \textit{okrąg otaczający} o~określonym promieniu.
+    Każdy z~gestów posiada serię punktów wzorcowych połączonych ze sobą liniami prostymi (w~celu symulacji gładszych połączeń np. okręgu stosuje się odpowiednią liczbę punktów pośrednich). Każdy z~punktów wzorcowych oprócz swojej pozycji posiada również \textit{okrąg otaczający} o~określonym promieniu.
 
-    W~określonych przez punkty kluczowe klatkach animacji następuje przeszukanie wszystkich dostępnych w~danej chwili czasu \textit{t} punktów charakterystycznych i~obliczana jest ich odległość od punktu kluczowego. Do porównania wybierana jest najbliższy punkt zgodnie z~metryką euklidesową.
+    W~określonych przez punkty wzorcowe klatkach animacji następuje przeszukanie wszystkich dostępnych w~danej chwili czasu \textit{t} punktów charakterystycznych i~obliczana jest ich odległość od punktu wzorcowego. Do porównania wybierany jest najbliższy punkt zgodnie z~metryką euklidesową, co formalnie zostało zdefiniowane jako \textbf{odchylenie minimalne od punktu wzorcowego} w~następujący sposób:
 
-    W~klatkach pośrednich analizowana jest odległość wszystkich punktów charakterystycznych od aktualnej \textit{trasy}. Dzięki temu, wiadomo jak wygląda dystrybucja punktów charakterystycznych w~okół śledzonej trasy.
+    \begin{equation}
+      \forall_{k\in K} \forall_{s \in S_{t}} min(d(k, s)),
+    \end{equation} gdzie $K$ to zbiór punktów wzorcowych, $S_{t}$ to zbiór punktów charakterystycznych w~chwili $t$ oraz~$d$ to metryka euklidesowa.
+
+    W~klatkach pośrednich analizowana jest odległość wszystkich punktów charakterystycznych od aktualnej \textit{trasy}. Dzięki temu wiadomo jak wygląda dystrybucja punktów charakterystycznych wokół śledzonej trasy. Zapis formalny jest analogiczny do powyższego i~został zdefiniowany jako \textbf{odchylenie minimalne od trasy wzorcowej} w~następujący sposób:
+
+    \begin{equation}
+      \forall_{p\in P} \forall_{s \in S_{t}} min(d(p, s)),
+    \end{equation} gdzie $P$ to zbiór tras wzorcowych, $S_{t}$ to zbiór punktów charakterystycznych w~chwili $t$ oraz~$d$ to metryka euklidesowa.
 
     Warto zauważyć, że taki sposób weryfikacji odporny jest na zmiany (poprzez dokładanie lub usuwanie) punktów charakterystycznych.
 
-    Biorąc pod uwagę dwa wspomniane parametry tj. \textbf{odchylenie minimalne od punktu kluczowego w~danej klatce sekwencji wideo} oraz \textbf{wektor odchyleń punktów charakterystycznych od trasy} można skutecznie porównać jakość badanych algorytmów między sobą.
+    Biorąc pod uwagę dwa wspomniane parametry tj. \textbf{odchylenie minimalne od punktu wzorcowego w~danej klatce sekwencji wideo} oraz \textbf{wektor odchyleń punktów charakterystycznych od trasy} można skutecznie porównać jakość badanych algorytmów między sobą.
 
-  \section{Procedura weryfikacji wydajności badanego algorytmu}\label{Section_Wydajnosc}
+  \section{Ocena wydajności algorytmu śledzenia}\label{Section_Wydajnosc}
 
-    W~celu analizy i~porównania wydajności poszczególnych algorytmów przygotowano zestaw parametrów, które obliczane będą podczas wykonania każdego algorytmu. Ujednolicenie to ma celu wypracowanie wspólnego wzorca porównawczego różnych algorytmów o~zupełnie innej zasadzie działania oraz implementacji.
+    W~celu analizy i~porównania wydajności poszczególnych algorytmów przygotowano zestaw wyznaczników, które obliczane będą podczas wykonania każdego algorytmu. Ujednolicenie to ma celu wypracowanie wspólnego wzorca porównawczego różnych algorytmów o~zupełnie innej zasadzie działania oraz implementacji.
 
     Główne parametry porównawcze opierają się na pomiarach czasu wykonania oraz własnościami statystycznymi wyciągniętymi z~pomiarów.
 
-    Pierwszy pomiar to \textbf{czas pracy algorytmu na pojedynczej klatce}. Z~wartości pomiarów dla wszystkich klatek sekwencji wideo wyciągnięte zostaną własności statystyczne tj. \textit{średnia arytmetyczna}, \textit{mediana}, \textit{odchylenie standardowe}.
+    Pierwszy pomiar to \textbf{czas przetwarzania pojedynczej klatki}. Z~wartości pomiarów dla wszystkich klatek sekwencji wideo wyciągnięte zostaną własności statystyczne tj. \textit{średnia arytmetyczna}, \textit{mediana}, \textit{odchylenie standardowe}.
 
     Kolejnym pomiarem jest \textbf{sumaryczny czas przetwarzania algorytmu}. Warto zauważyć, że nie będzie on nigdy mniejszy od nominalnego czasu trwania sekwencji wideo. Sumaryczny czas może być jedynie równy wartości nominalnej w~przypadku, gdy przetwarzanie pojedynczej klatki wideo odbędzie się w~czasie mniejszym bądź równym wartości niezbędnej do odczekania przed wyświetleniem następnej klatki. Czasu oczekiwania jest ściśle związany z~wartością \textit{częstotliwości klatek na sekundę} analizowanej sekwencji wideo.
 
     Następna wartość to \textbf{odchylenie sumarycznego czasu wykonania od czasu nominalnego} wyrażona w~procentach.
 
-    Ostatni parametr to próba klasyfikacji wszystkich algorytmów według stopnia ich złożoności. Każdy algorytm będzie poddany analizie pod kątem wyselekcjonowanego zbioru operacji dominujących, w~celu wyznaczenia \textbf{złożoności obliczeniowej oraz pamięciowej}.
+    Ostatni wyznacznik to klasyfikacja algorytmów według stopnia ich złożoności. Każdy algorytm będzie poddany analizie pod kątem wyselekcjonowanego zbioru operacji dominujących, w~celu wyznaczenia \textbf{złożoności obliczeniowej oraz pamięciowej}.
