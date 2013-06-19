@@ -777,6 +777,7 @@
 
     Jak wspomniano w~sekcji \ref{Section_Overhead} i~co widać na wykresach \ref{fig:SpecialisedSparseKeypointsDistance} oraz \ref{fig:SpecialisedSparsePathDistance}, warto zwiększyć wartość współczynnika minimalnej odległości pomiędzy punktami charakterystycznymi, w~celu zmniejszenia maksymalnego błędu (odległości od ścieżek oraz punktów wzorcowych). Dzięki temu zmniejszy się również wartość średnia odległości i~poprawi jakość ścieżki wyznaczonej ze śledzonych punktów.
 
+    \newpage
       \begin{figure}[!ht]
         \centering
         \includegraphics[width=15cm]{charts/quality/DenseKeypointsPerMapSize}
@@ -793,6 +794,7 @@
         \label{fig:DensePathPerMapSize}
       \end{figure}
 
+    \newpage
       \begin{figure}[!ht]
         \centering
         \includegraphics[width=15cm]{charts/quality/RandomKeypointsPerTrainedTreesAmount}
@@ -809,7 +811,7 @@
         \label{fig:RandomPathPerTrainedTreesAmount}
       \end{figure}
 
-
+    \newpage
       \begin{figure}[!ht]
         \centering
         \includegraphics[width=15cm]{charts/quality/KeypointsDistanceSparsePerMinimalDistance}
@@ -830,8 +832,25 @@
         \label{fig:SpecialisedSparsePathDistance}
       \end{figure}
 
-      \newpage
-      TODO: Prezentacja i~próbka działania, porównanie organoleptyczne (Person G, Gesture C).
+    \newpage
+
+      \begin{figure}[!ht]
+        \centering
+        \includegraphics[width=22cm,angle=90]{charts/quality/PersonGGestureCComparison}
+        \caption[Porównanie działania 3 algorytmów dla sekwencji gestu C dla osoby G]
+                {Porównanie działania trzech algorytmów dla sekwencji gestu \textit{Wielka Litera C} dla osoby G}
+        \label{fig:PersonGGestureCComparison}
+      \end{figure}
+
+    \newpage
+
+    Na rysunku \ref{fig:PersonGGestureCComparison} zamieszczone zostało porównanie wyników działania dla trzech algorytmów jednej ze wybranych sekwencji wykorzystywanych przy sparametryzowanych badaniach (gest \textit{Wielka Litera C} ze zbioru osoby G). Zamieszczone porównanie ma na celu zaprezentowanie wizualnej różnicy pomiędzy poszczególnymi implementacjami.
+
+    Widać wyraźnie, że w~przypadku górnego rzędu (rzadki przepływ optyczny) biała krzywa wyznaczona za pomocą śledzonych punktów (punkty zaznaczone kolorem niebieskim) jest bardzo gładka, dość zbliżona do czerwonej krzywej wyznaczonej przez punkty wzorcowe. Pozostałe dwa algorytmy (środkowy rząd - algorytm przepływu optycznego w~wariancie gęstym, dolny rząd to algorytm wykorzystujący las drzew losowych) charakteryzują się bardziej postrzępionym kształtem krzywej.
+
+    W~dolnym rzędzie na zielono zostały zaznaczone punkty śledzone za pomocą algorytmu wykorzystującego uczenie maszynowe. jest ich dużo mniej niż w~przypadku poprzednich dwóch algorytmów, i~ściśle z~niewielką liczbą powiązana jest niestabilność algorytmu (łatwo znajdowane są~punkty skrajne mające przy tak małej próbce punktów znaczny wpływ na położenie punktu pośredniego zaznaczonego białym kolorem).
+
+    W~przypadku gęstego przepływu optycznego kolorem żółtym zaznaczone są wektory mapy przepływu optycznego. Kolorem ciemno niebieskim zaznaczona jest siatka punktów dla której wyznaczana jest omawiana mapa przepływu. W~omawianym przypadku widać, że algorytm ma najbardziej postrzępioną postać wyjściowej trajektorii, oznaczonej kolorem białym. Omawiana krzywa jednoznacznie pokazuje, że algorytm jest dużo słabszy jakościowo w~porównaniu do pozostałych dwóch implementacji.
 
 \chapter{Usprawnienia i~podsumowanie}\label{Chapter_Podsumowanie}
 
