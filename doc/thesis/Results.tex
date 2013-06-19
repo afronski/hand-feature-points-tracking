@@ -152,7 +152,7 @@
 
     \subsection{Ocena jakości algorytmu śledzenia}\label{Subsection_Jakosc}
 
-      W~celu analizy i~porównania jakości poszczególnych algorytmów przygotowano zestaw parametrów, które będą badane podczas wykonania każdego z~nich. Główną rolę odgrywają tutaj \textit{punkty wzorcowe} oraz \textit{połączenia} między nimi.
+      W~celu analizy i~porównania jakości poszczególnych algorytmów przygotowano zestaw wskaźników, które będą badane podczas wykonania każdego z~nich. Główną rolę odgrywają tutaj \textit{punkty wzorcowe} oraz \textit{połączenia} między nimi.
 
       Jakość algorytmu wyznaczana będzie na podstawie odchyleń ścieżek oraz pozycji punktów charakterystycznych w~stosunku do pozycji punktów wzorcowych oraz ścieżek pomiędzy nimi.
 
@@ -174,19 +174,17 @@
 
       Warto zauważyć, że taki sposób weryfikacji odporny jest na zmiany (poprzez dokładanie lub usuwanie) punktów charakterystycznych.
 
-      Biorąc pod uwagę dwa wspomniane parametry tj. \textbf{odchylenie minimalne od punktu wzorcowego w~danej klatce sekwencji wideo} oraz \textbf{wektor odchyleń punktów charakterystycznych od ścieżki} można skutecznie porównać jakość badanych algorytmów między sobą.
+      Biorąc pod uwagę dwa omawiane wskaźniki tj. \textbf{odchylenie minimalne od punktu wzorcowego w~danej klatce sekwencji wideo} oraz \textbf{wektor odchyleń punktów charakterystycznych od ścieżki} można skutecznie porównać jakość badanych algorytmów między sobą.
 
     \subsection{Ocena wydajności algorytmu śledzenia}\label{Subsection_Wydajnosc}
 
       W~celu analizy i~porównania wydajności poszczególnych algorytmów przygotowano zestaw wyznaczników, które obliczane będą podczas wykonania każdego algorytmu. Ujednolicenie to ma celu wypracowanie wspólnego wzorca porównawczego różnych algorytmów o~zupełnie innej zasadzie działania oraz implementacji.
 
-      Główne parametry porównawcze opierają się na pomiarach czasu wykonania oraz własnościami statystycznymi wyciągniętymi z~pomiarów.
+      Główne wskaźniki porównawcze opierają się na pomiarach czasu wykonania oraz własnościami statystycznymi wyciągniętymi z~pomiarów.
 
       Pierwszy pomiar to \textbf{czas przetwarzania pojedynczej klatki}. Z~wartości pomiarów dla wszystkich klatek sekwencji wideo wyciągnięte zostaną własności statystyczne tj. \textit{średnia arytmetyczna}, \textit{mediana}, \textit{odchylenie standardowe}.
 
-      Kolejnym pomiarem jest \textbf{sumaryczny czas przetwarzania algorytmu}. Warto zauważyć, że nie będzie on nigdy mniejszy od nominalnego czasu trwania sekwencji wideo. Sumaryczny czas może być jedynie równy wartości nominalnej w~przypadku, gdy przetwarzanie pojedynczej klatki wideo odbędzie się w~czasie mniejszym bądź równym wartości niezbędnej do odczekania przed wyświetleniem następnej klatki. Czasu oczekiwania jest ściśle związany z~wartością \textit{częstotliwości klatek na sekundę} analizowanej sekwencji wideo.
-
-      Następna wartość to \textbf{odchylenie sumarycznego czasu wykonania od czasu nominalnego} wyrażona w~procentach.
+      Kolejnym pomiarem jest \textbf{obciążenie czasowe}, będące sumarycznym czasem przetwarzania algorytmu. Warto zauważyć, że bardzo rzadko będzie on mniejszy od nominalnego czasu trwania sekwencji wideo. Sumaryczny czas może być równy bądź mniejszy od wartości nominalnej w~przypadku, gdy przetwarzanie pojedynczej klatki wideo odbędzie się w~czasie mniejszym bądź równym wartości niezbędnej do odczekania przed wyświetleniem następnej ramki. Czas oczekiwania jest ściśle związany z~wartością \textit{częstotliwości klatek na sekundę} analizowanej sekwencji wideo.
 
       Ostatni wyznacznik to klasyfikacja algorytmów według stopnia ich złożoności. Każdy algorytm będzie poddany analizie pod kątem wyselekcjonowanego zbioru operacji dominujących, w~celu wyznaczenia \textbf{złożoności obliczeniowej oraz pamięciowej}.
 
@@ -195,7 +193,15 @@
 
     Wszystkie wyniki zostały zebrane w~plikach z~rozszerzeniem JSON (są to samoopisujace się pliki tekstowe ogólnego przeznaczenia, oparte na strukturze słownika typu \textit{klucz} - \textit{wartość}). Rozmiar wygenerowanych danych wynosi $4,1$ MB, co jak na dane czysto tekstowe jest dość dużą liczbą (ponad 4 miliony znaków).
 
-    Czas trwania podstawowych testów (analiza wszystkich zebranych próbek - 3 różne algorytmy o~domyślnych parametrach, 10 osób po 6 gestów) to ponad dwie i~pół godziny. Dla wyspecjalizowanych przypadków czas przetwarzania wyniósł trzy i~pół godziny (wybrane parametry dla 3 algorytmów na 2 najlepszych jakościowo próbkach 2 gestów). Przypadki wyspecjalizowane zostały zebrane w~pliku \textit{parametrized.json} umieszczonym w~katalogu głównym kodu źródłowego.
+    Każdy z~algorytmów posiada parametr oraz określoną dla niego wartość domyślną (jeżeli podczas analizy nie zostało zaznaczone inaczej tj. wyniki i~wykresy nie są zależne od wartości parametru, podczas badania przyjęte zostały wartości domyślne). Poniżej znajduje się lista argumentów wraz z~wartościami domyślnymi:
+
+      \begin{itemize}
+        \item Dla algorytmu przepływu optycznego gęstego parametrem jest \textbf{rozmiar oczka siatki}. Domyślnie rozmiar wynosi \textit{30 pikseli}.
+        \item Algorytm wykorzystujący las drzew losowych jest parametryzowany \textbf{liczbą drzew losowych}. Eksperymentalnie przyjętą wartością domyślną jest liczba \textit{5 drzew losowych}.
+        \item Przepływ optyczny w~wariancie rzadkim parametryzowany jest za pomocą dwóch wartości - \textbf{minimalnej odległości pomiędzy punktami charakterystycznymi} (wartość domyślna dla tego parametru wynosi \textit{10 pikseli}) oraz \textbf{maksymalną ilością punktów charakterystycznych} wyznaczonych w~aktualnej ramce (domyślnie przyjęto \textit{500 punktów charakterystycznych}).
+      \end{itemize}
+
+    Czas trwania podstawowych testów (analiza wszystkich zebranych próbek - 3 różne algorytmy o~domyślnych parametrach, 10 osób po 6 gestów) to ponad dwie i~pół godziny. Dla wyspecjalizowanych przypadków czas przetwarzania wyniósł trzy i~pół godziny (wybrane parametry dla 3 algorytmów na 2 najlepszych jakościowo próbkach 2 gestów). Przypadki wyspecjalizowane zostały zebrane w~pliku \textit{parametrized.json} umieszczonym w~katalogu głównym kodu źródłowego. Dwie wyspecjalizowane próbki, dwóch konkretnych gestów zostały wybrane drogą eksperymentalną, poprzez porównanie wyników działania wszystkich algorytmów dla każdego zestawu gestów.
 
     W~przypadku algorytmu opartego na uczeniu maszynowym, rozmiar wygenerowanych zbiorów treningowych dla domyślnych parametrów (las złożony z~5~drzew losowych, 200 punktów charakterystycznych, wymiar boku kwadratowej łaty - 20 pikseli) wyniósł dokładnie $43$ GB. Czas generacji został uwzględniony w~powyższym akapicie.
 
@@ -388,9 +394,9 @@
 
     Analogiczny zestaw testów został przeprowadzony na algorytmie wykorzystującym las drzew losowych.
 
-    W~jego przypadku największym wyzwaniem okazał się zbiór gestów osoby \textit{B} (rysunek \ref{fig:RandomForGestureC}). Warto zwrócić uwagę na stosunkowo niski średni czas przetwarzania w~porównaniu do uprzednio omawianego algorytmu. W~przypadku podziału na gesty, wartości minimalne, maksymalne oraz średnie są zbliżone do poprzedniej reprezentacji (wykres \ref{fig:RandomTimingForPersonE}). Algorytm charakteryzuje się niskim i~dość stabilnym średnim czasem przetwarzania klatki sekwencji wideo.
+    W~jego przypadku największym wyzwaniem okazał się zbiór gestów osoby \textit{B} (rysunek \ref{fig:RandomForGestureC}). Wynika to bezpośrednio z~charakterystycznego sposobu wykonywania gestów, w~których dużym zmianom ulegał kształt dłoni. Warto zwrócić uwagę na stosunkowo niski średni czas przetwarzania w~porównaniu do uprzednio omawianego algorytmu. W~przypadku podziału na gesty, wartości minimalne, maksymalne oraz średnie są zbliżone do poprzedniej reprezentacji (wykres \ref{fig:RandomTimingForPersonE}). Algorytm charakteryzuje się niskim i~dość stabilnym średnim czasem przetwarzania klatki sekwencji wideo.
 
-    W~przypadku tej konkretnej implementacji bardzo ważnym parametrem jest czas uczenia klasyfikatora przedstawiony w~zależności od liczby wykorzystanych drzew losowych. Omawiana reprezentacja została przedstawiona na wykresie \ref{fig:LearningTime}.
+    W~przypadku tej konkretnej implementacji bardzo ważną własnością jest czas uczenia klasyfikatora przedstawiony w~zależności od liczby wykorzystanych drzew losowych. Omawiana reprezentacja została przedstawiona na wykresie \ref{fig:LearningTime}.
 
     Równie ważnym wskaźnikiem jest wartość czasu przetwarzania klatki w~zależności od liczby wytrenowanych drzew. Zależność została przedstawiona na rysunku \ref{fig:TimingPerTrainedTreesAmount}.
 
@@ -534,7 +540,7 @@
 
     Podstawowym elementem porównawczym jeśli chodzi o~jakość wyznaczonego rozwiązania, jest wartość odległości w~pikselach (w~metryce euklidesowej) od ścieżek i~punktów wzorcowych. Za pomocą wyznaczonych wartości jesteśmy w~stanie porównać jak bardzo zaproponowane przez algorytm rozwiązanie jest zbliżone do rozwiązania wyznaczonego manualnie dla każdej sekwencji wideo.
 
-    Na serii wykresów od \ref{fig:DenseKeypointsPersonG} do \ref{fig:SparsePathGestureC} zostały zamieszczone wyniki badań jakościowych. Widać, że pod względem jakościowym dla wybranego zbioru \textit{G} oraz gestu o~nazwie \textit{Wielka litera C} najbardziej uniwersalnie radzi sobie algorytm rzadkiego przepływu optycznego. W~niewielkiej liczbie przypadków maksymalna wartość odległości dla obu analizowanych parametrów wykracza poza przyjęty promień otaczający punkt wzorcowy.
+    Na serii wykresów od \ref{fig:DenseKeypointsPersonG} do \ref{fig:SparsePathGestureC} zostały zamieszczone wyniki badań jakościowych. Widać, że pod względem jakościowym dla wybranego zbioru \textit{G} oraz gestu o~nazwie \textit{Wielka litera C} najbardziej uniwersalnie radzi sobie algorytm rzadkiego przepływu optycznego. W~niewielkiej liczbie przypadków maksymalna wartość odległości dla obu analizowanych wskaźników wykracza poza przyjęty promień otaczający punkt wzorcowy.
 
     Nieco gorzej (zwłaszcza jeśli chodzi o~wariancje wartości maksymalnych i~minimalnych) radzi sobie algorytm oparty o~uczenie maszynowe. Wykorzystanie lasu drzew losowych dla przypadków brzegowych (np. zmiana kształtu dłoni) powoduje uzyskanie dużej wartości odległości co oznacza, że punkt został pominięty. Jest to niepożądana sytuacja, potencjalne usprawnienie zostało opisane w~sekcji \ref{Section_Usprawnienia}.
 
@@ -824,6 +830,9 @@
         \label{fig:SpecialisedSparsePathDistance}
       \end{figure}
 
+      \newpage
+      TODO: Prezentacja i~próbka działania, porównanie organoleptyczne (Person G, Gesture C).
+
 \chapter{Usprawnienia i~podsumowanie}\label{Chapter_Podsumowanie}
 
   \section{Proponowane usprawnienia}\label{Section_Usprawnienia}
@@ -852,6 +861,6 @@
 
     W~ramach pracy magisterskiej omówiono i~przeprowadzono badania wydajnościowe oraz jakościowe implementacji trzech algorytmów śledzenia punktów charakterystycznych pod kątem wykorzystania ich do analizy ruchu dłoni.
 
-    Zebrane rezultaty pozwoliły na jednoznaczne określenie przydatności poszczególnych algorytmów w~badanym obszarze. Dokładne wnioski oraz~decyzje zostały zebrane i~opisane w~poprzednim rozdziale.
+    Zebrane rezultaty pozwoliły na jednoznaczne określenie przydatności poszczególnych algorytmów w~badanym obszarze. Najbardziej wszechstronnym, najoszczędniejszym w~kontekście zużycia pamięci oraz najwydajniejszym jest algorytm przepływu optycznego w~wariancie rzadkim.
 
-    Oprócz zaproponowanych implementacji, badań oraz~analizy zostały również zaproponowane usprawnienia i~potencjalne rozszerzenia, które zwiększą jakość oraz poprawia wydajność omawianych metod.
+    Oprócz zaproponowanych implementacji, badań oraz~analizy zostały również zaproponowane usprawnienia i~potencjalne rozszerzenia, które zwiększą jakość oraz poprawia wydajność omawianych metod. Warto zwrócić szczególną uwagę na usprawnienia zaproponowane dla algorytmu opartego o~wykorzystanie lasu drzew losowych. W~pierwszej kolejności przy dalszym rozwoju omawianej metody należy skupić się na poprawie wyników jakościowych (i~uodpornieniu algorytmu na przypadki brzegowe) oraz zmniejszeniu zużycia pamięci fizycznej i~wirtualnej.
