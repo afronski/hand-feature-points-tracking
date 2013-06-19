@@ -154,7 +154,7 @@
 
       W~celu analizy i~porównania jakości poszczególnych algorytmów przygotowano zestaw parametrów, które będą badane podczas wykonania każdego z~nich. Główną rolę odgrywają tutaj \textit{punkty wzorcowe} oraz \textit{połączenia} między nimi.
 
-      Jakość algorytmu wyznaczana będzie na podstawie odchyleń tras oraz pozycji punktów charakterystycznych w~stosunku do pozycji punktów wzorcowych oraz tras pomiędzy nimi.
+      Jakość algorytmu wyznaczana będzie na podstawie odchyleń ścieżek oraz pozycji punktów charakterystycznych w~stosunku do pozycji punktów wzorcowych oraz ścieżek pomiędzy nimi.
 
       Każdy z~gestów posiada serię punktów wzorcowych połączonych ze sobą liniami prostymi (w~celu symulacji gładszych połączeń np. okręgu stosuje się odpowiednią liczbę punktów pośrednich). Każdy z~punktów wzorcowych oprócz swojej pozycji posiada również \textit{okrąg otaczający} o~określonym promieniu.
 
@@ -165,16 +165,16 @@
         \end{equation}
       gdzie $K$ to zbiór punktów wzorcowych, $S_{t}$ to zbiór punktów charakterystycznych w~chwili $t$ oraz~$d$ to metryka euklidesowa.
 
-      W~klatkach pośrednich analizowana jest odległość wszystkich punktów charakterystycznych od aktualnej \textit{trasy}. Dzięki temu wiadomo jak wygląda dystrybucja punktów charakterystycznych wokół śledzonej trasy. Zapis formalny jest analogiczny do powyższego i~został zdefiniowany jako \textbf{odchylenie minimalne od trasy wzorcowej} w~następujący sposób:
+      W~klatkach pośrednich analizowana jest odległość wszystkich punktów charakterystycznych od aktualnej \textit{ścieżki}. Dzięki temu wiadomo jak wygląda dystrybucja punktów charakterystycznych wokół śledzonej ścieżki. Zapis formalny jest analogiczny do powyższego i~został zdefiniowany jako \textbf{odchylenie minimalne od ścieżki wzorcowej} w~następujący sposób:
 
         \begin{equation}
           \forall_{p\in P} \; \forall_{s \in S_{t}} \; min\{ d(p, s) \},
         \end{equation}
-      gdzie $P$ to zbiór tras wzorcowych, $S_{t}$ to zbiór punktów charakterystycznych w~chwili $t$ oraz~$d$ to metryka euklidesowa.
+      gdzie $P$ to zbiór ścieżek wzorcowych, $S_{t}$ to zbiór punktów charakterystycznych w~chwili $t$ oraz~$d$ to metryka euklidesowa.
 
       Warto zauważyć, że taki sposób weryfikacji odporny jest na zmiany (poprzez dokładanie lub usuwanie) punktów charakterystycznych.
 
-      Biorąc pod uwagę dwa wspomniane parametry tj. \textbf{odchylenie minimalne od punktu wzorcowego w~danej klatce sekwencji wideo} oraz \textbf{wektor odchyleń punktów charakterystycznych od trasy} można skutecznie porównać jakość badanych algorytmów między sobą.
+      Biorąc pod uwagę dwa wspomniane parametry tj. \textbf{odchylenie minimalne od punktu wzorcowego w~danej klatce sekwencji wideo} oraz \textbf{wektor odchyleń punktów charakterystycznych od ścieżki} można skutecznie porównać jakość badanych algorytmów między sobą.
 
     \subsection{Ocena wydajności algorytmu śledzenia}\label{Subsection_Wydajnosc}
 
@@ -193,9 +193,9 @@
   \section{Opis wygenerowanych zbiorów i~rezultatów}\label{Section_Results}
     Zanim zostaną dokładnie omówione i~przeanalizowane wyniki przeprowadzonych badań, warto przybliżyć kilka szczegółów dotyczących zebranych rezultatów.
 
-    Wszystkie wyniki zostały zebrane z~plikach z~rozszerzeniem JSON (są to samoopisujace się pliki tekstowe ogólnego przeznaczenia, oparte na strukturze słownika typu \textit{klucz} - \textit{wartość}). Rozmiar wygenerowanych danych wynosi $4,1$ MB, co jak na dane czysto tekstowe jest dość dużą liczbą (ponad 4 miliony znaków).
+    Wszystkie wyniki zostały zebrane w~plikach z~rozszerzeniem JSON (są to samoopisujace się pliki tekstowe ogólnego przeznaczenia, oparte na strukturze słownika typu \textit{klucz} - \textit{wartość}). Rozmiar wygenerowanych danych wynosi $4,1$ MB, co jak na dane czysto tekstowe jest dość dużą liczbą (ponad 4 miliony znaków).
 
-    Czas trwania podstawowych testów (analiza wszystkich zebranych próbek - 3 różne algorytmy o~domyślnych parametrach, 10 osób po 6 gestów) to ponad dwie i~pół godziny. Dla wyspecjalizowanych przypadków czas przetwarzania wyniósł trzy i~pół godziny (wybrane parametry dla 3 algorytmów na 2 najlepszych jakościowo próbkach 2 gestów). Przypadki dodatkowe zostały zebrane w~pliku \textit{parametrized.json} umieszczonym w~katalogu głównym kodu źródłowego.
+    Czas trwania podstawowych testów (analiza wszystkich zebranych próbek - 3 różne algorytmy o~domyślnych parametrach, 10 osób po 6 gestów) to ponad dwie i~pół godziny. Dla wyspecjalizowanych przypadków czas przetwarzania wyniósł trzy i~pół godziny (wybrane parametry dla 3 algorytmów na 2 najlepszych jakościowo próbkach 2 gestów). Przypadki wyspecjalizowane zostały zebrane w~pliku \textit{parametrized.json} umieszczonym w~katalogu głównym kodu źródłowego.
 
     W~przypadku algorytmu opartego na uczeniu maszynowym, rozmiar wygenerowanych zbiorów treningowych dla domyślnych parametrów (las złożony z~5~drzew losowych, 200 punktów charakterystycznych, wymiar boku kwadratowej łaty - 20 pikseli) wyniósł dokładnie $43$ GB. Czas generacji został uwzględniony w~powyższym akapicie.
 
@@ -251,7 +251,7 @@
         \label{fig:RandomForestTrackerPerTrainedTreesAmount}
       \end{figure}
 
-    Rzadki przepływ optyczny charakteryzuje się niewielkimi wahaniami zużycia pamięci w~zależności od minimalnej odległości pomiędzy śledzonymi punktami charakterystycznymi (jak można było przypuszczać, im większa odległość tym mniejsze zużycie pamięci). Na wykresie \ref{fig:SparseOpticalFlowPerMinimalDistanceBetweenPoints} widać, że fluktuacje mieszczą się w~przedziale o~szerokości około $30$ MB i~nie przekraczają wartości $63$ MB, co nie jest bez znaczenia w~środowisku z~ograniczonymi zasobami pamięciowymi (np. systemy wbudowane lub urządzenia mobilne). Z trzech porównywanych implementacji, metoda oparta o~algorytm \textit{LK} w~wariancie piramidalnym jest najbardziej optymalna pod względem zużycia pamięci.
+    Rzadki przepływ optyczny charakteryzuje się niewielkimi wahaniami zużycia pamięci w~zależności od minimalnej odległości pomiędzy śledzonymi punktami charakterystycznymi (jak można było przypuszczać, im większa odległość tym mniejsze zużycie pamięci). Na wykresie \ref{fig:SparseOpticalFlowPerMinimalDistanceBetweenPoints} widać, że fluktuacje mieszczą się w~przedziale o~szerokości około $30$ MB i~nie przekraczają wartości $63$ MB, co nie jest bez znaczenia w~środowisku z~ograniczonymi zasobami pamięciowymi (np. systemy wbudowane lub urządzenia mobilne). Z~trzech porównywanych implementacji, metoda oparta o~algorytm \textit{LK} w~wariancie piramidalnym jest najbardziej korzystna pod względem zużycia pamięci.
 
       \begin{figure}[!ht]
         \centering
@@ -271,13 +271,13 @@
 
     \newpage
 
-    W~wariancie gęstym zależnym od rozmiaru przyjętej siatki, przepływ optyczny charakteryzuje się wyższym zużyciem pamięci (maksymalnie około $72$ MB), jednak same wahania są stabilniejsze, mieszczą się w~przedziale o~szerokości około $5$ MB. Widać, że zwiększenie wymiarów siatki (intuicyjnie, rozrzedzenie jej) nie zawsze idzie w~parze z~malejącym zużyciem pamięci. Warto jednak zauważyć, że wahania odbywają się w~bardzo niewielkim zakresie.
+    W~wariancie gęstym zależnym od rozmiaru przyjętej siatki, przepływ optyczny charakteryzuje się wyższym zużyciem pamięci (maksymalnie około $72$ MB), jednak same wahania posiadają mniejszą amplitudę, mieszczą się w~przedziale o~szerokości około $5$ MB. Widać, że zwiększenie wymiarów siatki (intuicyjnie, rozrzedzenie jej) nie zawsze idzie w~parze z~malejącym zużyciem pamięci. Warto jednak zauważyć, że wahania odbywają się w~bardzo niewielkim zakresie.
 
-    Mimo wyższego zużycia całościowego, jego wartość nadal nie jest zbyt wysoka i~algorytm gęstego przepływu optycznego sprawdzi się w~środowisku z~ograniczonymi zasobami pamięciowymi.
+    Mimo wyższego zużycia całościowego, jego wartość nadal nie jest zbyt wysoka i~algorytm gęstego przepływu optycznego może być stosowany w~środowisku z~ograniczonymi zasobami pamięciowymi.
 
   \section{Wydajność badanych algorytmów}\label{Section_Timing}
 
-    Pod pojęciem badań wydajności zostały zebrane wszystkie testy oraz wykresy prezentujące czas przetwarzania pojedynczej klatki algorytmu. Wszystkie implementacje zostały szczegółowo zbadane pod tym kątem, aby wybrać algorytm najefektywniejszy i~dokładający najmniejszy narzut w~każdej kolejnej klatce sekwencji wideo.
+    Pod pojęciem badań wydajności zostały zebrane wszystkie testy oraz wykresy prezentujące czas przetwarzania pojedynczej klatki algorytmu. Wszystkie implementacje zostały szczegółowo zbadane pod tym kątem, aby wybrać algorytm najefektywniejszy i~nakładający najmniejszy narzut na każdą kolejną klatkę sekwencji wideo.
 
     Na wykresach \ref{fig:DenseTimingPersonAC}, \ref{fig:RandomTimingPersonAC} oraz \ref{fig:SparseTimingPersonAC} widać wartości czasu przetwarzania klatki, wraz z~naniesioną wartością średnią dla zaimplementowanych algorytmów kolejno przepływu w~wariancie gęstym, wykorzystującym lasy drzew losowych oraz rzadkiego przepływu optycznego.
 
@@ -306,7 +306,7 @@
         \label{fig:SparseTimingPersonAC}
       \end{figure}
 
-    Widać, że najmniejszym średnim czasem przetwarzania charakteryzują się dwa ostatnie algorytmu. Gęsty przepływ optyczny jest algorytmem o~bardzo dużym koszcie obliczeniowym, co objawia się bardzo wysokimi wartościami czasu przetwarzania klatki (oraz w~konsekwencji dużo wyższą wartością średnią). Zależność tą najlepiej widać na wykresach \ref{fig:PersonBO} oraz \ref{fig:PersonGO}.
+    Widać, że najmniejszym średnim czasem przetwarzania charakteryzują się dwa ostatnie algorytmy. Gęsty przepływ optyczny jest algorytmem o~bardzo dużym koszcie obliczeniowym, co objawia się bardzo wysokimi wartościami czasu przetwarzania klatki (oraz w~konsekwencji dużo wyższą wartością średnią). Zależność tą najlepiej widać na wykresach \ref{fig:PersonBO} oraz \ref{fig:PersonGO}.
 
       \begin{figure}[!ht]
         \centering
@@ -353,11 +353,11 @@
 
     Reprezentacja graficzna narzutu dodatkowych etapów przetwarzania została zamieszczona na wykresach \ref{fig:StackedDense}, \ref{fig:StackedSparse} oraz \ref{fig:StackedRandom}. Widać wyraźnie, że w~przypadku algorytmów z~rodziny przepływu optycznego dodatkowy narzut mieści się w~granicy błędu statystycznego (maksymalne wartości odpowiednio $0.6$ oraz $0.33$ milisekundy).
 
-    W~przypadku algorytmu opartego o~uczenie maszynowe, odzyskanie reprezentacji śledzonych punktów wiąże się z~niewielkim narzutem czasowym, odzwierciedlonym na przebiegu \ref{fig:StackedRandom} (maksymalnie ok. $50$ milisekund).
+    W~przypadku algorytmu opartego o~uczenie maszynowe, odzyskanie reprezentacji śledzonych punktów wiąże się z~niewielkim narzutem czasowym, odzwierciedlonym na przebiegu \ref{fig:StackedRandom} (maksymalnie ok. $50$ milisekund). Jak wyraźnie widać na wykresie, narzut wprowadzony przez pozostałe elementy w~stosunku do czasu obliczeń punktów śledzonej ścieżki jest pomijalnie mały.
 
-    Dla algorytmu gęstego przepływu optycznego najcięższą przeprawą jeśli chodzi o~przetwarzanie okazał się zestaw próbek \textit{G}, choć tak naprawdę czasy przetwarzania wszystkich zbiorów mieszczą się w~przedziale o~dość niewielkiej szerokości (jeśli chodzi o~średnie czas przetwarzania, przedział ma szerokość około $20$ milisekund). Omawiana implementacja charakteryzuje się bardzo stabilnym czasem przetwarzania pojedynczej klatki. Niemniej, jest to zbyt duża wartość, aby można było mówić o~zastosowaniu tej metody w~przypadku ścisłych wymagań czasowych.
+    Jeśli chodzi o~przetwarzanie (wykres \ref{fig:DenseForGestureC}), dla algorytmu gęstego przepływu optycznego najcięższy okazał się zestaw próbek \textit{G}, choć tak naprawdę czasy przetwarzania wszystkich zbiorów mieszczą się w~przedziale o~dość niewielkiej szerokości (jeśli chodzi o~średnie czas przetwarzania, przedział ma szerokość około $20$ milisekund). Omawiana implementacja charakteryzuje się bardzo stabilnym czasem przetwarzania pojedynczej klatki. Niemniej, jest to zbyt duża wartość, aby można było mówić o~zastosowaniu tej metody w~przypadku ścisłych wymagań czasowych.
 
-    Tak jak w~przypadku zbiorów, również podział ze względu na gesty dla wybranej próbki charakteryzuje się stabilnym czasem przetwarzania. Różnice pomiędzy średnimi wartościami są niewielkie (szerokość przedziału to około 25 milisekund).
+    Tak jak w~przypadku zbiorów, również podział ze względu na gesty (wykres \ref{fig:DenseTimingForPersonE}) dla wybranej próbki charakteryzuje się stabilnym czasem przetwarzania. Różnice pomiędzy średnimi wartościami są niewielkie (szerokość przedziału to około 25 milisekund).
 
       \begin{figure}[!ht]
         \centering
@@ -388,11 +388,11 @@
 
     Analogiczny zestaw testów został przeprowadzony na algorytmie wykorzystującym las drzew losowych.
 
-    W~jego przypadku największym wyzwaniem okazał się zbiór \textit{B} (rysunek \ref{fig:RandomForGestureC}). Warto zwrócić na stosunkowo niski średni czas przetwarzania w~porównaniu do uprzednio omawianego algorytmu. W~przypadku podziału na gesty, wartości minimalne, maksymalne oraz średnie są zbliżone do poprzedniej reprezentacji (wykres \ref{fig:RandomTimingForPersonE}). Algorytm charakteryzuje się niskim i~dość stabilnym średnim czasem przetwarzania klatki sekwencji wideo.
+    W~jego przypadku największym wyzwaniem okazał się zbiór gestów osoby \textit{B} (rysunek \ref{fig:RandomForGestureC}). Warto zwrócić uwagę na stosunkowo niski średni czas przetwarzania w~porównaniu do uprzednio omawianego algorytmu. W~przypadku podziału na gesty, wartości minimalne, maksymalne oraz średnie są zbliżone do poprzedniej reprezentacji (wykres \ref{fig:RandomTimingForPersonE}). Algorytm charakteryzuje się niskim i~dość stabilnym średnim czasem przetwarzania klatki sekwencji wideo.
 
-    W~przypadku tej konkretnej implementacji bardzo ważnym parametrem jest czas uczenia klasyfikatora przedstawiony w~zależności od liczby wykorzystanych drzew losowych. Omawiana reprezentacja zostały przedstawione na wykresie \ref{fig:LearningTime}.
+    W~przypadku tej konkretnej implementacji bardzo ważnym parametrem jest czas uczenia klasyfikatora przedstawiony w~zależności od liczby wykorzystanych drzew losowych. Omawiana reprezentacja została przedstawiona na wykresie \ref{fig:LearningTime}.
 
-    Równie ważnym parametrem jest wartość czasu przetwarzania klatki w~zależności od liczby wytrenowanych drzew. Zależność została przedstawiona na rysunku \ref{fig:TimingPerTrainedTreesAmount}.
+    Równie ważnym wskaźnikiem jest wartość czasu przetwarzania klatki w~zależności od liczby wytrenowanych drzew. Zależność została przedstawiona na rysunku \ref{fig:TimingPerTrainedTreesAmount}.
 
     \newpage
       \begin{figure}[!ht]
@@ -412,7 +412,7 @@
       \end{figure}
 
     \newpage
-    Jak widać na wykresie \ref{fig:LearningTime} wprowadzony przez ten konkretny algorytm narzut czasowy jest znaczny oraz jest wprost proporcjonalny do liczby wytrenowanych drzew. Jest to największa wada algorytmu jeśli chodzi o~wydajność. Każda metoda wykorzystująca uczenie maszynowe, wprowadza spory narzut przeznaczony na przygotowanie klasyfikatora. Nie jest to jednak argument dyskryminujący, ponieważ przygotowana implementacja pozwala na dalsze optymalizacje i~zminimalizowanie czasu uczenia (usprawnienia zostały zebrane w~sekcji \ref{Section_Usprawnienia}).
+    Jak widać na wykresie \ref{fig:LearningTime} wprowadzony przez ten konkretny algorytm narzut czasowy jest znaczny oraz jest wprost proporcjonalny do liczby wytrenowanych drzew. Jest to największa wada algorytmu jeśli chodzi o~wydajność. Każda metoda wykorzystująca uczenie maszynowe, wprowadza spory narzut przeznaczony na przygotowanie klasyfikatora. Nie jest to jednak argument dyskwalifikujący, ponieważ przygotowana implementacja pozwala na dalsze optymalizacje i~zminimalizowanie czasu uczenia (usprawnienia zostały zebrane w~sekcji \ref{Section_Usprawnienia}).
 
       \begin{figure}[!ht]
         \centering
@@ -433,9 +433,9 @@
       \end{figure}
 
     \newpage
-    Rzadki przepływ optyczny jest algorytmem o~najniższym średnim czasie przetwarzania klatki. Widać to na wykresach \ref{fig:SparseForGestureC} oraz \ref{fig:SparseTimingForPersonE}. Algorytm najlepiej poradził sobie praktycznie z~każdym zbiorem (wyjątkiem jest zbiór \textit{A}, jednak średnia wartość jest i~tak najniższa spośród trzech implementacji).
+    Rzadki przepływ optyczny jest algorytmem o~najniższym średnim czasie przetwarzania klatki. Widać to na wykresach \ref{fig:SparseForGestureC} oraz \ref{fig:SparseTimingForPersonE}. Algorytm najlepiej poradził sobie praktycznie z~każdym zbiorem (wyjątkiem jest zbiór gestów dla osoby \textit{A}, jednak średnia wartość jest i~tak najniższa spośród trzech implementacji).
 
-    Również, jeśli chodzi o~podział ze względu na gesty omawiana implementacja jest najwydajniejsza. W~obu przypadkach wartości średnie przetwarzania klatki animacji nie przekraczają 40 milisekund, maksymalne - tylko w~jednym przypadku przekraczają 50 milisekund. Implementacja może zostać wykorzystana w~warunkach o~dużych wymaganiach jeśli chodzi o~narzut przetwarzania pojedynczej ramki sekwencji wideo.
+    Również, jeśli chodzi o~podział ze względu na gesty, omawiana implementacja jest najwydajniejsza. W~obu przypadkach wartości średnie przetwarzania klatki animacji nie przekraczają 40 milisekund, maksymalne - tylko w~jednym przypadku przekraczają 50 milisekund. Implementacja może zostać wykorzystana w~warunkach o~dużych wymaganiach jeśli chodzi o~narzut przetwarzania pojedynczej ramki sekwencji wideo.
 
     Omawiana metoda charakteryzuje się liniową zależnością czasu obliczeń na pojedynczej klatce w~zależności od maksymalnej liczby punktów charakterystycznych (wykres \ref{fig:TimingPerFeaturesAmount}) oraz zależnością zbliżoną do logarytmicznej jeśli chodzi o~minimalną odległość pomiędzy punktami wyznaczonymi przez algorytm (wykres \ref{fig:TimingPerMinimalDistance}).
 
@@ -472,58 +472,61 @@
         \label{fig:TimingPerMinimalDistance}
       \end{figure}
 
-  \section{Wprowadzony narzut czasowy}\label{Section_Overhead}
-    Na podstawie wyników zaprezentowanych w~poprzedniej sekcji można skutecznie określić, który algorytm wprowadza najmniejszy całkowity narzut czasowy przetwarzania sekwencji wideo. Na wykresie \ref{fig:OverheadGL} zostały zestawione wartości dla każdego z~algorytmów. Najbardziej optymalnym algorytmem jest algorytm przepływu optycznego w~wariancie rzadkim.
+  \section{Obciążenie czasowe}\label{Section_Overhead}
+    Obciążeniem czasowym nazywamy różnicę pomiędzy nominalnym czasem trwania nieprzetworzonej sekwencji wideo a całkowitym czasem przetwarzania omawianej próbki. W~przypadku, gdy wartość obciążenia jest liczbą ujemną mamy do czynienia z~rezerwą czasu przetwarzania (oznacza to, że narzut czasowy wprowadzony przez algorytm dla każdej ramki jest mniejszy od czasu oczekiwania na następną klatkę animacji).
 
-    Porównanie zawarte na wykresie omówionym powyżej, nie zawiera pełnego narzutu dla metody opartej o~uczenie maszynowe. Całkowite podsumowanie zostało umieszczone na rysunku \ref{fig:RandomForestTrackerOverhead}. Widać wyraźnie, że w~przypadku pełnej generacji (zapisu, odczytu i~budowania bazy treningowej) dla jednego drzewa narzut jest ogromny (około 1 minuty). Mimo, iż narzut czasowy wprowadzony tylko poprzez klasyfikacji w~oparciu o~wytrenowany zbiór jest niski, to metoda jest bardzo kosztowna. W~sekcji \ref{Section_Usprawnienia} zwrócono uwagę na analizowany problem i~zaproponowano potencjalne rozwiązanie.
+    Na podstawie wyników zaprezentowanych w~poprzedniej sekcji można skutecznie określić, który algorytm wprowadza najmniejsze obciążenie czasowe przetwarzania sekwencji wideo. Na wykresie \ref{fig:OverheadGL} zostały zestawione wartości dla każdego z~algorytmów. Najbardziej wydajnym algorytmem jest algorytm przepływu optycznego w~wariancie rzadkim.
 
-    Na wykresach \ref{fig:SpecialisedDenseOverhead}, \ref{fig:SpecialisedRandomOverhead} oraz \ref{fig:SpecialisedSparseOverhead} zaprezentowane zostały zależności całkowitego narzutu czasowego w~odniesieniu do podstawowych parametrów zaimplementowanych metod.
+    Porównanie zawarte na wykresie omówionym powyżej, nie zawiera pełnego obciążenia dla metody opartej o~uczenie maszynowe. Całkowite podsumowanie zostało umieszczone na rysunku \ref{fig:RandomForestTrackerOverhead}. Widać wyraźnie, że w~przypadku pełnej generacji (zapisu, odczytu i~budowania bazy treningowej) dla jednego drzewa narzut czasowy jest ogromny (około 1 minuty). Mimo, iż obciążenie czasowe wprowadzone przez proces klasyfikacji utrzymuje się na niskim poziomie, to pozostałe elementy poprzedzające samą klasyfikację czynią metodę bardzo kosztowną. W~sekcji \ref{Section_Usprawnienia} zwrócono uwagę na analizowany problem i~zaproponowano potencjalne rozwiązanie.
 
-    W~przypadku algorytmu gęstego przepływu optycznego, narzut zmniejsza się wraz z~rozrzedzeniem siatki (zwiększeniem rozmiaru jej oczka) i~stabilizuje się w~okolicy rozmiaru równego 10 pikseli. Jak zostanie przedstawione w~następnym rozdziale wspomniana wartość może zostać przyjęta jako rozsądny kompromis pomiędzy jakością jak i~czasem działania algorytmu.
+    Na wykresach \ref{fig:SpecialisedDenseOverhead}, \ref{fig:SpecialisedRandomOverhead} oraz \ref{fig:SpecialisedSparseOverhead} zaprezentowane zostały zależności całkowitego obciążenia czasowego w~odniesieniu do podstawowych parametrów zaimplementowanych metod.
 
-    Dla algorytmu wykorzystującego las drzew losowych całkowity narzut stabilizuje się wraz z~wykorzystaniem większej liczby drzew losowych. Biorąc pod uwagę czas wykonania, liczba pięciu drzew wydaje się rozsądnym kompromisem pomiędzy całkowitym narzutem czasowym oraz jakością.
+    W~przypadku algorytmu gęstego przepływu optycznego, obciążenie zmniejsza się wraz z~rozrzedzeniem siatki (zwiększeniem rozmiaru jej oczka) i~stabilizuje się w~okolicy rozmiaru równego 10 pikseli. Jak zostanie przedstawione w~następnym rozdziale wspomniana wartość może zostać przyjęta jako rozsądny kompromis pomiędzy jakością jak i~czasem działania algorytmu.
 
-    Dla algorytmu przepływu optycznego w~wariancie rzadkim mniejsze wartości minimalnej odległości pomiędzy punktami charakterystycznymi skutkują brakiem narzutu czasowego (wartość ujemna oznacza rezerwę jeśli chodzi o~czas przetwarzania). Biorąc jednak pod uwagę jakość omówioną w~sekcji \ref{Section_Quality} warto zwiększyć ten współczynnik w~celu zwiększenia jakości wyznaczonej ścieżki.
+    Dla algorytmu wykorzystującego las drzew losowych całkowite obciążenie stabilizuje się wraz z~wykorzystaniem większej liczby drzew losowych. Biorąc pod uwagę czas wykonania, liczba pięciu drzew wydaje się rozsądnym kompromisem pomiędzy całkowitym obciążeniem oraz jakością.
+
+    Dla algorytmu przepływu optycznego w~wariancie rzadkim mniejsze wartości minimalnej odległości pomiędzy punktami charakterystycznymi skutkują rezerwą jeśli chodzi o~czas przetwarzania. Biorąc jednak pod uwagę jakość omówioną w~sekcji \ref{Section_Quality} warto zwiększyć ten współczynnik w~celu zwiększenia jakości wyznaczonej ścieżki.
 
     \newpage
       \begin{figure}[!ht]
         \centering
         \includegraphics[width=14cm]{charts/overhead/OverheadGL}
-        \caption[Narzut czasowy wprowadzony przez każdy algorytm]
-                {Narzut czasowy wprowadzony przez każdy algorytm\\(próbka \textit{Person\_G\_L})}
+        \caption[Obciążenie czasowe wprowadzony przez każdy algorytm]
+                {Obciążenie czasowe wprowadzony przez każdy algorytm\\(próbka \textit{Person\_G\_L})}
         \label{fig:OverheadGL}
       \end{figure}
 
       \begin{figure}[!ht]
         \centering
         \includegraphics[width=14cm]{charts/overhead/RandomForestTrackerOverallOverhead}
-        \caption[Całkowity narzut czasowy dla algorytmu wykorzystującego las drzew losowych]
-                {Całkowity narzut czasowy dla algorytmu wykorzystującego las drzew losowych}
+        \caption[Całkowity obciążenie czasowe dla algorytmu wykorzystującego las drzew losowych]
+                {Całkowity obciążenie czasowe dla algorytmu wykorzystującego las drzew losowych}
         \label{fig:RandomForestTrackerOverhead}
       \end{figure}
 
     \newpage
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=10cm]{charts/overhead/DenseOverheadPerMapSize}
-        \caption[Narzut czasowy w~zależności od rozmiaru siatki]
-                {Narzut czasowy w~zależności od rozmiaru siatki\\(gęsty przepływ optyczny)}
+        \includegraphics[width=14cm]{charts/overhead/DenseOverheadPerMapSize}
+        \caption[Obciążenie czasowe w~zależności od rozmiaru siatki]
+                {Obciążenie czasowe w~zależności od rozmiaru siatki\\(gęsty przepływ optyczny)}
         \label{fig:SpecialisedDenseOverhead}
       \end{figure}
 
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=10cm]{charts/overhead/RandomOverheadPerTrainedTreesAmount}
-        \caption[Narzut czasowy w~zależności od liczby drzew losowych]
-                {Narzut czasowy w~zależności od liczby drzew losowych\\(las drzew losowych)}
+        \includegraphics[width=14cm]{charts/overhead/RandomOverheadPerTrainedTreesAmount}
+        \caption[Obciążenie czasowe w~zależności od liczby drzew losowych]
+                {Obciążenie czasowe w~zależności od liczby drzew losowych\\(las drzew losowych)}
         \label{fig:SpecialisedRandomOverhead}
       \end{figure}
 
+    \newpage
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=10cm]{charts/overhead/SparseOverheadPerMinimalDistance}
-        \caption[Narzut czasowy w~zależności od minimalnej odległości pomiędzy punktami charakterystycznymi]
-                {Narzut czasowy w~zależności od minimalnej odległości pomiędzy punktami charakterystycznymi (rzadki przepływ optyczny)}
+        \includegraphics[width=14cm]{charts/overhead/SparseOverheadPerMinimalDistance}
+        \caption[Obciążenie czasowe w~zależności od minimalnej odległości pomiędzy punktami charakterystycznymi]
+                {Obciążenie czasowe w~zależności od minimalnej odległości pomiędzy punktami charakterystycznymi (rzadki przepływ optyczny)}
         \label{fig:SpecialisedSparseOverhead}
       \end{figure}
 
@@ -531,13 +534,13 @@
 
     Podstawowym elementem porównawczym jeśli chodzi o~jakość wyznaczonego rozwiązania, jest wartość odległości w~pikselach (w~metryce euklidesowej) od ścieżek i~punktów wzorcowych. Za pomocą wyznaczonych wartości jesteśmy w~stanie porównać jak bardzo zaproponowane przez algorytm rozwiązanie jest zbliżone do rozwiązania wyznaczonego manualnie dla każdej sekwencji wideo.
 
-    Na serii wykresów od \ref{fig:DenseKeypointsPersonG} do \ref{fig:SparsePathGestureC} zostały zamieszczone wyniki badań jakościowych. Widać, że pod względem jakościowym dla wybranego zbioru \textit{G} oraz gestu o~nazwie \textit{Wielka litera C} najbardziej uniwersalnie radzi sobie algorytm rzadkiego przepływu optycznego. W~niewielkiej ilości przypadków maksymalna wartość odległości dla obu analizowanych parametrów wykracza poza przyjęty promień otaczający punkt wzorcowy.
+    Na serii wykresów od \ref{fig:DenseKeypointsPersonG} do \ref{fig:SparsePathGestureC} zostały zamieszczone wyniki badań jakościowych. Widać, że pod względem jakościowym dla wybranego zbioru \textit{G} oraz gestu o~nazwie \textit{Wielka litera C} najbardziej uniwersalnie radzi sobie algorytm rzadkiego przepływu optycznego. W~niewielkiej liczbie przypadków maksymalna wartość odległości dla obu analizowanych parametrów wykracza poza przyjęty promień otaczający punkt wzorcowy.
 
     Nieco gorzej (zwłaszcza jeśli chodzi o~wariancje wartości maksymalnych i~minimalnych) radzi sobie algorytm oparty o~uczenie maszynowe. Wykorzystanie lasu drzew losowych dla przypadków brzegowych (np. zmiana kształtu dłoni) powoduje uzyskanie dużej wartości odległości co oznacza, że punkt został pominięty. Jest to niepożądana sytuacja, potencjalne usprawnienie zostało opisane w~sekcji \ref{Section_Usprawnienia}.
 
     Problematyczna sekwencja i~błędna klasyfikacja została dokładnie odzwierciedlona na wykresach \ref{fig:KeypointsQualityAC} oraz \ref{fig:KeypointsQualityGO}. Widać wyraźnie, że metoda oparta o~klasyfikator w~środkowej części wprowadza bardzo duży błąd rzutujący całościowo na jakość rozwiązania końcowego. Na wspomnianych wykresach widać również wyraźnie przewagę algorytmu przepływu optycznego w~wariancie rzadkim, jeśli chodzi o~odległość od punktów wzorcowych. W~przypadku odległości od ścieżek wzorcowych zdecydowanie najmniejszym błędem obarczona jest metoda wykorzystująca las drzew losowych, jednak jej nieprzewidywalność oraz duża wariancja mogą być wadą w~przypadku wdrożenia w~środowisku o~dużych wymaganiach dotyczących stabilności i~jakości.
 
-    Algorytm przepływu optycznego w~wariancie gęstym radzi sobie lepiej dla sekwencji obarczonych dużym błędem w~poprzednio omawianej metodzie, jednak radzi sobie gorzej dla sekwencji poprawnie sklasyfikowanych przez algorytm wykorzystujący las drzew losowych. Jest to metoda pośrednia, o stabilnej i~przewidywalnej dokładności (co w~jej przypadku jest niewątpliwą zaletą, zwłaszcza w~porównaniu do poprzednio omawianej metody).
+    Algorytm przepływu optycznego w~wariancie gęstym radzi sobie lepiej dla sekwencji obarczonych dużym błędem w~poprzednio omawianej metodzie, jednak wyniki są gorsze dla sekwencji poprawnie sklasyfikowanych przez algorytm wykorzystujący las drzew losowych. Jest to metoda pośrednia, o stabilnej i~przewidywalnej dokładności (co w~jej przypadku jest niewątpliwą zaletą, zwłaszcza w~porównaniu do poprzednio omawianej metody).
 
     \newpage
       \begin{figure}[!ht]
@@ -660,7 +663,7 @@
         \label{fig:KeypointsQualityGO}
       \end{figure}
 
-    Poniżej można zaobserwować po raz kolejny jest problem niestabilności metody opartej o~proces uczenia maszynowego (środkowa część wykresu \ref{fig:PathQualityAC}). W~przypadku próbek \textit{Person\_A\_C} oraz \textit{Person\_G\_O} najmniejszy błąd jeśli chodzi o~odległość od ścieżek wzorcowych został zaprezentowany przez algorytm przepływu optycznego w~wariancie gęstym. Metoda oparta o~algorytm \textit{LK} dla analizowanych próbek była nieznacznie gorsza od najlepszej implementacji.
+    Poniżej można zaobserwować po raz kolejny jest problem niestabilności metody opartej o~proces uczenia maszynowego (środkowa część wykresu \ref{fig:PathQualityAC}). W~przypadku próbek \textit{Person\_A\_C} oraz \textit{Person\_G\_O} najmniejszy błąd, jeśli chodzi o~odległość od ścieżek wzorcowych został zaprezentowany przez algorytm przepływu optycznego w~wariancie gęstym. Metoda oparta o~algorytm \textit{LK} dla analizowanych próbek była nieznacznie gorsza od najlepszej implementacji.
 
     \newpage
       \begin{figure}[!ht]
@@ -679,12 +682,12 @@
         \label{fig:PathQualityGO}
       \end{figure}
 
-    Ciekawym przypadkiem jest próbka \textit{Person\_G\_C}, w~której stabilnie zaprezentował się algorytm wykorzystujący las drzew losowych. Rezultat obliczony za pomocą tej metody charakteryzował się najmniejszym błędem i~najlepszą jakością, co zostało zobrazowane na wykresach \ref{fig:DenseQualityKeypointsGC}, \ref{fig:RandomQualityKeypointsGC} oraz \ref{fig:SparseQualityKeypointsGC} (oraz \ref{fig:DenseQualityPathGC}, \ref{fig:RandomQualityPathGC}, \ref{fig:SparseQualityPathGC}). Rezultat ten pozwala wierzyć, że po wprowadzeniu usprawnień do procesu budowy bazy treningowej i~dopracowaniu samego klasyfikatora (poprzez uodpornienie na sytuacje brzegowe tj. zmiana kształtu dłoni) algorytm ten będzie najdokładniejszy.
+    Ciekawym przypadkiem jest próbka \textit{Person\_G\_C}, w~której stabilnie zaprezentował się algorytm wykorzystujący las drzew losowych. Wspomniana własność w~tym przypadku wynika bezpośrednio ze sposobu wykonywania gestu przez osobę G (podczas nagrywania sekwencji kształt dłoni nie ulegał zmianie). Rezultat obliczony za pomocą tej metody charakteryzował się najmniejszym błędem i~najlepszą jakością, co zostało zobrazowane na wykresach \ref{fig:DenseQualityKeypointsGC}, \ref{fig:RandomQualityKeypointsGC} oraz \ref{fig:SparseQualityKeypointsGC} (oraz \ref{fig:DenseQualityPathGC}, \ref{fig:RandomQualityPathGC}, \ref{fig:SparseQualityPathGC}). Omawiane wyniki pozwalają wierzyć, że po wprowadzeniu usprawnień do procesu budowy bazy treningowej i~dopracowaniu samego klasyfikatora (poprzez uodpornienie na sytuacje brzegowe tj. zmianę kształtu dłoni) algorytm ten będzie najdokładniejszy.
 
     \newpage
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=10cm]{charts/quality/DenseQualityKeypointsGC}
+        \includegraphics[width=14cm]{charts/quality/DenseQualityKeypointsGC}
         \caption[Odległość od punktów wzorcowych dla jednego algorytmu (gęsty przepływ optyczny, osoba G, gest C)]
                 {Odległość od punktów wzorcowych dla jednego algorytmu\\(gęsty przepływ optyczny, próbka \textit{Person\_G\_C})}
         \label{fig:DenseQualityKeypointsGC}
@@ -692,33 +695,34 @@
 
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=10cm]{charts/quality/RandomQualityKeypointsGC}
+        \includegraphics[width=14cm]{charts/quality/RandomQualityKeypointsGC}
         \caption[Odległość od punktów wzorcowych dla jednego algorytmu (las drzew losowych, osoba G, gest C)]
                 {Odległość od punktów wzorcowych dla jednego algorytmu\\
                  (las drzew losowych, próbka \textit{Person\_G\_C})}
         \label{fig:RandomQualityKeypointsGC}
       \end{figure}
 
+    \newpage
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=10cm]{charts/quality/SparseQualityKeypointsGC}
+        \includegraphics[width=14cm]{charts/quality/SparseQualityKeypointsGC}
         \caption[Odległość od punktów wzorcowych dla jednego algorytmu (rzadki przepływ optyczny, osoba G, gest C)]
                 {Odległość od punktów wzorcowych dla jednego algorytmu\\(rzadki przepływ optyczny, próbka \textit{Person\_G\_C})}
         \label{fig:SparseQualityKeypointsGC}
       \end{figure}
 
-    \newpage
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=10cm]{charts/quality/DenseQualityPathGC}
+        \includegraphics[width=14cm]{charts/quality/DenseQualityPathGC}
         \caption[Odległość od ścieżek wzorcowych dla jednego algorytmu  (gęsty przepływ optyczny, osoba G, gest C)]
                 {Odległość od ścieżek wzorcowych dla jednego algorytmu\\(gęsty przepływ optyczny, próbka \textit{Person\_G\_C})}
         \label{fig:DenseQualityPathGC}
       \end{figure}
 
+    \newpage
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=10cm]{charts/quality/RandomQualityPathGC}
+        \includegraphics[width=14cm]{charts/quality/RandomQualityPathGC}
         \caption[Odległość od ścieżek wzorcowych dla jednego algorytmu (las drzew losowych, osoba G, gest C)]
                 {Odległość od ścieżek wzorcowych dla jednego algorytmu\\
                  (las drzew losowych, próbka \textit{Person\_G\_C})}
@@ -727,7 +731,7 @@
 
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=10cm]{charts/quality/SparseQualityPathGC}
+        \includegraphics[width=14cm]{charts/quality/SparseQualityPathGC}
         \caption[Odległość od ścieżek wzorcowych dla jednego algorytmu (rzadki przepływ optyczny, osoba G, gest C)]
                 {Odległość od ścieżek wzorcowych dla jednego algorytmu\\(rzadki przepływ optyczny, próbka \textit{Person\_G\_C})}
         \label{fig:SparseQualityPathGC}
@@ -736,7 +740,7 @@
     \newpage
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=10cm]{charts/quality/DenseScatterGC}
+        \includegraphics[width=15cm]{charts/quality/DenseScatterGC}
         \caption[Wykres rozproszenia punktów (gęsty przepływ optyczny)]
                 {Wykres rozproszenia punktów\\(gęsty przepływ optyczny, próbka \textit{Person\_G\_C})}
         \label{fig:DenseScatterGC}
@@ -744,15 +748,16 @@
 
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=10cm]{charts/quality/RandomScatterGC}
+        \includegraphics[width=15cm]{charts/quality/RandomScatterGC}
         \caption[Wykres rozproszenia punktów (las drzew losowych)]
                 {Wykres rozproszenia punktów\\(las drzew losowych, próbka \textit{Person\_G\_C})}
         \label{fig:RandomScatterGC}
       \end{figure}
 
+    \newpage
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=10cm]{charts/quality/SparseScatterGC}
+        \includegraphics[width=15cm]{charts/quality/SparseScatterGC}
         \caption[Wykres rozproszenia punktów (rzadki przepływ optyczny)]
                 {Wykres rozproszenia punktów\\(rzadki przepływ optyczny, próbka \textit{Person\_G\_C})}
         \label{fig:SparseScatterGC}
@@ -760,9 +765,15 @@
 
     Na wykresach \ref{fig:DenseScatterGC}, \ref{fig:RandomScatterGC}, \ref{fig:SparseScatterGC} została przedstawiona wizualna reprezentacja wyznaczonych punktów charakterystycznych wyznaczonej ścieżki (kolor zielony) oraz najbliższych uśrednionych punktów (kolor niebieski) w~odniesieniu do wyznaczonych manualnie punktów wzorcowych (kolor czerwony). Promień okręgu otaczającego punkt wzorcowy jest wprost proporcjonalny do błędu (odległości najbliższego średniego punktu). Po analizie wzrokowej, widać że największe czerwone punkty (zwłaszcza na boku wyznaczonego kształtu) posiada metoda wykorzystująca las drzew losowych.
 
+    W~przypadku wykresów \ref{fig:DenseKeypointsPerMapSize} oraz \ref{fig:DensePathPerMapSize} zaprezentowany został spadek jakości wraz ze~zwiększającym się rozmiarem siatki dla przepływu optycznego w~wariancie gęstym.
+
+    Dla metody lasów losowych liczba drzew losowych wpływa w~niewielkim stopniu na jakość, co zostało zaprezentowane na wykresach \ref{fig:RandomKeypointsPerTrainedTreesAmount} oraz \ref{fig:RandomPathPerTrainedTreesAmount}. Większa wartość omawianego współczynnika pozwala w~niewielkim stopniu zmniejszyć maksymalny błąd (wartości od 30 do 45) związany z~odległością od punktów wzorcowych.
+
+    Jak wspomniano w~sekcji \ref{Section_Overhead} i~co widać na wykresach \ref{fig:SpecialisedSparseKeypointsDistance} oraz \ref{fig:SpecialisedSparsePathDistance}, warto zwiększyć wartość współczynnika minimalnej odległości pomiędzy punktami charakterystycznymi, w~celu zmniejszenia maksymalnego błędu (odległości od ścieżek oraz punktów wzorcowych). Dzięki temu zmniejszy się również wartość średnia odległości i~poprawi jakość ścieżki wyznaczonej ze śledzonych punktów.
+
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=14cm]{charts/quality/DenseKeypointsPerMapSize}
+        \includegraphics[width=15cm]{charts/quality/DenseKeypointsPerMapSize}
         \caption[Odległości od punktów wzorcowych w~zależności od rozmiaru siatki]
                 {Odległości od punktów wzorcowych w~zależności od rozmiaru siatki (gęsty przepływ optyczny)}
         \label{fig:DenseKeypointsPerMapSize}
@@ -770,18 +781,15 @@
 
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=14cm]{charts/quality/DensePathPerMapSize}
+        \includegraphics[width=15cm]{charts/quality/DensePathPerMapSize}
         \caption[Odległość od ścieżek wzorcowych w~zależności od rozmiaru siatki]
                 {Odległość od ścieżek wzorcowych w~zależności od rozmiaru siatki (gęsty przepływ optyczny)}
         \label{fig:DensePathPerMapSize}
       \end{figure}
 
-    W~przypadku wykresów \ref{fig:DenseKeypointsPerMapSize} oraz \ref{fig:DensePathPerMapSize} zaprezentowany został spadek jakości wraz ze~zwiększającym się rozmiarem siatki dla przepływu optycznego w~wariancie gęstym.
-
-    \newpage
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=14cm]{charts/quality/RandomKeypointsPerTrainedTreesAmount}
+        \includegraphics[width=15cm]{charts/quality/RandomKeypointsPerTrainedTreesAmount}
         \caption[Odległości od punktów wzorcowych w~zależności od liczby drzew losowych]
                 {Odległości od punktów wzorcowych w~zależności od liczby drzew losowych (las drzew losowych)}
         \label{fig:RandomKeypointsPerTrainedTreesAmount}
@@ -789,18 +797,16 @@
 
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=14cm]{charts/quality/RandomPathPerTrainedTreesAmount}
+        \includegraphics[width=15cm]{charts/quality/RandomPathPerTrainedTreesAmount}
         \caption[Odległości od ścieżek wzorcowych w~zależności od liczby drzew losowych]
                 {Odległości od ścieżek wzorcowych w~zależności od liczby drzew losowych (las drzew losowych)}
         \label{fig:RandomPathPerTrainedTreesAmount}
       \end{figure}
 
-    Dla metody lasów losowych liczba drzew losowych wpływa w~niewielkim stopniu na jakość, co zostało zaprezentowane na wykresach \ref{fig:RandomKeypointsPerTrainedTreesAmount} oraz \ref{fig:RandomPathPerTrainedTreesAmount}. Większa wartość omawianego współczynnika pozwala w~niewielkim stopniu zmniejszyć maksymalny błąd (wartości od 30 do 45) związany z~odległością od punktów wzorcowych.
 
-    \newpage
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=14cm]{charts/quality/KeypointsDistanceSparsePerMinimalDistance}
+        \includegraphics[width=15cm]{charts/quality/KeypointsDistanceSparsePerMinimalDistance}
         \caption[Odległość od punktu wzorcowego w~zależności od minimalnej odległości pomiędzy punktami
                  charakterystycznymi]
                 {Odległość od punktu wzorcowego w~zależności od minimalnej odległości pomiędzy punktami
@@ -810,15 +816,13 @@
 
       \begin{figure}[!ht]
         \centering
-        \includegraphics[width=14cm]{charts/quality/PathDistanceSparsePerMinimalDistance}
+        \includegraphics[width=15cm]{charts/quality/PathDistanceSparsePerMinimalDistance}
         \caption[Odległość od ścieżki wzorcowej w~zależności od minimalnej odległości pomiędzy punktami
                  charakterystycznymi]
                 {Odległość od ścieżki wzorcowej w~zależności od minimalnej odległości pomiędzy punktami
                  charakterystycznymi (rzadki przepływ optyczny)}
         \label{fig:SpecialisedSparsePathDistance}
       \end{figure}
-
-    Jak wspomniano w~sekcji \ref{Section_Overhead} i~co widać na wykresach \ref{fig:SpecialisedSparseKeypointsDistance} oraz \ref{fig:SpecialisedSparsePathDistance}, warto zwiększyć wartość współczynnika minimalnej odległości pomiędzy punktami charakterystycznymi, w~celu zmniejszenia maksymalnego błędu (odległości od ścieżek oraz punktów wzorcowych). Dzięki temu zmniejszy się również, wartość średnia odległości i~poprawi jakość ścieżki wyznaczonej ze śledzonych punktów.
 
 \chapter{Usprawnienia i~podsumowanie}\label{Chapter_Podsumowanie}
 
@@ -829,11 +833,11 @@
     \begin{itemize}
       \item \textbf{Rozszerzenie sposobu budowania bazy treningowej dla algorytmu wykorzystującego las drzew losowych.}
 
-      Aby zwiększyć jakość klasyfikacji oraz jeszcze bardziej uodpornić algorytm na zmianę kształtu śledzonej dłoni należy udoskonalić proces generacji danych wejściowych. Potencjalnym rozszerzeniem może być wykorzystanie nie tylko pierwszej klatki animacji, do generowania zbioru danych treningowych. Innym rozszerzeniem, może być dodanie kolejnych transformacji źródłowej klatki animacji (np. celowego zniekształcenia perspektywy lub tzw. \textit{rybiego oka} oraz dodatkowego rodzaju szumu).
+      Aby zwiększyć jakość klasyfikacji oraz jeszcze bardziej uodpornić algorytm na zmianę kształtu śledzonej dłoni należy udoskonalić proces generacji danych wejściowych. Potencjalnym rozszerzeniem może być wykorzystanie nie tylko pierwszej klatki animacji, do generowania zbioru danych treningowych. Innym rozszerzeniem może być dodanie kolejnych transformacji źródłowej klatki animacji (np. wprowadzenie zniekształcenia perspektywy lub tzw. \textit{rybiego oka} oraz dodatkowego rodzaju szumu w~celu zasymulowania zmiany kształtu dłoni).
 
       \item \textbf{Optymalizacja zużycia pamięci dla algorytmu przepływu optycznego gęstego.}
 
-      W~sekcji \ref{Section_Memory} podczas omawiania zużycia pamięci dla wspomnianego algorytmu dało się zauważyć ciągłą zmianę zużywanej pamięci fizycznej (i~w konsekwencji także wirtualnej, rysunek \ref{fig:OpticalFlowsMemoryUsage}). Ciągła alokacja i~zwalnianie przydzielonych zasobów negatywnie wpływa na czas przetwarzania klatki sekwencji wideo. Narzut ten, może zostać zniwelowany za pomocą zmiany sposobu alokacji pamięci np. poprzez zastosowanie wielokrotnie wykorzystywanej i~współdzielonej puli pamięci.
+      W~sekcji \ref{Section_Memory} podczas omawiania zużycia pamięci dla wspomnianego algorytmu dało się zauważyć ciągłą zmianę zużywanej pamięci fizycznej (i~w konsekwencji także wirtualnej). Ciągła alokacja i~zwalnianie przydzielonych zasobów negatywnie wpływa na czas przetwarzania klatki sekwencji wideo. Narzut ten może zostać zniwelowany za pomocą zmiany sposobu alokacji pamięci np. poprzez zastosowanie wielokrotnie wykorzystywanej i~współdzielonej puli pamięci.
 
       \item \textbf{Optymalizacja zużycia pamięci dla algorytmu opartego o drzewa losowe.}
 

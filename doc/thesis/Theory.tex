@@ -124,7 +124,7 @@
 
     W~przypadku filtrów opartych o~metody analityczne warto pamiętać o~innej rodzinie algorytmów śledzenia opartych o~filtry cząsteczkowe (ang. \textit{particle filters}) oraz szczególnym przypadku - filtrze Kalmana. Omawiane algorytmy najskuteczniej działają w~środowisku silnych zakłóceń (np. drgań lub wibracji) lub gdzie obserwator porusza się wraz z~kamerą wideo. Zbiór danych wejściowych został przygotowany w~zupełnie innych warunkach, dlatego omawiane metody nie zostały zaimplementowane w~pracy.
 
-    Diametralnie inną rodziną są algorytmy wykorzystujące uczenie maszynowe. Coraz większą popularność zdobywa metoda wykorzystująca lasy drzew losowych i~sporo problemów może być rozwiązywanych za jej pomocą. Rosnąca popularność, skuteczność oraz zupełnie inne podejście do przetwarzania sekwencji wideo, przyczyniły się do wyboru właśniej tej techniki na trzecią implementację zaproponowaną w~pracy magisterskiej.
+    Diametralnie inną rodziną są algorytmy wykorzystujące uczenie maszynowe. Coraz większą popularność zdobywa metoda wykorzystująca lasy drzew losowych i~sporo problemów może być rozwiązywanych za jej pomocą. Rosnąca popularność, skuteczność oraz zupełnie inne podejście do przetwarzania sekwencji wideo, przyczyniły się do wyboru właśnie tej techniki na trzecią implementację zaproponowaną w~pracy magisterskiej.
 
   \newpage
   \section{Algorytmy oparte o~przepływ optyczny}\label{Section_OpticalFlow}
@@ -429,7 +429,7 @@
 
         Proces powtarzany jest dla każdego węzła nie będącego liściem. Rekurencja zostanie przerwana po osiągnięciu maksymalnej wysokości drzewa lub gdy w~węźle zostanie zbyt mała liczba elementów. W~zaproponowanej implementacji minimalna liczba elementów w~węźle waha się od 50 do 100 elementów, natomiast maksymalna wysokość drzewa jest liczbą całkowitą z~przedziału $[10; 30]$.
 
-        Klasą dla analizowanego przypadku nazywamy przynależność do wygenerowanej grupy łat zbudowanych dookoła wyektrahowanych punktów kluczowych za pomocą entropii obliczonej według powyższej definicji.
+        Klasą dla analizowanego przypadku nazywamy przynależność do wygenerowanej grupy łat zbudowanych dookoła wyekstrahowanych punktów kluczowych za pomocą entropii obliczonej według powyższej definicji.
 
       \subsubsection{Test zaimplementowany wewnątrz węzła drzewa losowego}
 
@@ -449,7 +449,7 @@
 
         Proces klasyfikacji wykorzystujący nauczone lasy drzew losowych przebiega w~trzech etapach:
           \begin{itemize}
-            \item W~pierwszym kroku następuje ekstrakcja cech z~aktualnej klatki animacji. Do tego celu wykorzystywany jest algorytm wyodrębnienia narożników zgodnych z~definicją narożnika według \textit{Harrisa}. Punkty charakterystyczne zostają wyekstrahowane wraz z~otoczeniem (fragmenty, łaty). Proces ten odbywa sie dla każdej klatki niezależnie, nie wprowadzając zależności między aktualnie przetwarzaną klatką i~kolejnymi.
+            \item W~pierwszym kroku następuje ekstrakcja cech z~aktualnej klatki animacji. Do tego celu wykorzystywany jest algorytm wyodrębnienia narożników zgodnych z~definicją narożnika według \textit{Harrisa}. Punkty charakterystyczne zostają wyekstrahowane wraz z~otoczeniem (fragmenty, łaty). Proces ten odbywa się dla każdej klatki niezależnie, nie wprowadzając zależności między aktualnie przetwarzaną klatką i~kolejnymi.
             \item Drugi krok polega na wyznaczeniu klasy, do której zostanie zakwalifikowany dany fragment oraz prawdopodobieństwa, z~jakim dana łata należy do wyznaczonej klasy. Obliczenie omawianych parametrów odbywa się poprzez przepuszczenie danej cechy przez las drzew losowych i~określeniu za pomocą uśrednionej liczby głosów zawartych w~liściach wszystkich drzew, jak prawdopodobne i~do której klasy należy dany punkt wraz z~otoczeniem. Elementy z~niewłaściwą klasą lub poniżej pewnego prawdopodobieństwa (w~implementacji przyjęto wartość $0.1$) zostają odrzucone w~procesie klasyfikacji.
             \item Po przetworzeniu wszystkich fragmentów następuje faza prezentacji wyników. Trzeci krok, ze względu na stopień skomplikowania, został szczegółowo omówiony w~następnej podsekcji.
           \end{itemize}
