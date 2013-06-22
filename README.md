@@ -12,19 +12,19 @@ Technology List:
 
 Domain logic:
 
-  - C++ (_ISO/IEC 14882:2003_)
-    - C++ Standard Library (_iostream, string, ..._)
+  - C++ ( _ISO/IEC 14882:2003_ )
+    - C++ Standard Library ( _iostream, string, ..._ )
     - OpenCV
 
 Thin middle-end and simple front-end:
 
-  - node.js (_middle-end_)
+  - node.js ( _middle-end_ )
     - express
     - vid-streamer
     - colors
     - execSync
     - glob
-  - pure JavaScript (_ES5_), HTML5, CSS3 (_front-end_)
+  - pure JavaScript ( _ES5_ ), HTML5, CSS3 ( _front-end_ )
   - all visualizations and charts are based on d3.js
 
 Continuous integration:
@@ -34,8 +34,8 @@ Continuous integration:
 
 Utilities:
 
-  - FFmpeg (_converting, transposing and recording videos)
-  - Bash (_automation scripts_)
-  - Git (_VCS_)
-  - Sublime Text 2 (_Editor_)
+  - FFmpeg ( _converting, transposing and recording videos_ )
+  - Bash ( _automation scripts_ )
+  - Git ( _VCS_ )
+  - Sublime Text 2 ( _Editor_ )
   - LaTeX
