@@ -149,7 +149,7 @@
 
       Przypisując wektor prędkości (lub przemieszczenie, różnicę odległości jaką piksel przebył od swojego ostatniego położenia w~poprzedniej ramce sekwencji wideo) do każdego piksela, tworzony jest obraz przepływu optycznego nazwany \textit{gęstym} (został on szczegółowo omówiony w~\ref{Subsection_DenseOpticalFlow}). Powstały obraz nazywany jest \textit{wektorowym polem prędkości}. Podczas obserwacji tego typu metod, łatwo zauważyć, że wiele wektorów prędkości na obrazie posiada długość $0$ (innymi słowy, piksele w~tych miejscach się nie poruszają) i~można pokusić się o~optymalizację metody gęstej poprzez wprowadzenie okna obserwacji nazwanego \textit{blokiem}. Taki rodzaj gęstego przepływu optycznego nosi nazwę \textit{dopasowywania bloków}, nie został on jednak wzięty pod uwagę w~przeprowadzonych badaniach.
 
-      Obliczenie \textit{wektorowego pola prędkości} jest zadaniem kosztownym obliczeniowo. Złożoność asymptotyczna wynosi $O(nm)$, gdzie $n$~oraz~$m$ są wymiarami klatki animacji. W~praktyce, oprócz wspominanej złożoności istnieje jeszcze spory koszt reprezentowany przez stałą opisującą obliczenie wektora prędkości dla danego punktu. Omawiana stała posiada bardzo duży wpływ na końcową postać złożoności ze~względu na zastosowanie metody interpolacji między śledzonymi punktami w~celu uzyskania jednoznacznego rezultatu.
+      Obliczenie \textit{wektorowego pola prędkości} jest zadaniem kosztownym w~kontekście obliczeniowym. Złożoność asymptotyczna wynosi $O(nm)$, gdzie $n$~oraz~$m$ są wymiarami klatki animacji. W~praktyce, oprócz wspominanej złożoności istnieje jeszcze spory koszt reprezentowany przez stałą opisującą obliczenie wektora prędkości dla danego punktu. Omawiana stała posiada bardzo duży wpływ na końcową postać złożoności ze~względu na zastosowanie metody interpolacji między śledzonymi punktami w~celu uzyskania jednoznacznego rezultatu.
 
       Gęsty przepływ optyczny, mimo intuicyjnej definicji, jest metodą o~bardzo dużym koszcie obliczeniowym. Próba zredukowania obliczanego pola wektorów doprowadziła do stworzenia metody \textit{dopasowania bloków} omówionej powyżej. Intuicyjnie, możliwe jest jeszcze większe ograniczenie złożoności, poprzez śledzenie tylko charakterystycznej grupy punktów, oraz zastosowanie \textit{definicji narożnika} omówionej szczegółowo w~podrozdziale \ref{Section_GoodFeaturesToTrack} oraz artykułach \cite{LucasKanadeTracker81} i~\cite{GoodFeaturesToTrack94}. Właśnie takie sformułowanie problemu nazywane jest \textit{rzadkim przepływem optycznym}. Koszt obliczeniowy jest dużo mniejszy niż w~przypadku gęstego przepływu i~jest wprost proporcjonalny do mocy zbioru punktów charakterystycznych, która w~zdecydowanej większości przypadków jest dużo mniejsza od liczby punktów obrazu.
 
@@ -172,11 +172,25 @@
 
       Dla uproszczenia wyjaśnień przyjęty został obraz w~skali szarości o~jednym kanale opisanym liczbą zmiennoprzecinkową.
 
-      Pierwsze twierdzenie wymaga, aby śledzony punkt danej powierzchni wyglądał tak samo w~kolejnych klatkach animacji (inaczej: wyglądał tak samo w~czasie), co matematycznie zapisane jest następująco: \[ f(x, t) \equiv I(x(t), t) = I(x(t + dt), t + dt), \] co oznacza, że jasność śledzonego punktu nie ulega zmianom w~czasie: \[ \frac{\partial f(x)}{\partial t} = 0. \]
+      Pierwsze twierdzenie wymaga, aby śledzony punkt danej powierzchni wyglądał tak samo w~kolejnych klatkach animacji (inaczej: wyglądał tak samo w~czasie), co matematycznie zapisane jest następująco:
+      \begin{equation}
+        f(x, t) \equiv I(x(t), t) = I(x(t + dt), t + dt),
+      \end{equation}
+      co oznacza, że jasność śledzonego punktu nie ulega zmianom w~czasie:
+      \begin{equation}
+        \frac{\partial f(x)}{\partial t} = 0.
+      \end{equation}
 
       Drugi warunek oznacza, że ruch wybranego punktu z~ramki na ramkę jest \textit{mały}. Innymi słowy, zmiana jest aproksymacją pochodnej intensywności obrazu w~dziedzinie czasu (założone zostało, że omawiana zmiana jest \textit{różniczkowalna}). Aby wyjaśnić konsekwencje tego założenia, najpierw zostanie opisany przypadek jednowymiarowy.
 
-      W~przestrzeni jednowymiarowej została wykorzystana pierwsza definicja, zastępując funkcję jasności $f(x,t)$ wyrażeniem $I(x(t), t)$ oraz zakładając zależność zmiennej $x$ od $t$. Po skorzystaniu z~twierdzenia o~pochodnej funkcji złożonej otrzymano: \[ \underbrace{ \left. \frac{\partial I}{\partial x}\right|_{t} }_{I_{x}} \underbrace{ \left(\frac{\partial x}{\partial t}\right) }_{\mathbf{v}} + \underbrace{ \left. \frac{\partial I}{\partial t}\right|_{x(t)} }_{I_{t}} = 0, \] gdzie $I_{x}$ jest pochodną pierwszego obrazu, $I_{t}$ jest pochodną obrazu następnej klatki, a~$\mathbf{v}$ jest poszukiwanym wektorem prędkości. Po przekształceniu uzyskano równanie dla przypadku jednowymiarowego: \[ \mathbf{v} = -\frac{I_{t}}{I_{x}}. \]
+      W~przestrzeni jednowymiarowej została wykorzystana pierwsza definicja, zastępując funkcję jasności $f(x,t)$ wyrażeniem $I(x(t), t)$ oraz zakładając zależność zmiennej $x$ od $t$. Po skorzystaniu z~twierdzenia o~pochodnej funkcji złożonej otrzymano:
+      \begin{equation}
+        \underbrace{ \left. \frac{\partial I}{\partial x}\right|_{t} }_{I_{x}} \underbrace{ \left(\frac{\partial x}{\partial t}\right) }_{\mathbf{v}} + \underbrace{ \left. \frac{\partial I}{\partial t}\right|_{x(t)} }_{I_{t}} = 0,
+      \end{equation}
+      gdzie $I_{x}$ jest pochodną pierwszego obrazu, $I_{t}$ jest pochodną obrazu następnej klatki, a~$\mathbf{v}$ jest poszukiwanym wektorem prędkości. Po przekształceniu uzyskano równanie dla przypadku jednowymiarowego:
+      \begin{equation}
+        \mathbf{v} = -\frac{I_{t}}{I_{x}}.
+      \end{equation}
 
       \newpage
         \begin{figure}[!ht]
@@ -197,14 +211,21 @@
           \label{fig:Iterations}
         \end{figure}
 
-      Próba przeniesienia proponowanego rozwiązania na przypadek dwuwymiarowy wymaga dodania współrzędnej $y$, co modyfikuje opisane równanie do postaci: \[I_{x}\mathbf{u} + I_{y}\mathbf{v} + I_{t} = \mathbf{0}. \]
+      Próba przeniesienia proponowanego rozwiązania na przypadek dwuwymiarowy wymaga dodania współrzędnej $y$, co modyfikuje opisane równanie do postaci:
+      \begin{equation}
+        I_{x}\mathbf{u} + I_{y}\mathbf{v} + I_{t} = \mathbf{0}.
+      \end{equation}
 
       Niestety równanie w~tej postaci jest niedookreślone, ponieważ dla każdego piksela są obecne dwie niewiadome. Oznacza to, że na poziomie pojedynczych pikseli nie jest możliwe uzyskanie dokładnego rozwiązania dla ruchu w~przestrzeni dwuwymiarowej. W~takim przypadku możliwe jest jedynie rozwiązanie składnika ruchu, który jest równoległy do linii, wyznaczonej przez równanie przepływu, co jest zaprezentowane poniżej:
 
-        \[ I_{x}\mathbf{u} + I_{y}\mathbf{v} + I_{t} = \mathbf{0}, \]
+        \begin{equation}
+          I_{x}\mathbf{u} + I_{y}\mathbf{v} + I_{t} = \mathbf{0},
+        \end{equation}
 
-        \[ \nabla \mathbf{I}^{T} \mathbf{u} = -\mathbf{I_{t}}, \]
-        \[
+        \begin{equation}
+          \nabla \mathbf{I}^{T} \mathbf{u} = -\mathbf{I_{t}},
+        \end{equation}
+        \begin{equation}
           \mathbf{u} =
             \begin{bmatrix}
               u \\
@@ -216,11 +237,11 @@
               I_{x} \\
               I_{y} \\
             \end{bmatrix}.
-        \]
+        \end{equation}
 
       Aby rozwiązać przypadek dwuwymiarowy bez wspomnianego problemu, niezbędne jest skorzystanie z~trzeciego twierdzenia o~jednolitej przestrzeni. Jeśli grupa pikseli porusza się z~identyczną prędkością i~należy fizycznie do jednego obiektu, możliwe jest wykorzystanie ich własności do rozwiązania omawianego równania, poprzez zastosowanie okna (najczęstszy wybór to: $3\times3$, $5\times5$ lub $7\times7$ pikseli), dla którego w~centrum znajduje się śledzony punkt. Dla okna o~rozmiarze 3 na 3 uzyskano 9 dodatkowych równań, dzięki czemu niedookreślony układ równań staje się nadokreślony, co zostało zilustrowane poniżej:
 
-        \[
+        \begin{equation}
           \underbrace{
             \begin{bmatrix}
               I_{x}(p_{1}) & I_{y}(p_{1}) \\
@@ -240,17 +261,17 @@
               \vdots       \\
               I_{t}(p_{9}) \\
             \end{bmatrix}}_{\substack{\mathbf{b}\\9\times1}}.
-        \]
+        \end{equation}
 
       Aby rozwiązać zadany układ równań zastosowano metodę najmniejszych kwadratów zgodnie z~$min||Ad - b||^{2}$ co daje:
 
-        \[
+        \begin{equation}
           \underbrace{(A^{T}A)}_{2\times2} \underbrace{d}_{2\times1} = \underbrace{A^{T}b}_{2\times2}.
-        \]
+        \end{equation}
 
       Następnie wyłączone zostały poszukiwane wektory $\mathbf{v}$ oraz $\mathbf{u}$:
 
-        \[
+        \begin{equation}
           \underbrace{
             \begin{bmatrix}
               \sum I_{x} I_{x} & \sum I_{x} I_{y} \\
@@ -267,16 +288,16 @@
               \sum I_{y} I_{t} \\
             \end{bmatrix}
           }_{A^{T}b}.
-        \]
+        \end{equation}
 
       Co ostatecznie prowadzi do rozwiązania:
 
-        \[
+        \begin{equation}
           \begin{bmatrix}
             \mathbf{u} \\
             \mathbf{v} \\
           \end{bmatrix} = (A^{T}A)^{-1} A^{T}b.
-        \]
+        \end{equation}
 
       Aby rozwiązać powyższe równanie, część $(A^{T}A)$ musi być odwracalna, a~warunek odwracalności zostanie spełniony wtedy i~tylko wtedy, gdy omawiany fragment posiada rząd równy $2$. Powyższe wymaganie zostanie spełnione, gdy wspomniana macierz posiada dwa duże wektory własne. Przywołując \textit{definicję Harrisa} z~rozdziału \ref{Section_GoodFeaturesToTrack} dokładnie takie własności uzyskano tworząc okno wokół śledzonego punktu, który jest \textit{narożnikiem}. Z~wykorzystaniem takiego piksela jest możliwe rozwiązanie powyższego układu równań, wyznaczając wektory prędkości w~dwuwymiarowej przestrzeni.
 
