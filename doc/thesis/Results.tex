@@ -357,7 +357,7 @@
         \label{fig:StackedRandom}
       \end{figure}
 
-    Reprezentacja graficzna narzutu dodatkowych etapów przetwarzania została zamieszczona na wykresach \ref{fig:StackedDense}, \ref{fig:StackedSparse} oraz \ref{fig:StackedRandom}. Widać wyraźnie, że w~przypadku algorytmów z~rodziny przepływu optycznego dodatkowy narzut mieści się w~granicy błędu statystycznego (maksymalne wartości odpowiednio $0.6$ oraz $0.33$ milisekundy).
+    Reprezentacja graficzna narzutu dodatkowych etapów przetwarzania została zamieszczona na wykresach \ref{fig:StackedDense}, \ref{fig:StackedSparse} oraz \ref{fig:StackedRandom}. Widać wyraźnie, że w~przypadku algorytmów z~rodziny przepływu optycznego dodatkowy narzut mieści się w~granicy błędu pomiarowego (maksymalne wartości odpowiednio $0.6$ oraz $0.33$ milisekundy).
 
     W~przypadku algorytmu opartego o~uczenie maszynowe, odzyskanie reprezentacji śledzonych punktów wiąże się z~niewielkim narzutem czasowym, odzwierciedlonym na przebiegu \ref{fig:StackedRandom} (maksymalnie ok. $50$ milisekund). Jak wyraźnie widać na wykresie, narzut wprowadzony przez pozostałe elementy w~stosunku do czasu obliczeń punktów śledzonej ścieżki jest pomijalnie mały.
 
@@ -479,7 +479,7 @@
       \end{figure}
 
   \section{Obciążenie czasowe}\label{Section_Overhead}
-    Obciążeniem czasowym nazywamy różnicę pomiędzy nominalnym czasem trwania nieprzetworzonej sekwencji wideo a całkowitym czasem przetwarzania omawianej próbki. W~przypadku, gdy wartość obciążenia jest liczbą ujemną mamy do czynienia z~rezerwą czasu przetwarzania (oznacza to, że narzut czasowy wprowadzony przez algorytm dla każdej ramki jest mniejszy od czasu oczekiwania na następną klatkę animacji).
+    Obciążeniem czasowym nazywamy różnicę pomiędzy nominalnym czasem trwania nieprzetworzonej sekwencji wideo a całkowitym czasem przetwarzania omawianej próbki. W~przypadku, gdy wartość obciążenia jest liczbą ujemną mamy do czynienia z~rezerwą czasu przetwarzania (oznacza to, że narzut czasowy wprowadzony przez algorytm dla każdej ramki jest mniejszy od czasu oczekiwania na następną klatkę animacji). Innym sposobem reprezentacji omawianego wskaźnika jest wartość procentowa (oznaczająca jaki odsetek czasu przeznaczonego na przetwarzanie klatki został wykorzystany). W~przypadku wartości mniejszej od 100\% system posiada zapas jeśli chodzi o~przetwarzanie klatek w~czasie rzeczywistym. W~pozostałych dwóch przypadkach (obciążenie równe lub~większe od 100\%) system nie posiada zapasu lub jest przeciążony i~nie jest w~stanie przetwarzać kolejnych klatek bez wprowadzania dodatkowych opóźnień.
 
     Na podstawie wyników zaprezentowanych w~poprzedniej sekcji można skutecznie określić, który algorytm wprowadza najmniejsze obciążenie czasowe przetwarzania sekwencji wideo. Na wykresie \ref{fig:OverheadGL} zostały zestawione wartości dla każdego z~algorytmów. Najbardziej wydajnym algorytmem jest algorytm przepływu optycznego w~wariancie rzadkim.
 
@@ -852,7 +852,7 @@
 
     W~przypadku gęstego przepływu optycznego kolorem żółtym zaznaczone są wektory mapy przepływu optycznego. Kolorem ciemno niebieskim zaznaczona jest siatka punktów dla której wyznaczana jest omawiana mapa przepływu. W~omawianym przypadku widać, że algorytm ma najbardziej postrzępioną postać wyjściowej trajektorii, oznaczonej kolorem białym. Omawiana krzywa jednoznacznie pokazuje, że algorytm jest dużo słabszy jakościowo w~porównaniu do pozostałych dwóch implementacji.
 
-\chapter{Usprawnienia i~podsumowanie}\label{Chapter_Podsumowanie}
+\chapter{Podsumowanie i~kierunki dalszych prac}\label{Chapter_Podsumowanie}
 
   \section{Proponowane usprawnienia}\label{Section_Usprawnienia}
 

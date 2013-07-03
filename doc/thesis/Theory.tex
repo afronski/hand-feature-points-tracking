@@ -2,15 +2,15 @@
 
   \section{Cel}\label{Section_Aim}
 
-    Ewolucja technologii informacyjnych w~większości przypadków poza zwiększeniem możliwości obliczeniowych, niesie także ze sobą zmianę sposobu interakcji poprzez zacieśnienie współpracy na linii człowiek - komputer
+    Ewolucja technologii informacyjnych w~większości przypadków poza zwiększeniem możliwości obliczeniowych, niesie także ze sobą zmianę sposobu interakcji poprzez zacieśnienie współpracy na linii człowiek - komputer.
 
-    Sterowanie pierwszymi maszynami obliczeniowymi ciężko nazwać interakcją, gdyż proces tworzenia kart dziurkowanych, choć wyżej w~abstrakcji od naciskania przełączników, nadal był mało interaktywny. Prawdziwym przełomem było opracowanie klawiatury, która umożliwia sterowanie komputerem za pomocą komend do dnia dzisiejszego. Kolejnym etapem ewolucji były narzędzia wskazujące w~postaci myszki komputerowej.
+    Sterowanie pierwszymi maszynami obliczeniowymi ciężko nazwać interakcją, gdyż proces tworzenia kart dziurkowanych, choć wyżej w~abstrakcji od naciskania przełączników, nadal był mało interaktywny. Prawdziwym przełomem było opracowanie klawiatury, która umożliwia sterowanie komputerem za pomocą komend i~jest powszechnie stosowana do dnia dzisiejszego. Kolejnym etapem ewolucji były narzędzia wskazujące w~postaci myszki komputerowej.
 
-    Gdy człowiek nauczył się komunikacji z~maszynami za pomocą urządzeń wskazujących, następnym naturalnym krokiem było skierowanie się ku kolejnemu zmysłowi~-~dotykowi. Obecnie urządzenia dotykowe zdominowały proces interakcji z~użytkownikiem dzięki ekranom dotykowym, telefonom komórkowym nowej generacji oraz tabletom. Przekraczając kolejne bariery ewolucja interfejsów dotarła do kolejnego etapu nie wspomaganego bezpośrednio żadnym zmysłem, gdzie urządzenia elektroniczne są wykorzystywane jedynie w~sposób pośredni - do rejestracji i~analizy. W~tym modelu sterowanie odbywa się za pomocą ruchu dłoni lub całej sylwetki. Jednym z~zaproponowanych rozwiązań jest \textit{Kinect} firmy \textit{Microsoft} odnoszący sukcesy w~branży związanej z~grami komputerowymi.
+    Gdy człowiek opracował metody komunikacji z~maszynami za pomocą urządzeń wskazujących, następnym naturalnym krokiem było skierowanie się ku kolejnemu zmysłowi~-~dotykowi. Obecnie urządzenia dotykowe zdominowały proces interakcji z~użytkownikiem dzięki ekranom dotykowym, telefonom komórkowym nowej generacji oraz tabletom. Przekraczając kolejne bariery ewolucja interfejsów dotarła do kolejnego etapu nie wspomaganego bezpośrednio żadnym zmysłem, gdzie urządzenia elektroniczne są wykorzystywane jedynie w~sposób pośredni - do rejestracji i~analizy obrazów. W~tym modelu sterowanie odbywa się za pomocą ruchu dłoni lub całej sylwetki. Jednym z~zaproponowanych rozwiązań jest \textit{Kinect} firmy \textit{Microsoft} odnoszący sukcesy w~branży związanej z~grami komputerowymi.
 
-    Brak dedykowanego sprzętu elektronicznego wspomagającego proces interakcji utrudnia analizę, a~jednocześnie pozwala na wejście na kolejny stopień jeśli chodzi o~interakcję, umożliwiając personalizację obsługi (na podstawie wzorców biometrycznych i~algorytmów uczących się sposobu, w~jaki użytkownik wykorzystuje oprogramowanie) lub pozwalając na interakcję osobom głuchoniemym, dla których komunikacja za pomocą gestów jest naturalna.
+    Brak dedykowanego sprzętu elektronicznego wspomagającego proces interakcji utrudnia analizę, a~jednocześnie pozwala na wejście na kolejny stopień, jeśli chodzi o~interakcję, umożliwiając personalizację obsługi (na podstawie wzorców biometrycznych i~algorytmów uczących się sposobu, w~jaki użytkownik wykorzystuje oprogramowanie) lub pozwalając na interakcję osobom głuchoniemym, dla których komunikacja za pomocą gestów jest naturalna.
 
-    Kluczowym elementem procesu interakcji są algorytmy śledzenia punktów charakterystycznych, a~w~szczególnym przypadku wyznaczanie trajektorii i~śledzenie punktów znajdujących się na powierzchni dłoni. Ze względu na odmienną budowę ciała, różne uwarunkowania, pewne indywidualne cechy biometryczne oraz nawyki analizowany problem nie jest trywialny i~poszczególne metody w~różny sposób dają sobie radę w~opisywanej sytuacji. Celem pracy magisterskiej jest zbadanie pod względem jakościowym, jak i~wydajnościowym trzech wybranych algorytmów śledzenia punktów charakterystycznych, wybranych na podstawie zróżnicowania sposobu przetwarzania sekwencji wideo i~zweryfikowanie za pomocą zbioru danych wejściowych uzyskanych za pomocą klasycznej kamery jak skutecznie poradzą sobie z~problemem ściśle dotyczącym gestów wykonywanych za pomocą dłoni (ponieważ proces interakcji odbywa się w~czasie rzeczywistym z~bardzo niewielkim opóźnieniem).
+    Kluczowym elementem procesu interakcji są algorytmy śledzenia punktów charakterystycznych, a~w~szczególnym przypadku wyznaczanie trajektorii i~śledzenie punktów znajdujących się na powierzchni dłoni. Ze względu na odmienną budowę ciała, różne uwarunkowania, pewne indywidualne cechy biometryczne oraz nawyki analizowany problem nie jest trywialny i~poszczególne metody wykazują zróżnicowaną możliwość ich stosowania w~opisywanej sytuacji. Celem pracy magisterskiej jest zbadanie pod względem jakościowym, jak i~wydajnościowym trzech algorytmów śledzenia punktów charakterystycznych, wybranych na podstawie zróżnicowania sposobu przetwarzania sekwencji wideo i~zweryfikowanie przy wykorzystaniu zbioru danych wejściowych uzyskanych z~użyciem klasycznej kamery jak skutecznie poradzą sobie z~problemem ściśle dotyczącym gestów wykonywanych za pomocą dłoni (ponieważ proces interakcji odbywa się w~czasie rzeczywistym z~bardzo niewielkim opóźnieniem).
 
   \section{Układ pracy}\label{Section_Layout}
 
@@ -44,7 +44,14 @@
 
     Aby można było w~pełni mówić o~częstotliwości należy wprowadzić definicję \textbf{trybu wyświetlania obrazu}. Wyróżnione zostały dwa sposoby: tryb \textit{progresywny} (oznaczenie \textit{p}, ang. \textit{progressive}) i~tryb z~\textit{przeplotem} (oznaczenie \textit{i}, ang. \textit{interlaced}). W~przypadku trybu progresywnego (stosowanego we współczesnym sprzęcie, czyli monitorów innych niż katodowe \textit{CRT} i~plazmowe \textit{ALiS}) liczba obrazów jest równa liczbie klatek. Dlatego w~przypadku tego trybu wartość \textit{ramek na sekundę}, może zostać zapisana z~nominalną jednostką częstotliwości z~układu SI. Odwrotność częstotliwości przetwarzania określa \textbf{czas przetwarzania pojedynczej klatki} analizowanej sekwencji.
 
-    Dla przykładu, sekwencja wideo o~\textit{liczbie ramek na sekundę} równej 24 \textit{FPS} posiada częstotliwość: \[ f_{wideo} = 24 [FPS] = 24 [Hz], \] z~tej wartości wynika następujący czas przetwarzania pojedynczej ramki: \[ t_{przetwarzania} = \frac{1}{24 [Hz]} = 41,67 [ms]. \]
+    Dla przykładu, sekwencja wideo o~\textit{liczbie ramek na sekundę} równej 24 \textit{FPS} posiada częstotliwość:
+    \begin{equation}
+      f_{wideo} = 24 [FPS] = 24 [Hz],
+    \end{equation}
+    z~tej wartości wynika następujący czas przetwarzania pojedynczej ramki:
+    \begin{equation}
+      t_{przetwarzania} = \frac{1}{24 [Hz]} = 41,67 [ms].
+    \end{equation}
 
     \textbf{Punktem charakterystycznym} nazywany jest punkt ramki animacji wraz z~jego otoczeniem (tzw. \textit{okno} \cite{SalientPointsTracking05}), niezbędnym do wyznaczenia parametrów wyróżniających i~umożliwiających śledzenie. Rozmiar okna oraz sposób wyznaczania własności charakteryzujących dany punkt i~jego wybitność został dokładnie omówiony w~podrozdziale \ref{Section_GoodFeaturesToTrack}.
 
@@ -56,7 +63,7 @@
 
     \textbf{Oknem} nazywany jest fragment ramki sekwencji wideo (o~dowolnych wymiarach), w~środku którego znajduje się punkt charakterystyczny.
 
-    \textbf{Problem szczeliny} to takie usytuowanie okna, na podstawie którego algorytm jest w~stanie określić tylko jedną składową ruchu, prostopadłą do krawędzi wybranego prostokąta. Wizualizacja problemu została zamieszczona na rysunku \ref{fig:ApertureProblem}. W~górnym rzędzie widzimy obserwację ruchu poprzez pewną szczelinę. Niestety, co widać w~dolnym rzędzie, przyjęte obszar obserwacji ogranicza postrzeganie pełnego ruchu obserwowanego obiektu, czego efektem jest utrata informacji o~jednej składowej i~w~konsekwencji błędnie wyznaczony wektor w~górnym rzędzie.
+    \textbf{Problem szczeliny} to takie usytuowanie okna, na podstawie którego algorytm jest w~stanie określić tylko jedną składową ruchu, prostopadłą do krawędzi wybranego prostokąta. Wizualizacja problemu została zamieszczona na rysunku \ref{fig:ApertureProblem}. W~górnym rzędzie widzimy obserwację ruchu poprzez pewną szczelinę. Niestety, co widać w~dolnym rzędzie, przyjęty obszar obserwacji ogranicza postrzeganie pełnego ruchu obserwowanego obiektu, czego efektem jest utrata informacji o~jednej składowej i~w~konsekwencji błędnie wyznaczony wektor w~górnym rzędzie.
 
       \begin{figure}[!ht]
         \centering
@@ -70,7 +77,7 @@
 
     Wybór punktów charakterystycznych dla problemu śledzenia ich w~sekwencji wideo jest kluczowym elementem z~punktu widzenia jakości wyznaczonego rozwiązania końcowego. Analizując sekwencję wideo jedynie ze strukturą o~powtarzalnej teksturze, wybór charakterystycznego elementu okaże się bardzo trudny. Wiele punktów będzie identycznych lub bardzo podobnych do siebie i~śledzenie jednego wybranego pomiędzy kolejnymi ramkami animacji jest z~góry skazane na porażkę. Z~drugiej strony, jeśli algorytm ma do dyspozycji unikalny fragment, wybierając go zwiększa szanse na odnalezienie go w~następnych ramkach.
 
-    Podejście intuicyjne do tego problemu, polegające na poszukiwaniu odróżniającego się szczegółu jest krótkowzroczne. Przy wyborze odpowiedniej cechy, metoda można kierować się dużą wartością pochodnej w~punkcie - tego typu wartości oznaczają najczęściej \textbf{krawędź}. Niestety, podstawową cechą \textit{krawędzi} jest to, że wiele punktów leżących na niej posiada identyczne wartości gradientu (prowadzi to do tzw. problemu szczeliny, który omówiony został wcześniej). Potrzebne są bardziej unikalne właściwości.
+    Podejście intuicyjne do tego problemu, polegające na poszukiwaniu odróżniającego się szczegółu jest krótkowzroczne. Przy wyborze odpowiedniej cechy, metoda może kierować się dużą wartością pochodnej w~punkcie - tego typu wartości oznaczają najczęściej \textbf{krawędź}. Niestety, podstawową cechą \textit{krawędzi} jest to, że wiele punktów leżących na niej posiada identyczne wartości gradientu (prowadzi to do tzw. problemu szczeliny, który omówiony został wcześniej). Potrzebne są bardziej unikalne właściwości.
 
     Pierwsze podejście do problemu doboru cech pozwoliło na odkrycie bardzo ważnej własności dotyczącej wartości pochodnej. Okazuje się, że jeśli wartości pochodnej w~dwóch równoległych do siebie kierunkach są duże, to dany punkt jest dużo bardziej unikalny w~skali całej ramki - nazywany jest wtedy \textbf{narożnikiem}.
 
@@ -114,11 +121,11 @@
 
     Metoda została opracowana przez Davida L\"{o}we w~roku 1999. Ogólna idea algorytmu opiera się na wyekstrahowaniu punktów kluczowych do odpowiedniej struktury danych, następnie obiekt jest identyfikowany w~nowym obrazie pojedynczo, na podstawie odległości w~metryce euklidesowej oraz za pomocą wektora cech. Z~pełnego zbioru dopasowań wybierane zostają tylko te punkty, które zgadzają się pod względem położenia, skali i~orientacji. Dzięki zastosowaniu efektywnej struktury danych (w~proponowanej implementacji tablicy haszowanej) identyfikacja skupisk śledzonych punktów i~wybór tych najwierniej odpowiadających (za pomocą uogólnionej \textit{transformaty Hougha}) oryginalnie śledzonemu obiektowi przebiega bezproblemowo. Następnie, każdy zidentyfikowany klaster trzech lub więcej punktów podlega weryfikacji hipotezy przynależności do śledzonego punktu. Skupiska nie pasujące do omawianej hipotezy zostają odrzucone, klastry wyznaczone przez poprzednie kroki z~poprawnie zweryfikowaną hipotezą z~dużym prawdopodobieństwem należą do śledzonego obiektu.
 
-\chapter{Analiza i~porównanie wybranych algorytmów}\label{Chapter_Algorytmy}
+\chapter{Wybrane algorytmy śledzenia punktów charakterystycznych}\label{Chapter_Algorytmy}
 
   \section{Wprowadzenie}\label{Section_IntroductionToAlgorithms}
 
-    Tematyka śledzenia punktów charakterystycznych jest niezwykle szeroką dziedziną. Mnogość metod związana jest przede wszystkim ze~środowiskiem w~jakim algorytmy działają oraz wymaganiami jakościowymi i~wydajnościowymi jakie są stawiane w~stosunku do konkretnych implementacji.
+    Tematyka śledzenia punktów charakterystycznych jest niezwykle szeroką dziedziną. Mnogość metod związana jest przede wszystkim ze~środowiskiem, w~jakim algorytmy działają oraz wymaganiami jakościowymi i~wydajnościowymi, jakie są stawiane w~stosunku do konkretnych implementacji.
 
     W~pracy magisterskiej zostały wybrane trzy algorytmy śledzenia punktów charakterystycznych. Zostały zaimplementowane najpopularniejsze i~podstawowe algorytmy z~rodziny przepływu optycznego w~wariancie gęstym oraz rzadkim. Oprócz kryterium popularności, zostały one wybrane przede wszystkim przez zupełnie inne podejście do przetwarzania aktualnej klatki animacji.
 
@@ -142,13 +149,13 @@
 
       Przypisując wektor prędkości (lub przemieszczenie, różnicę odległości jaką piksel przebył od swojego ostatniego położenia w~poprzedniej ramce sekwencji wideo) do każdego piksela, tworzony jest obraz przepływu optycznego nazwany \textit{gęstym} (został on szczegółowo omówiony w~\ref{Subsection_DenseOpticalFlow}). Powstały obraz nazywany jest \textit{wektorowym polem prędkości}. Podczas obserwacji tego typu metod, łatwo zauważyć, że wiele wektorów prędkości na obrazie posiada długość $0$ (innymi słowy, piksele w~tych miejscach się nie poruszają) i~można pokusić się o~optymalizację metody gęstej poprzez wprowadzenie okna obserwacji nazwanego \textit{blokiem}. Taki rodzaj gęstego przepływu optycznego nosi nazwę \textit{dopasowywania bloków}, nie został on jednak wzięty pod uwagę w~przeprowadzonych badaniach.
 
-      Obliczenie \textit{wektorowego pola prędkości} jest zadaniem złożonym obliczeniowo. Złożoność asymptotyczna wynosi $O(Cnm)$, gdzie $C$ jest stałą związaną z~obliczeniami wektora prędkości dla danego punktu zależną od~wartości $n$ oraz~$m$, które są wymiarami klatki animacji. Omawiana stała posiada bardzo duży wpływ na końcową postać złożoności ze~względu na zastosowanie metody interpolacji między śledzonymi punktami w~celu uzyskania jednoznacznego rezultatu.
+      Obliczenie \textit{wektorowego pola prędkości} jest zadaniem kosztownym obliczeniowo. Złożoność asymptotyczna wynosi $O(nm)$, gdzie $n$~oraz~$m$ są wymiarami klatki animacji. W~praktyce, oprócz wspominanej złożoności istnieje jeszcze spory koszt reprezentowany przez stałą opisującą obliczenie wektora prędkości dla danego punktu. Omawiana stała posiada bardzo duży wpływ na końcową postać złożoności ze~względu na zastosowanie metody interpolacji między śledzonymi punktami w~celu uzyskania jednoznacznego rezultatu.
 
       Gęsty przepływ optyczny, mimo intuicyjnej definicji, jest metodą o~bardzo dużym koszcie obliczeniowym. Próba zredukowania obliczanego pola wektorów doprowadziła do stworzenia metody \textit{dopasowania bloków} omówionej powyżej. Intuicyjnie, możliwe jest jeszcze większe ograniczenie złożoności, poprzez śledzenie tylko charakterystycznej grupy punktów, oraz zastosowanie \textit{definicji narożnika} omówionej szczegółowo w~podrozdziale \ref{Section_GoodFeaturesToTrack} oraz artykułach \cite{LucasKanadeTracker81} i~\cite{GoodFeaturesToTrack94}. Właśnie takie sformułowanie problemu nazywane jest \textit{rzadkim przepływem optycznym}. Koszt obliczeniowy jest dużo mniejszy niż w~przypadku gęstego przepływu i~jest wprost proporcjonalny do mocy zbioru punktów charakterystycznych, która w~zdecydowanej większości przypadków jest dużo mniejsza od liczby punktów obrazu.
 
       Poniżej zostały szczegółowo omówione algorytmy przepływu optycznego rzadkiego oraz gęstego.
 
-    \subsection{Rzadki przepływ optyczny (algorytm Lucas-Kanade)}
+    \subsection{Rzadki przepływ optyczny}
 
       Oryginalna idea algorytmu opracowana przez Lucasa i~Kanade (\textit{LK}) została zaproponowana w~1981 roku w~pracy \cite{LucasKanadeTracker81} i~początkowo była próbą stworzenia algorytmu wariantu \textit{gęstego} o~mniejszej złożoności obliczeniowej. Poprzez łatwość zaaplikowania reguł stworzonej metody do listy punktów charakterystycznych obrazu wejściowego została jedną z~najważniejszych metod wariantu \textit{rzadkiego}.
 
@@ -156,7 +163,7 @@
 
       Aby uniknąć sytuacji, w~której dobrane okno jest zbyt małe stosuje się tzw. wariant \textit{piramidalny} algorytmu \textit{LK} opisany dokładnie w~pracy \cite{OpenCvOpticalFlow04}. Na wstępie dla aktualnej klatki animacji budowana jest piramida obrazów o~stopniowanej jakości oraz rozmiarze. Śledzenie rozpoczyna się od największego i~najmniej szczegółowego obrazu stopniowo przechodząc do mniejszych, bogatszych w~szczegóły stopni piramidy. Dzięki temu, szybszy i~bardziej dynamiczny ruch może zostać wyłapany nawet poprzez mniejsze okna dookoła punktów charakterystycznych.
 
-      Algorytm rzadkiego przepływu optycznego zaproponowany przez Lucasa i~Kanadego został oparty na trzech podstawowych regułach:
+      Algorytm rzadkiego przepływu optycznego zaproponowany przez Lucasa i~Kanade został oparty na trzech podstawowych regułach:
         \begin{itemize}
           \item Twierdzenie o~stałej jasności - śledzony piksel obrazu nie zmienia swojej jasności (w~przypadku analizy obrazów kolorowych reguła nosi nazwę \textit{Reguły niezmienności koloru}) podczas ruchu pomiędzy klatkami.
           \item Twierdzenie o~niewielkim ruchu - śledzony fragment powierzchni porusza się o~niewielką odległość z~klatki na klatkę. Innymi słowy, wartość \textit{FPS} analizowanej sekwencji wideo jest na tyle wysoka, aby transformacja śledzonego punktu pomiędzy dwoma ramkami była wykonywana na małym fragmencie całego obrazu klatki.
@@ -284,7 +291,7 @@
 
       Algorytm w~wariancie \textit{piramidalnym} tworzy dwie struktury dla aktualnej i~następnej ramki. Następnie przegląda dostępne klatki animacji od najmniejszej (najwyższej) do największej, najbardziej szczegółowej (najniższej). Dzięki temu eliminuje problemy związane z~naruszeniem drugiego twierdzenia (o~małym ruchu pomiędzy klatkami). Oszacowane wartości pojawiające się po analizie mniej szczegółowej ramki są wejściem do analizy ramki umieszczonej na następnym poziomie, dzięki temu za pomocą kolejnych poziomów obliczone rozwiązanie jest coraz bardziej dokładne.
 
-      \subsection{Gęsty przepływ optyczny (algorytm Farnebäcka)}\label{Subsection_DenseOpticalFlow}
+      \subsection{Gęsty przepływ optyczny}\label{Subsection_DenseOpticalFlow}
       Idea algorytmu gęstego przepływu optycznego wydaje się dużo bliższa intuicji, jednak przez próbę obliczenia pola wektorów prędkości dla całej klatki obrazu jest metodą dużo bardziej kosztowną obliczeniowo. W~przypadku omówionego wyżej algorytmu w~wersji \textit{rzadkiej} stworzonych zostało wiele założeń, które nie zostaną nigdy spełnione w~niektórych realnych zastosowaniach. Algorytm Farnebäcka opisany szczegółowo w~pracy \cite{GunnarFarneback03} powstał właśnie z~takiej potrzeby. Motywacją do stworzenia algorytmu była praca w~warunkach, gdzie kamera wystawiona była na duże drgania i~obraz posiadał dużo zakłóceń z~tego powodu.
 
       Pierwszym krokiem algorytmu jest aproksymacja sąsiedztwa w~obu klatkach sekwencji wideo za pomocą wielomianów czwartego stopnia, do czego zastosowano rozwinięcie wielomianowe. Dzięki obserwacji jak nowo wyliczony wielomian zachowuje się po wprowadzeniu przesunięcia i~wprowadzeniu omówionych poniżej poprawek uzyskano wydajny i~dokładny algorytm gęstego przepływu optycznego.
