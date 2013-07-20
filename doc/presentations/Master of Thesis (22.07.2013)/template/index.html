@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>Prezentacja pracy magisterskiej</title>
+    <meta charset='utf-8'>
+    <script src='../slides.js'></script>
+  </head>
+
+  <style>
+  </style>
+
+  <body style='display: none'>
+    <section class='slides layout-regular template-default'>
+      <article class="entry-point">
+        <h1 class="bold">Śledzenie punktów charakterystycznych dłoni w sekwencjach wideo</h1>
+        <hgroup>
+          <h2>Wojciech Gawroński (ITS)</h2>
+          <h3 class="spacer">Promotor: dr inż. Michał Kawulok</h3>
+          <p><em class="small-subline">Hand feature points tracking in video sequences</em></p>
+        </hgroup>
+      </article>
+
+      <article>
+        <h1 class="bold">Plan prezentacji</h1>
+        <ul class="build">
+          <li>Problematyka śledzenia w sekwencjach wideo</li>
+          <li>Przeprowadzone badania</li>
+          <li>Przedstawienie zaimplementowanych algorytmów</li>
+          <li>Przedstawienie warstwy prezentacji</li>
+        </ul>
+      </article>
+
+      <article>
+        <h1 class="bold">Problematyka śledzenia w sekwencjach wideo</h1>
+        <p>
+          Problem identyfikacji punktów charakterystycznych polega na znalezieniu fragmentu obrazu w aktualnej ramce, o pewnej ważnej dla algorytmu charakterystyce, i zidentyfikowanie go w kolejnej klatce sekwencji wideo.
+        </p>
+      </article>
+
+      <article>
+        <h1 class="bold">Przeprowadzone badania</h1>
+        <ul class="build">
+          <li>Przygotowana specyfikacja 6 gestów</li>
+          <li>Próbka 10 osób, z których każda wykonywała przygotowany zestaw gestów</li>
+          <li>Przetwarzanie każdej sekwencji wideo przez trzy algorytmy</li>
+          <li>Analiza wyników pod kątem wydajności, zużycia pamięci, czasu przetwarzania oraz jakości.</li>
+        </ul>
+      </article>
+
+      <article>
+        <h1 class="bold">Algorytmy</h1>
+        <ul class="build">
+          <li>Algorytm Lucas-Kanade (<em>przepływ optyczny rzadki</em>)</li>
+          <li>Algorytm Horn-Schunck (<em>przepływ optyczny gęsty</em>)</li>
+          <li>Algorytm wykorzystujący las drzew losowych<br/>(<em>uczenie maszynowe</em>)</li>
+        </ul>
+      </article>
+
+      <article class="presentation-slide">
+        <h1 class="bold">Prezentacja</h1>
+        <h3>Przepływ optyczny rzadki</h3>
+        <video controls>
+          <source src="../videos/sparse.ogv" />
+        </video>
+      </article>
+
+      <article class="presentation-slide">
+        <h1 class="bold">Prezentacja</h1>
+        <h3>Przepływ optyczny gęsty</h3>
+        <video controls>
+          <source src="../videos/dense.ogv" />
+        </video>
+      </article>
+
+      <article class="presentation-slide">
+        <h1 class="bold">Prezentacja</h1>
+        <h3>Algorytm wykorzystujący las drzew losowych</h3>
+        <video controls>
+          <source src="../videos/random-forest.ogv" />
+        </video>
+      </article>
+
+      <article class="presentation-slide">
+        <h1 class="bold">Interfejs użytkownika</h1>
+        <h3>Przetwarzanie sekwencji wideo</h3>
+        <img class="presentations" src="../images/Presentation.png" alt="Main view" />
+      </article>
+
+      <article class="presentation-slide">
+        <h1 class="bold">Interfejs użytkownika</h1>
+        <h3>Zaznaczanie punktów wzorcowych</h3>
+        <img class="keypoints" src="../images/Keypoints.png" alt="Keypoints" />
+      </article>
+
+      <article class="presentation-slide">
+        <h1 class="bold">Interfejs użytkownika</h1>
+        <h3>Prezentacja wyników</h3>
+        <img class="charts" src="../images/Charts.png" alt="Results" />
+      </article>
+
+      <article>
+        <h1 class="centered-header">Dziękuję za uwagę!</h1>
+      </article>
+    </section>
+  </body>
+</html>
