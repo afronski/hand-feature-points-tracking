@@ -75,7 +75,7 @@ if (execSync.code("scons") === 0) {
         console.log("Processing '%s' file with algorithm '%s'".yellow, fileName, algorithm);
 
         if (execSync.code(builtCommand) === 0) {
-          console.log("Results saved to file '%s'".green, resultFileName)
+          console.log("Results saved to file '%s'".green, resultFileName);
         } else {
           console.log("[EE] Command for file name '%s' and algorithm '%s' failed!".red,
                       fileName, algorithm);
@@ -97,7 +97,7 @@ if (execSync.code("scons") === 0) {
                   object.fileName, object.algorithm, object.params);
 
       if (execSync.code(builtCommand) === 0) {
-        console.log("Results saved to file '%s'".green, resultFileName)
+        console.log("Results saved to file '%s'".green, resultFileName);
       } else {
         console.log("[EE] Command for file name '%s', algorithm '%s' and parameters '%s' failed!".red,
                     object.fileName, object.algorithm, object.params);
